@@ -227,6 +227,97 @@
     background:var(--mint-soft);padding:1.5px 5px;border-radius:5px;letter-spacing:.02em;
   }
 
+  .emo{font-size:14.5px;line-height:1;margin-right:1px;flex:0 0 auto}
+
+  /* ── 개수 차감 스테퍼 ── */
+  .step{
+    flex:0 0 auto;display:flex;align-items:center;gap:1px;
+    background:#F1F5F0;border-radius:11px;padding:2px;
+  }
+  .step button{
+    width:27px;height:27px;border-radius:9px;
+    display:grid;place-items:center;
+    font-size:15px;font-weight:800;line-height:1;color:var(--ink2);
+    background:#fff;box-shadow:0 1px 2px rgba(20,40,30,.09);
+  }
+  .step button:active{transform:scale(.92)}
+  .step button:disabled{opacity:.3;box-shadow:none;background:transparent}
+  .step-num{
+    min-width:36px;text-align:center;font-size:12.5px;font-weight:800;
+    letter-spacing:-.03em;color:var(--ink);white-space:nowrap;
+  }
+  .step-num small{font-size:9px;font-weight:700;color:var(--sub);margin-left:1px}
+
+  /* ── 아직 많이 남았나요? ── */
+  .leftover{
+    margin:2px 0 13px;border-radius:16px;padding:12px 13px 11px;
+    background:linear-gradient(142deg,#FFFAEC,#FFF3D9);
+    border:1px solid #F1E0B6;
+    box-shadow:0 2px 10px rgba(150,110,20,.08);
+  }
+  .leftover-head{display:flex;align-items:center;gap:5px;font-size:12.5px;font-weight:800;color:#7A5A0C;letter-spacing:-.02em}
+  .leftover-sub{font-size:11px;color:#9A7B3C;font-weight:600;margin-top:4px;line-height:1.5}
+  .leftover-row{
+    display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+    margin-top:8px;padding-top:8px;border-top:1px solid rgba(180,140,40,.16);
+  }
+  .leftover-row:first-of-type{border-top:0;padding-top:7px}
+  .leftover-name{flex:1 1 100%;min-width:0;font-size:12px;font-weight:800;color:#5E4A11;display:flex;align-items:center;gap:5px}
+  .leftover-name em{font-style:normal;font-size:10.5px;font-weight:700;color:#A98A42}
+  .lo-btn{
+    flex:1 1 0;font-size:10.5px;font-weight:800;padding:7px 6px;border-radius:9px;
+    background:#fff;color:#7A5A0C;border:1px solid #EBD9AC;white-space:nowrap;
+  }
+  .lo-btn.solid{background:#8A6210;color:#fff;border-color:#8A6210}
+  .lo-btn:active{transform:scale(.97)}
+
+  /* ── 직접 입력: 고정 선택 태그 + 추천 칩 ── */
+  .selbar{
+    position:sticky;top:-10px;z-index:5;
+    margin:12px -18px 0;padding:10px 18px 9px;
+    background:#fff;border-bottom:1px solid var(--line);
+    box-shadow:0 6px 12px -10px rgba(20,40,30,.25);
+  }
+  .tagrow{
+    display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;
+    scrollbar-width:none;-ms-overflow-style:none;
+  }
+  .tagrow::-webkit-scrollbar{display:none}
+  .ptag{
+    flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;
+    font-size:11.5px;font-weight:800;padding:6px 10px;border-radius:99px;
+    background:var(--mint-soft);color:var(--mint-deep);border:1px solid #BDE9D7;
+    letter-spacing:-.02em;white-space:nowrap;
+  }
+  .ptag .x{font-size:9.5px;font-weight:800;color:#79BCA1;margin-left:1px}
+  .ptag:active{transform:scale(.96)}
+  .tag-empty{font-size:11px;font-weight:600;color:var(--sub);padding:6px 2px}
+  .recbox{margin-top:9px}
+  .rec-label{font-size:10.5px;font-weight:800;color:var(--sub);letter-spacing:.02em;margin-bottom:5px}
+  .rec-row{
+    display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;
+    scrollbar-width:none;-ms-overflow-style:none;
+  }
+  .rec-row::-webkit-scrollbar{display:none}
+  .rec{
+    flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;
+    font-size:11.5px;font-weight:700;padding:6px 10px;border-radius:99px;
+    background:#FFF8E8;color:#8A6210;border:1px solid #F0DFB6;white-space:nowrap;
+  }
+  .rec:active{transform:scale(.96)}
+
+  .eat-sub{font-size:10.5px;font-weight:700;color:var(--sub);white-space:nowrap}
+  .eat-row .step{margin-left:auto}
+
+  /* ── 이모지 선택 ── */
+  .emopick{display:flex;gap:6px;flex-wrap:wrap}
+  .emopick button{
+    width:36px;height:35px;border-radius:10px;font-size:17px;
+    background:#F5F7F4;border:1px solid #E8ECE7;display:grid;place-items:center;
+  }
+  .emopick button.is-on{background:var(--mint-soft);border-color:#8FD9BE}
+  .emopick button:active{transform:scale(.94)}
+
   .badge{
     flex:0 0 auto;
     font-size:10px;font-weight:800;letter-spacing:-.01em;
@@ -567,10 +658,12 @@
 
   <main class="main">
     <section class="view" id="view-pantry">
+      <div id="leftoverCard"></div>
       <div class="filters" id="filters"></div>
       <div id="pantryList"></div>
     </section>
     <section class="view is-hidden" id="view-meals">
+      <div id="leftoverCardMeals"></div>
       <div id="mealsWrap"></div>
     </section>
   </main>
@@ -620,6 +713,11 @@
     </div>
   </div>
 
+  <div class="field">
+    <label>이모지 <span class="hint-inline">누르면 바뀌어요</span></label>
+    <div class="emopick" id="fEmo"></div>
+  </div>
+
   <div class="quick" id="quickAdd"></div>
 
   <div class="sheet-actions">
@@ -631,12 +729,12 @@
 
 <div class="sheet" id="eatSheet" role="dialog" aria-modal="true">
   <div class="sheet-grip"></div>
-  <h2>이거 먹었어요</h2>
+  <h2>먹었어요</h2>
   <p class="sheet-sub" id="eatSub"></p>
   <div class="eat-list" id="eatList"></div>
   <div class="sheet-actions">
     <button class="btn ghost" id="eatCancel">취소</button>
-    <button class="btn primary" id="eatConfirm">선택 재료 처리</button>
+    <button class="btn primary" id="eatConfirm">먹음 기록하기</button>
   </div>
 </div>
 
@@ -648,6 +746,11 @@
   <div class="field">
     <label for="cName">메뉴 이름</label>
     <input id="cName" type="text" placeholder="예: 에그 스크램블 파스타" maxlength="30" autocomplete="off">
+  </div>
+
+  <div class="selbar" id="cSelBar">
+    <div class="tagrow" id="cTags"></div>
+    <div class="recbox" id="cRecs"></div>
   </div>
 
   <div class="field">
@@ -705,47 +808,47 @@
 
   var DEFAULT_ITEMS = [
     /* ── 냉동고 ── */
-    { id: 'mackerel',   name: '고등어',              qty: '2미',        loc: 'freezer', urg: 'urgent', note: '가급적 빨리' },
-    { id: 'pork',       name: '목살',                qty: '한덩이 3개', loc: 'freezer', urg: 'normal', note: '' },
-    { id: 'mozzarella', name: '모짜렐라 치즈',       qty: '',           loc: 'freezer', urg: 'normal', note: '' },
-    { id: 'vegmix',     name: '야채믹스',            qty: '냉동',       loc: 'freezer', urg: 'normal', note: '' },
-    { id: 'duck',       name: '오리고기',            qty: '한봉지',     loc: 'freezer', urg: 'normal', note: '' },
-    { id: 'chicken',    name: '하림 칼집 닭가슴살',  qty: '7개',        loc: 'freezer', urg: 'safe',   note: '내년까지' },
+    { id: 'mackerel',   name: '고등어',              qty: '2미',        loc: 'freezer', urg: 'urgent', note: '가급적 빨리', emoji: '🐠', count: 2, unit: '미' },
+    { id: 'pork',       name: '목살',                qty: '한덩이 3개', loc: 'freezer', urg: 'normal', note: '', emoji: '🥩', count: 3, unit: '덩이' },
+    { id: 'mozzarella', name: '모짜렐라 치즈',       qty: '',           loc: 'freezer', urg: 'normal', note: '', emoji: '🧀' },
+    { id: 'vegmix',     name: '야채믹스',            qty: '냉동',       loc: 'freezer', urg: 'normal', note: '', emoji: '🥕' },
+    { id: 'duck',       name: '오리고기',            qty: '한봉지',     loc: 'freezer', urg: 'normal', note: '', emoji: '🦆', count: 1, unit: '봉지' },
+    { id: 'chicken',    name: '하림 칼집 닭가슴살',  qty: '7개',        loc: 'freezer', urg: 'safe',   note: '내년까지', emoji: '🍗', count: 7, unit: '개' },
 
     /* ── 냉장고 ── */
-    { id: 'salad',      name: '샐러드',              qty: '1개',        loc: 'fridge',  urg: 'urgent', note: '가급적 빨리' },
-    { id: 'milk',       name: '우유 큰 팩',          qty: '절반 남음',  loc: 'fridge',  urg: 'urgent', note: '11/21까지' },
-    { id: 'kimchi',     name: '김치',                qty: '좀 많음',    loc: 'fridge',  urg: 'normal', note: '' },
-    { id: 'mushroom',   name: '버섯',                qty: '소량',       loc: 'fridge',  urg: 'soon',   note: '빠른 소진' },
-    { id: 'onion',      name: '양파',                qty: '2개',        loc: 'fridge',  urg: 'normal', note: '' },
-    { id: 'potato',     name: '감자',                qty: '3개',        loc: 'fridge',  urg: 'normal', note: '' },
-    { id: 'tofu',       name: '두부',                qty: '1모',        loc: 'fridge',  urg: 'soon',   note: '빠른 소진' },
-    { id: 'apple',      name: '사과',                qty: '큰 거 6개',  loc: 'fridge',  urg: 'normal', note: '' },
-    { id: 'tangerine',  name: '귤',                  qty: '작은 거 6개',loc: 'fridge',  urg: 'normal', note: '' },
-    { id: 'grape',      name: '청포도',              qty: '싱싱함',     loc: 'fridge',  urg: 'normal', note: '' },
-    { id: 'egg',        name: '계란',                qty: '30구 · 23개',loc: 'fridge',  urg: 'soon',   note: '상온분 우선 소진' },
-    { id: 'pesto',      name: '바질 페스토',         qty: '',           loc: 'fridge',  urg: 'normal', note: '' },
-    { id: 'creamcheese',name: '크림치즈',            qty: '소량',       loc: 'fridge',  urg: 'soon',   note: '빠른 소진' },
-    { id: 'morningbun', name: '모닝빵',              qty: '4개',        loc: 'fridge',  urg: 'urgent', note: '11/22까지' },
-    { id: 'shake',      name: '단백질 쉐이크',       qty: '30개',       loc: 'fridge',  urg: 'safe',   note: '' },
-    { id: 'boiledegg',  name: '삶은 달걀',           qty: '9개',        loc: 'fridge',  urg: 'soon',   note: '빠른 소진' },
+    { id: 'salad',      name: '샐러드',              qty: '1개',        loc: 'fridge',  urg: 'urgent', note: '가급적 빨리', emoji: '🥬', count: 1, unit: '개' },
+    { id: 'milk',       name: '우유 큰 팩',          qty: '절반 남음',  loc: 'fridge',  urg: 'urgent', note: '11/21까지', emoji: '🥛', count: 1, unit: '팩' },
+    { id: 'kimchi',     name: '김치',                qty: '좀 많음',    loc: 'fridge',  urg: 'normal', note: '', emoji: '🌶️' },
+    { id: 'mushroom',   name: '버섯',                qty: '소량',       loc: 'fridge',  urg: 'soon',   note: '빠른 소진', emoji: '🍄' },
+    { id: 'onion',      name: '양파',                qty: '2개',        loc: 'fridge',  urg: 'normal', note: '', emoji: '🧅', count: 2, unit: '개' },
+    { id: 'potato',     name: '감자',                qty: '3개',        loc: 'fridge',  urg: 'normal', note: '', emoji: '🥔', count: 3, unit: '개' },
+    { id: 'tofu',       name: '두부',                qty: '1모',        loc: 'fridge',  urg: 'soon',   note: '빠른 소진', emoji: '🧊', count: 1, unit: '모' },
+    { id: 'apple',      name: '사과',                qty: '큰 거 6개',  loc: 'fridge',  urg: 'normal', note: '', emoji: '🍎', count: 6, unit: '개' },
+    { id: 'tangerine',  name: '귤',                  qty: '작은 거 6개',loc: 'fridge',  urg: 'normal', note: '', emoji: '🍊', count: 6, unit: '개' },
+    { id: 'grape',      name: '청포도',              qty: '싱싱함',     loc: 'fridge',  urg: 'normal', note: '', emoji: '🍇' },
+    { id: 'egg',        name: '계란',                qty: '30구 · 23개',loc: 'fridge',  urg: 'soon',   note: '상온분 우선 소진', emoji: '🥚', count: 23, unit: '알' },
+    { id: 'pesto',      name: '바질 페스토',         qty: '',           loc: 'fridge',  urg: 'normal', note: '', emoji: '🌿' },
+    { id: 'creamcheese',name: '크림치즈',            qty: '소량',       loc: 'fridge',  urg: 'soon',   note: '빠른 소진', emoji: '🥯' },
+    { id: 'morningbun', name: '모닝빵',              qty: '4개',        loc: 'fridge',  urg: 'urgent', note: '11/22까지', emoji: '🍞', count: 4, unit: '개' },
+    { id: 'shake',      name: '단백질 쉐이크',       qty: '30개',       loc: 'fridge',  urg: 'safe',   note: '', emoji: '🥤', count: 30, unit: '개' },
+    { id: 'boiledegg',  name: '삶은 달걀',           qty: '9개',        loc: 'fridge',  urg: 'soon',   note: '빠른 소진', emoji: '🥚', count: 9, unit: '개' },
 
     /* ── 기본·상온 ── */
-    { id: 'rice',       name: '밥',                  qty: '',           loc: 'pantry',  urg: 'pantry', note: '' },
-    { id: 'pasta',      name: '파스타면',            qty: '',           loc: 'pantry',  urg: 'pantry', note: '' },
-    { id: 'spam',       name: '스팸',                qty: '',           loc: 'pantry',  urg: 'pantry', note: '⚠️ 끓여서 염분 빼고 김치찌개로만' },
-    { id: 'tuna',       name: '참치',                qty: '좀 많음',    loc: 'pantry',  urg: 'pantry', note: '' },
-    { id: 'jjajang',    name: '짜슐랭',              qty: '4팩',        loc: 'pantry',  urg: 'pantry', note: '' },
-    { id: 'pastasauce', name: '파스타 소스',         qty: '명란크림 · 토마토', loc: 'pantry', urg: 'pantry', note: '' },
-    { id: 'butter',     name: '버터',                qty: '',           loc: 'pantry',  urg: 'pantry', note: '' },
-    { id: 'garlic',     name: '다진마늘',            qty: '',           loc: 'pantry',  urg: 'pantry', note: '' },
-    { id: 'stock',      name: '치킨스톡',            qty: '',           loc: 'pantry',  urg: 'pantry', note: '' },
-    { id: 'dashida',    name: '다시다',              qty: '',           loc: 'pantry',  urg: 'pantry', note: '' },
-    { id: 'vinegar',    name: '식초',                qty: '',           loc: 'pantry',  urg: 'pantry', note: '' },
-    { id: 'soy',        name: '간장',                qty: '',           loc: 'pantry',  urg: 'pantry', note: '' },
-    { id: 'tunasauce',  name: '참치액',              qty: '',           loc: 'pantry',  urg: 'pantry', note: '' },
-    { id: 'peanut',     name: '땅콩버터 스프레드',   qty: '',           loc: 'pantry',  urg: 'pantry', note: '' },
-    { id: 'jam',        name: '딸기잼',              qty: '',           loc: 'pantry',  urg: 'pantry', note: '' }
+    { id: 'rice',       name: '밥',                  qty: '',           loc: 'pantry',  urg: 'pantry', note: '', emoji: '🍚' },
+    { id: 'pasta',      name: '파스타면',            qty: '',           loc: 'pantry',  urg: 'pantry', note: '', emoji: '🍝' },
+    { id: 'spam',       name: '스팸',                qty: '',           loc: 'pantry',  urg: 'pantry', note: '⚠️ 끓여서 염분 빼고 김치찌개로만', emoji: '🥫', count: 2, unit: '캔' },
+    { id: 'tuna',       name: '참치',                qty: '좀 많음',    loc: 'pantry',  urg: 'pantry', note: '', emoji: '🐟', count: 5, unit: '캔' },
+    { id: 'jjajang',    name: '짜슐랭',              qty: '4팩',        loc: 'pantry',  urg: 'pantry', note: '', emoji: '🍜', count: 4, unit: '팩' },
+    { id: 'pastasauce', name: '파스타 소스',         qty: '명란크림 · 토마토', loc: 'pantry', urg: 'pantry', note: '', emoji: '🥣' },
+    { id: 'butter',     name: '버터',                qty: '',           loc: 'pantry',  urg: 'pantry', note: '', emoji: '🧈' },
+    { id: 'garlic',     name: '다진마늘',            qty: '',           loc: 'pantry',  urg: 'pantry', note: '', emoji: '🧄' },
+    { id: 'stock',      name: '치킨스톡',            qty: '',           loc: 'pantry',  urg: 'pantry', note: '', emoji: '🧂' },
+    { id: 'dashida',    name: '다시다',              qty: '',           loc: 'pantry',  urg: 'pantry', note: '', emoji: '🥄' },
+    { id: 'vinegar',    name: '식초',                qty: '',           loc: 'pantry',  urg: 'pantry', note: '', emoji: '🧴' },
+    { id: 'soy',        name: '간장',                qty: '',           loc: 'pantry',  urg: 'pantry', note: '', emoji: '🍶' },
+    { id: 'tunasauce',  name: '참치액',              qty: '',           loc: 'pantry',  urg: 'pantry', note: '', emoji: '🐟' },
+    { id: 'peanut',     name: '땅콩버터 스프레드',   qty: '',           loc: 'pantry',  urg: 'pantry', note: '', emoji: '🥜' },
+    { id: 'jam',        name: '딸기잼',              qty: '',           loc: 'pantry',  urg: 'pantry', note: '', emoji: '🍓' }
   ];
 
   var RECIPES = [
@@ -814,6 +917,9 @@
       steps: '두부·버섯 도톰하게 썰어 노릇하게 구워요. 간장·다진마늘·물 약간 졸여 위에 얹으면 완성.' }
   ];
 
+  /* 기본 레시피에서 함께 쓰인 빈도 (추천 칩 1순위 재료) */
+  var RECIPE_CO = buildCo(RECIPES.map(function (r) { return r.uses; }));
+
   var FILTERS = [
     { id: 'all',    label: '전체' },
     { id: 'urgent', label: '🚨 급한 순' },
@@ -831,6 +937,74 @@
   ];
 
   var QUICK_ADD = ['우유', '요거트', '감자', '대파', '양파', '바질페스토', '두부', '고기', '양념장'];
+
+  var EMOJI_PICKS = ['🥚', '🥬', '🍎', '🥩', '🐟', '🥛', '🧀', '🍞', '🍄', '🧅', '🥔', '🍝'];
+
+  /* 이름으로 이모지 자동 매핑 (긴 키워드부터 검사) */
+  var EMOJI_RULES = [
+    ['계란후라이', '🍳'], ['계란', '🥚'], ['달걀', '🥚'], ['우유', '🥛'], ['치즈', '🧀'], ['버터', '🧈'],
+    ['마늘', '🧄'], ['양파', '🧅'], ['감자', '🥔'], ['고구마', '🍠'], ['당근', '🥕'],
+    ['대파', '🥬'], ['양배추', '🥬'], ['상추', '🥬'], ['샐러드', '🥬'], ['시금치', '🥬'], ['깻잎', '🌿'],
+    ['버섯', '🍄'], ['두부', '🧊'], ['김치', '🌶️'], ['고추', '🌶️'],
+    ['사과', '🍎'], ['귤', '🍊'], ['오렌지', '🍊'], ['바나나', '🍌'], ['포도', '🍇'], ['딸기', '🍓'],
+    ['블루베리', '🫐'], ['수박', '🍉'], ['토마토', '🍅'], ['레몬', '🍋'],
+    ['고등어', '🐠'], ['참치', '🐟'], ['연어', '🐟'], ['생선', '🐟'], ['새우', '🍤'], ['오징어', '🦑'],
+    ['닭', '🍗'], ['목살', '🥩'], ['고기', '🥩'], ['소고기', '🥩'], ['돼지', '🥩'], ['오리', '🦆'],
+    ['스팸', '🥫'], ['햄', '🥫'], ['소시지', '🌭'], ['만두', '🥟'], ['떡', '🍡'], ['어묵', '🍢'],
+    ['모닝빵', '🍞'], ['베이글', '🥯'], ['빵', '🍞'], ['파스타', '🍝'], ['라면', '🍜'], ['국수', '🍜'],
+    ['짜장', '🍜'], ['쌀', '🍚'], ['밥', '🍚'], ['쉐이크', '🥤'], ['요거트', '🥣'], ['잼', '🍓'],
+    ['땅콩', '🥜'], ['페스토', '🌿'], ['바질', '🌿'], ['소스', '🥣'], ['간장', '🍶'], ['식초', '🧴'],
+    ['소금', '🧂'], ['스톡', '🧂'], ['다시다', '🥄'], ['채소', '🥬'], ['야채', '🥕']
+  ].sort(function (a, b) { return b[0].length - a[0].length; });
+
+  function emojiFor(name) {
+    var n = String(name || '').toLowerCase();
+    for (var i = 0; i < EMOJI_RULES.length; i++) {
+      if (n.indexOf(EMOJI_RULES[i][0]) !== -1) return EMOJI_RULES[i][1];
+    }
+    return '🍽️';
+  }
+
+  function emojiOf(it) {
+    if (!it) return '🍽️';
+    return it.emoji || emojiFor(it.name);
+  }
+
+  function isCountable(it) {
+    return !!it && typeof it.count === 'number';
+  }
+
+  function unitOf(it) {
+    return (it && it.unit) || '개';
+  }
+
+  /* "5개" / "2캔" 같은 수량 글자에서 개수와 단위를 읽어낸다 */
+  function countFromQty(qty) {
+    var m = String(qty == null ? '' : qty).trim().match(/^(\d{1,3})\s*([^\s0-9]{0,3})$/);
+    if (!m) return null;
+    var n = parseInt(m[1], 10);
+    if (!n || n > 999) return null;
+    return { count: n, unit: m[2] || '개' };
+  }
+
+  function bumpPair(map, a, b) {
+    if (!a || !b || a === b) return;
+    if (!map[a]) map[a] = {};
+    if (!map[b]) map[b] = {};
+    map[a][b] = (map[a][b] || 0) + 1;
+    map[b][a] = (map[b][a] || 0) + 1;
+  }
+
+  function buildCo(usesList) {
+    var map = {};
+    usesList.forEach(function (ids) {
+      var u = (ids || []).slice();
+      for (var i = 0; i < u.length; i++) {
+        for (var j = i + 1; j < u.length; j++) bumpPair(map, u[i], u[j]);
+      }
+    });
+    return map;
+  }
 
   /* ── DOM ── */
   var $ = function (id) { return document.getElementById(id); };
@@ -851,14 +1025,18 @@
 
   var eatSheet = $('eatSheet'), eatSub = $('eatSub'), eatList = $('eatList'), eatConfirm = $('eatConfirm');
   var menuSheet = $('menuSheet');
+  var leftoverCard = $('leftoverCard'), leftoverCardMeals = $('leftoverCardMeals');
 
   var customSheet = $('customSheet'), customSub = $('customSub');
   var cName = $('cName'), cSearch = $('cSearch'), cList = $('cList'), cNote = $('cNote'), cCount = $('cCount');
+  var cTags = $('cTags'), cRecs = $('cRecs');
+  var fEmo = $('fEmo');
 
   /* ── 상태 ── */
   var ui = { tab: 'pantry', filter: 'all', hideDone: false };
-  var editor = { mode: 'add', id: null, loc: 'fridge', urg: 'normal' };
+  var editor = { mode: 'add', id: null, loc: 'fridge', urg: 'normal', emoji: null, origQty: '' };
   var eatTarget = null;
+  var eatQty = {};
   var customTarget = null;
   var customSel = {};
   var resetArmed = false;
@@ -871,13 +1049,21 @@
   function freshState() {
     return {
       ingredients: DEFAULT_ITEMS.map(function (it) {
-        return { id: it.id, name: it.name, qty: it.qty, loc: it.loc, urg: it.urg, note: it.note, done: false, custom: false };
+        return {
+          id: it.id, name: it.name, qty: it.qty, loc: it.loc, urg: it.urg, note: it.note,
+          done: false, custom: false,
+          emoji: it.emoji || emojiFor(it.name),
+          count: typeof it.count === 'number' ? it.count : null,
+          unit: it.unit || '개',
+          used: 0
+        };
       }),
       plan: null,
       skips: {},
       eaten: {},
       customMeals: {},
-      snacks: { today: [], tomorrow: [] }
+      snacks: { today: [], tomorrow: [] },
+      coOccurrence: {}
     };
   }
 
@@ -897,8 +1083,12 @@
   }
 
   function normalize(s) {
+    var byId0 = {};
+    DEFAULT_ITEMS.forEach(function (d) { byId0[d.id] = d; });
+
     s.ingredients = s.ingredients.map(function (it) {
-      return {
+      var def = byId0[String(it.id)] || null;
+      var o = {
         id: String(it.id),
         name: String(it.name || '재료'),
         qty: it.qty || '',
@@ -906,11 +1096,24 @@
         urg: URG[it.urg] ? it.urg : 'normal',
         note: it.note || '',
         done: !!it.done,
-        custom: !!it.custom
+        custom: !!it.custom,
+        emoji: it.emoji ? String(it.emoji) : (def && def.emoji) || emojiFor(it.name)
       };
+
+      if (typeof it.count === 'number') o.count = Math.max(0, Math.round(it.count));
+      else if (def && typeof def.count === 'number') o.count = o.done ? 0 : def.count;
+      else o.count = null;
+
+      o.unit = it.unit ? String(it.unit) : (def && def.unit) || '개';
+      o.used = typeof it.used === 'number' ? Math.max(0, Math.round(it.used)) : 0;
+
+      if (o.count !== null && o.count <= 0) o.done = true;
+      return o;
     });
+
     s.skips = s.skips || {};
     s.eaten = s.eaten || {};
+    s.coOccurrence = s.coOccurrence && typeof s.coOccurrence === 'object' ? s.coOccurrence : {};
     s.customMeals = s.customMeals && typeof s.customMeals === 'object' ? s.customMeals : {};
     Object.keys(s.customMeals).forEach(function (k) {
       var c = s.customMeals[k];
@@ -1142,7 +1345,7 @@
     var circumference = 2 * Math.PI * 26;
 
     var chips = urgentLeft.slice(0, 5).map(function (it) {
-      return '<button class="urgent-chip" data-jump="' + esc(it.id) + '">' + esc(it.name) + '</button>';
+      return '<button class="urgent-chip" data-jump="' + esc(it.id) + '">' + emojiOf(it) + ' ' + esc(it.name) + '</button>';
     }).join('');
     if (urgentLeft.length > 5) {
       chips += '<span class="urgent-chip">+' + (urgentLeft.length - 5) + '</span>';
@@ -1188,23 +1391,43 @@
 
   function itemRow(it) {
     var meta = [];
-    if (it.qty) meta.push('<span>' + esc(it.qty) + '</span>');
+    if (isCountable(it)) {
+      if (!it.done) meta.push('<span>' + it.count + esc(unitOf(it)) + ' 남음</span>');
+    } else if (it.qty) {
+      meta.push('<span>' + esc(it.qty) + '</span>');
+    }
+    if (!isCountable(it) && it.used) {
+      if (meta.length) meta.push('<span class="dot"></span>');
+      meta.push('<span>🍽️ ' + it.used + '번 먹음</span>');
+    }
     if (it.note) {
-      meta.push('<span class="dot"></span>');
+      if (meta.length) meta.push('<span class="dot"></span>');
       var isWarn = it.note.indexOf('⚠️') === 0;
       meta.push('<span class="' + (isWarn ? 'warn' : '') + '">' + esc(it.note) + '</span>');
     }
     if (it.custom) meta.push('<span class="mine">내가 추가</span>');
 
+    var control;
+    if (isCountable(it)) {
+      control = '<div class="step">' +
+        '<button data-act="dec" data-id="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 하나 차감"' +
+          (it.count <= 0 ? ' disabled' : '') + '>−</button>' +
+        '<span class="step-num">' + it.count + '<small>' + esc(unitOf(it)) + '</small></span>' +
+        '<button data-act="inc" data-id="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 하나 더">+</button>' +
+      '</div>';
+    } else {
+      control = '<button class="switch' + (it.done ? ' on' : '') + '" role="switch" aria-checked="' + it.done + '" ' +
+        'aria-label="' + esc(it.name) + ' 처리 완료" data-act="toggle" data-id="' + esc(it.id) + '"><span></span></button>';
+    }
+
     return '<div class="item' + (it.done ? ' is-done' : '') + '" data-row="' + esc(it.id) + '">' +
       '<button class="item-main" data-act="edit" data-id="' + esc(it.id) + '">' +
-        '<span class="item-name">' + esc(it.name) +
+        '<span class="item-name"><span class="emo">' + emojiOf(it) + '</span>' + esc(it.name) +
           '<span class="badge ' + URG[it.urg].cls + '">' + URG[it.urg].short + ' ' + URG[it.urg].label + '</span>' +
         '</span>' +
         (meta.length ? '<span class="item-meta">' + meta.join('') + '</span>' : '') +
       '</button>' +
-      '<button class="switch' + (it.done ? ' on' : '') + '" role="switch" aria-checked="' + it.done + '" ' +
-        'aria-label="' + esc(it.name) + ' 처리 완료" data-act="toggle" data-id="' + esc(it.id) + '"><span></span></button>' +
+      control +
     '</div>';
   }
 
@@ -1256,8 +1479,9 @@
       html = emptyBox('🧺', '이 조건에 맞는 재료가 없어요.');
     }
 
-    html += '<div class="section-note">💡 미처리 재료가 <b>급해요 → 곧 소진</b> 순으로 식단에 먼저 배치돼요. ' +
-      '재료를 누르면 수량·메모를 고칠 수 있고, 오른쪽 스위치로 처리 완료를 기록해요.</div>';
+    html += '<div class="section-note">💡 급해요 → 곧 소진 순으로 식단에 먼저 배치돼요. ' +
+      '<b>계란·모닝빵</b>처럼 개수가 있는 재료는 <b>−/+</b>로 하나씩 차감하고 0이 되면 자동으로 처리 완료돼요. ' +
+      '개수 없는 재료(버터·파스타면 등)는 오른쪽 스위치로 직접 처리해요.</div>';
 
     listEl.innerHTML = html;
   }
@@ -1274,6 +1498,36 @@
   }
 
   /* =========================================================
+     "아직 많이 남았나요?" 확인 카드
+     ========================================================= */
+  function leftoverItems() {
+    return state.ingredients.filter(function (it) {
+      return !it.done && !isCountable(it) && (it.used || 0) >= 2;
+    });
+  }
+
+  function renderLeftover() {
+    var rows = leftoverItems();
+    var html = '';
+    if (rows.length) {
+      html = '<div class="leftover">' +
+        '<p class="leftover-head">🤔 아직 많이 남았나요?</p>' +
+        '<p class="leftover-sub">두 번 이상 먹은 재료예요. 남은 양에 맞게 정리하면 소진 기록이 정확해져요.</p>' +
+        rows.map(function (it) {
+          return '<div class="leftover-row">' +
+            '<span class="leftover-name">' + emojiOf(it) + ' ' + esc(it.name) +
+              ' <em>' + (it.used || 0) + '번 먹음</em></span>' +
+            '<button class="lo-btn" data-left="keep" data-id="' + esc(it.id) + '">아직 꽤 남음</button>' +
+            '<button class="lo-btn solid" data-left="done" data-id="' + esc(it.id) + '">거의 다 씀 · 소진</button>' +
+          '</div>';
+        }).join('') +
+      '</div>';
+    }
+    leftoverCard.innerHTML = html;
+    leftoverCardMeals.innerHTML = html;
+  }
+
+  /* =========================================================
      식단 탭
      ========================================================= */
   function useChips(r) {
@@ -1284,7 +1538,7 @@
       if (it.done) cls += ' done';
       else if (it.urg === 'urgent') cls += ' urgent';
       else if (it.urg === 'soon') cls += ' soon';
-      return '<span class="' + cls + '">' + esc(it.name) + '</span>';
+      return '<span class="' + cls + '">' + emojiOf(it) + ' ' + esc(it.name) + '</span>';
     }).join('');
   }
 
@@ -1338,14 +1592,14 @@
           '<button class="act" data-act="editCustom">✏️ 수정</button>' +
           '<button class="act" data-act="swap">🔄 레시피로</button>' +
           '<button class="act" data-act="skip">🍗 배달·외식</button>' +
-          '<button class="act solid" data-act="eat">✅ 이거 먹음 (재료 처리)</button>' +
+          '<button class="act solid" data-act="eat">✅ 먹었음</button>' +
         '</div>';
     } else {
       actions = '<div class="meal-actions four">' +
           '<button class="act" data-act="custom">✏️ 직접 입력</button>' +
           '<button class="act" data-act="swap">🔄 다른 메뉴</button>' +
           '<button class="act" data-act="skip">🍗 배달·외식</button>' +
-          '<button class="act solid" data-act="eat">✅ 이거 먹음 (재료 처리)</button>' +
+          '<button class="act solid" data-act="eat">✅ 먹었음</button>' +
         '</div>';
     }
 
@@ -1395,7 +1649,7 @@
       dayBlock('today', 0) +
       dayBlock('tomorrow', 1) +
       '<div class="section-note">🍽️ 점심·저녁 두 끼만 제안해요. 취향에 안 맞으면 <b>다른 메뉴</b>로 바로 교체하고, ' +
-      '먹은 뒤 <b>이거 먹음</b>을 누르면 그 레시피 재료가 한 번에 처리돼요. ' +
+      '먹은 뒤 <b>먹었음</b>을 누르면 그 레시피 재료가 한 번에 정리돼요. ' +
       '먹고 싶은 메뉴가 따로 있으면 <b>✏️ 직접 입력</b>으로 이름·쓸 재료를 등록해 두세요 — 다시 짜도 그 끼니는 그대로 남아요.</div>';
   }
 
@@ -1405,6 +1659,7 @@
   function renderAll() {
     renderDash();
     renderFilters();
+    renderLeftover();
     renderList();
     renderMeals();
   }
@@ -1446,6 +1701,7 @@
   function openEditor(mode, id) {
     editor.mode = mode;
     editor.id = id || null;
+    editor.emoji = null;
 
     if (mode === 'edit') {
       var it = byId(id);
@@ -1457,6 +1713,8 @@
       fNote.value = it.note;
       editor.loc = it.loc;
       editor.urg = it.urg;
+      editor.emoji = it.emoji || null;
+      editor.origQty = it.qty;
       ingDelete.classList.remove('is-hidden');
       quickAdd.style.display = 'none';
     } else {
@@ -1467,14 +1725,27 @@
       fNote.value = '';
       editor.loc = 'fridge';
       editor.urg = 'normal';
+      editor.origQty = '';
       ingDelete.classList.add('is-hidden');
       quickAdd.style.display = '';
     }
 
     segSet(segLoc, editor.loc);
     segSet(segUrg, editor.urg);
+    renderEmoPick();
     openSheet(ingSheet);
     setTimeout(function () { fName.focus(); }, 260);
+  }
+
+  function renderEmoPick() {
+    var autoEmo = emojiFor(fName.value.trim());
+    var cur = editor.emoji || autoEmo;
+    var seen = {};
+    fEmo.innerHTML = [autoEmo].concat(EMOJI_PICKS).map(function (e) {
+      if (seen[e]) return '';
+      seen[e] = true;
+      return '<button type="button" data-emo="' + e + '" class="' + (cur === e ? 'is-on' : '') + '">' + e + '</button>';
+    }).join('');
   }
 
   function saveEditor() {
@@ -1486,6 +1757,7 @@
     }
     var qty = fQty.value.trim();
     var note = fNote.value.trim();
+    var emoji = editor.emoji || emojiFor(name);
 
     if (editor.mode === 'edit') {
       var it = byId(editor.id);
@@ -1495,15 +1767,32 @@
       it.note = note;
       it.loc = editor.loc;
       it.urg = editor.urg;
+      it.emoji = emoji;
+      /* 수량을 새로 적었고 그 안에 숫자가 있으면 남은 개수도 거기에 맞춘다 */
+      if (qty !== editor.origQty) {
+        var parsedEdit = countFromQty(qty);
+        if (parsedEdit) {
+          it.count = parsedEdit.count;
+          it.unit = parsedEdit.unit;
+          it.done = it.count <= 0;
+        } else if (it.count !== null && it.count !== undefined && !qty) {
+          it.count = null;
+        }
+      }
       save();
       closeSheets();
       renderAll();
       toast('재료를 수정했어요');
     } else {
       var id = 'c' + Date.now().toString(36) + Math.floor(Math.random() * 1000).toString(36);
+      var parsedNew = countFromQty(qty);
       state.ingredients.push({
         id: id, name: name, qty: qty, note: note,
-        loc: editor.loc, urg: editor.urg, done: false, custom: true
+        loc: editor.loc, urg: editor.urg, done: false, custom: true,
+        emoji: emoji,
+        count: parsedNew ? parsedNew.count : null,
+        unit: parsedNew ? parsedNew.unit : '개',
+        used: 0
       });
       save();
       closeSheets();
@@ -1511,7 +1800,7 @@
       ui.hideDone = false;
       renderAll();
       setTab('pantry');
-      toast(name + ' 추가 완료');
+      toast(emoji + ' ' + name + ' 추가 완료');
     }
   }
 
@@ -1538,6 +1827,80 @@
     cCount.innerHTML = n ? '<b>' + n + '개</b> 선택' : '선택 안 함';
   }
 
+  /* 현재 고른 재료들 → 함께 쓰는 재료 추천 (레시피 공출현 + 내 기록) */
+  function recommendItems(selMap) {
+    var sel = Object.keys(selMap).filter(function (id) {
+      var it = byId(id);
+      return selMap[id] && it && !it.done;
+    });
+
+    if (!sel.length) {
+      var urgent = state.ingredients.filter(function (it) { return !it.done && (it.urg === 'urgent' || it.urg === 'soon'); });
+      urgent.sort(function (a, b) { return URG[a.urg].order - URG[b.urg].order; });
+      return { picks: urgent.slice(0, 4), base: true };
+    }
+
+    var hist = (state.coOccurrence && typeof state.coOccurrence === 'object') ? state.coOccurrence : {};
+    var score = {};
+    sel.forEach(function (s) {
+      var fromRecipe = RECIPE_CO[s] || {};
+      Object.keys(fromRecipe).forEach(function (c) {
+        score[c] = (score[c] || 0) + fromRecipe[c];
+      });
+      var fromMine = hist[s] || {};
+      Object.keys(fromMine).forEach(function (c) {
+        score[c] = (score[c] || 0) + fromMine[c] * 4;
+      });
+    });
+
+    var ranked = Object.keys(score).map(function (id) {
+      var cand = byId(id);
+      var bonus = cand ? (cand.urg === 'urgent' ? 1.2 : cand.urg === 'soon' ? 0.6 : 0) : 0;
+      return { it: cand, s: score[id] + bonus };
+    }).filter(function (o) {
+      return o.it && !o.it.done && !selMap[o.it.id] && o.s > 0;
+    });
+    ranked.sort(function (a, b) { return b.s - a.s; });
+
+    var picks = ranked.slice(0, 8).map(function (o) { return o.it; });
+
+    /* 후보가 적으면 급한 재료로 빈자리를 채운다 */
+    if (picks.length < 4) {
+      state.ingredients.forEach(function (it) {
+        if (picks.length >= 4) return;
+        if (it.done || selMap[it.id]) return;
+        if (picks.indexOf(it) !== -1) return;
+        if (it.urg !== 'urgent' && it.urg !== 'soon') return;
+        picks.push(it);
+      });
+    }
+
+    return { picks: picks, base: false };
+  }
+
+  function renderSelBar() {
+    var ids = Object.keys(customSel).filter(function (id) { return customSel[id] && byId(id); });
+
+    cTags.innerHTML = ids.length
+      ? ids.map(function (id) {
+          var it = byId(id);
+          return '<button type="button" class="ptag" data-unsel="' + esc(id) + '">' +
+            emojiOf(it) + ' ' + esc(it.name) + '<span class="x">✕</span></button>';
+        }).join('')
+      : '<span class="tag-empty">아래에서 재료를 고르면 여기에 태그로 쌓여요</span>';
+
+    var rec = recommendItems(customSel);
+    var chips = rec.picks.map(function (it) {
+      return '<button type="button" class="rec" data-pick="' + esc(it.id) + '">' +
+        emojiOf(it) + ' ' + esc(it.name) + '&nbsp;＋</button>';
+    }).join('');
+
+    cRecs.innerHTML = chips
+      ? '<p class="rec-label">' + (rec.base ? '🚨 먼저 챙길 재료' : '✨ 같이 자주 쓰는 재료') + '</p>' +
+        '<div class="rec-row">' + chips + '</div>'
+      : '';
+  }
+
   function renderCustomList() {
     var q = cSearch.value.trim().toLowerCase();
     var html = '';
@@ -1558,7 +1921,7 @@
           : '';
         return '<label class="eat-row">' +
           '<input type="checkbox" value="' + esc(it.id) + '"' + (on ? ' checked' : '') + '>' +
-          '<span class="eat-name">' + esc(it.name) + '</span>' +
+          '<span class="eat-name"><span class="emo">' + emojiOf(it) + '</span>' + esc(it.name) + '</span>' +
           badge +
         '</label>';
       }).join('');
@@ -1569,6 +1932,7 @@
     }
     cList.innerHTML = html;
     updateCustomCount();
+    renderSelBar();
   }
 
   function openCustom(day, meal) {
@@ -1593,6 +1957,13 @@
     setTimeout(function () { cName.focus(); }, 260);
   }
 
+  function toggleCustomSel(id, on) {
+    customSel[id] = on;
+    var st = cList.scrollTop;
+    renderCustomList();
+    cList.scrollTop = st;
+  }
+
   function saveCustom() {
     if (!customTarget) return;
     var name = cName.value.trim();
@@ -1603,6 +1974,8 @@
     }
     var uses = [];
     state.ingredients.forEach(function (it) { if (customSel[it.id] && !it.done) uses.push(it.id); });
+
+    if (uses.length >= 2) recordHistory(uses);
 
     state.customMeals = state.customMeals || {};
     state.customMeals[customTarget.key] = { name: name, uses: uses, note: cNote.value.trim() };
@@ -1615,12 +1988,22 @@
     toast(name + ' 등록 완료 · 이 끼니는 계속 유지돼요');
   }
 
+  /* 함께 고른 재료들을 coOccurrence 기록에 누적 */
+  function recordHistory(ids) {
+    if (!state.coOccurrence || typeof state.coOccurrence !== 'object') state.coOccurrence = {};
+    var u = (ids || []).slice();
+    for (var i = 0; i < u.length; i++) {
+      for (var j = i + 1; j < u.length; j++) bumpPair(state.coOccurrence, u[i], u[j]);
+    }
+  }
+
   /* ── 먹음 시트 ── */
   function openEat(day, meal) {
     var k = slotKey(day, meal);
     var r = mealRecipe(day, meal);
     if (!r) return;
     eatTarget = { day: day, meal: meal, key: k, recipe: r };
+    eatQty = {};
 
     var rows = r.uses.map(function (id) { return byId(id); }).filter(Boolean);
     rows.sort(function (a, b) {
@@ -1628,21 +2011,33 @@
       return URG[a.urg].order - URG[b.urg].order;
     });
 
-    eatSub.textContent = r.name + ' — 처리할 재료를 골라주세요.';
+    eatSub.textContent = r.name + ' — 개수가 있는 재료는 −/+로 몇 개 먹었는지 정하고, 나머지는 먹음 횟수만 가볍게 남겨요.';
 
     eatList.innerHTML = rows.map(function (it) {
       var auto = !it.done && (it.urg === 'urgent' || it.urg === 'soon');
       if (it.done) {
         return '<div class="eat-row is-done">' +
           '<span class="eat-check">✓</span>' +
-          '<span class="eat-name">' + esc(it.name) + '</span>' +
+          '<span class="eat-name"><span class="emo">' + emojiOf(it) + '</span>' + esc(it.name) + '</span>' +
           '<span class="badge ' + URG[it.urg].cls + '">이미 처리</span>' +
+        '</div>';
+      }
+      if (isCountable(it)) {
+        eatQty[it.id] = 1;
+        return '<div class="eat-row" data-eatrow="' + esc(it.id) + '">' +
+          '<span class="eat-name"><span class="emo">' + emojiOf(it) + '</span>' + esc(it.name) + '</span>' +
+          '<span class="eat-sub">' + it.count + esc(unitOf(it)) + ' 남음</span>' +
+          '<div class="step">' +
+            '<button data-eat="dec" data-id="' + esc(it.id) + '" aria-label="한 개 적게">−</button>' +
+            '<span class="step-num" data-eatnum="' + esc(it.id) + '">1</span>' +
+            '<button data-eat="inc" data-id="' + esc(it.id) + '" aria-label="한 개 많게">+</button>' +
+          '</div>' +
         '</div>';
       }
       return '<label class="eat-row">' +
         '<input type="checkbox" value="' + esc(it.id) + '"' + (auto ? ' checked' : '') + '>' +
-        '<span class="eat-name">' + esc(it.name) + '</span>' +
-        '<span class="badge ' + URG[it.urg].cls + '">' + URG[it.urg].short + ' ' + URG[it.urg].label + '</span>' +
+        '<span class="eat-name"><span class="emo">' + emojiOf(it) + '</span>' + esc(it.name) + '</span>' +
+        '<span class="eat-sub">먹음 +1</span>' +
       '</label>';
     }).join('');
 
@@ -1655,22 +2050,42 @@
 
   function confirmEat() {
     if (!eatTarget) return;
+    var parts = [];
+    var usedIds = [];
+
+    /* 개수 없는 재료: 체크한 만큼 먹음 횟수 +1 */
     var boxes = eatList.querySelectorAll('input[type="checkbox"]');
-    var picked = [];
     for (var i = 0; i < boxes.length; i++) {
-      if (boxes[i].checked) picked.push(boxes[i].value);
+      if (!boxes[i].checked) continue;
+      var it = byId(boxes[i].value);
+      if (!it || it.done || isCountable(it)) continue;
+      it.used = (it.used || 0) + 1;
+      usedIds.push(it.id);
+      parts.push(emojiOf(it) + ' ' + it.name + ' +1회');
     }
-    picked.forEach(function (id) {
-      var it = byId(id);
-      if (it) it.done = true;
+
+    /* 소분·개수 재료: −/+로 정한 개수만큼 차감, 0이면 처리 완료 */
+    Object.keys(eatQty).forEach(function (id) {
+      var item = byId(id);
+      if (!item || item.done || !isCountable(item)) return;
+      var n = Math.min(eatQty[id] || 0, item.count);
+      if (!n || n <= 0) return;
+      item.count -= n;
+      usedIds.push(item.id);
+      parts.push(emojiOf(item) + ' ' + item.name + ' ' + n + unitOf(item));
+      if (item.count <= 0) { item.count = 0; item.done = true; }
     });
+
+    if (usedIds.length >= 2) recordHistory(usedIds);
+
     state.eaten[eatTarget.key] = true;
     delete state.skips[eatTarget.key];
     save();
     closeSheets();
     eatTarget = null;
+    eatQty = {};
     renderAll();
-    toast(picked.length ? picked.length + '개 재료를 처리했어요' : '먹은 기록만 남겼어요');
+    toast(parts.length ? parts.join(' · ') + ' 기록했어요' : '먹은 기록만 남겼어요');
   }
 
   /* =========================================================
@@ -1718,6 +2133,38 @@
     if (!btn) return;
     var id = btn.getAttribute('data-id');
     var act = btn.getAttribute('data-act');
+
+    if (act === 'dec' || act === 'inc') {
+      var cit = byId(id);
+      if (!cit || !isCountable(cit)) return;
+      if (act === 'dec') {
+        if (cit.count <= 0) return;
+        cit.count -= 1;
+        if (cit.count <= 0) {
+          cit.count = 0;
+          cit.done = true;
+          toast(emojiOf(cit) + ' ' + cit.name + ' 다 씀 · 처리 완료');
+        } else {
+          toast(emojiOf(cit) + ' ' + cit.name + ' 1' + unitOf(cit) + ' 차감 · ' + cit.count + unitOf(cit) + ' 남음');
+        }
+      } else {
+        if (cit.count <= 0) {
+          cit.count = 1;
+          cit.done = false;
+          toast(emojiOf(cit) + ' ' + cit.name + ' 다시 ' + cit.count + unitOf(cit) + ' 남았어요');
+        } else {
+          cit.count += 1;
+          toast(emojiOf(cit) + ' ' + cit.name + ' +1 · ' + cit.count + unitOf(cit) + ' 남음');
+        }
+      }
+      save();
+      renderDash();
+      renderLeftover();
+      renderList();
+      renderMeals();
+      return;
+    }
+
     if (act === 'toggle') {
       var it = byId(id);
       if (!it) return;
@@ -1726,11 +2173,51 @@
       renderDash();
       renderList();
       renderMeals();
-      if (it.done) toast(it.name + ' 처리 완료');
+      if (it.done) toast(emojiOf(it) + ' ' + it.name + ' 처리 완료');
       return;
     }
     if (act === 'edit') openEditor('edit', id);
   });
+
+  /* 먹음 시트의 개수 스테퍼 */
+  eatList.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-eat]');
+    if (!b) return;
+    var id = b.getAttribute('data-id');
+    var it = byId(id);
+    if (!it || !isCountable(it)) return;
+    var cur = eatQty[id] == null ? 1 : eatQty[id];
+    var next = b.getAttribute('data-eat') === 'inc' ? cur + 1 : cur - 1;
+    next = Math.max(0, Math.min(next, it.count));
+    eatQty[id] = next;
+    var num = eatList.querySelector('[data-eatnum="' + id + '"]');
+    if (num) num.textContent = String(next);
+    var row = eatList.querySelector('[data-eatrow="' + id + '"]');
+    if (row) row.classList.toggle('is-done', next === 0);
+  });
+
+  /* 아직 많이 남았나요? 카드 */
+  function onLeftoverClick(e) {
+    var b = e.target.closest('[data-left]');
+    if (!b) return;
+    var it = byId(b.getAttribute('data-id'));
+    if (!it) return;
+    if (b.getAttribute('data-left') === 'keep') {
+      it.used = 0;
+      save();
+      renderAll();
+      toast(emojiOf(it) + ' ' + it.name + ' · 먹음 횟수를 다시 셀게요');
+    } else {
+      it.done = true;
+      it.used = 0;
+      if (isCountable(it)) it.count = 0;
+      save();
+      renderAll();
+      toast(emojiOf(it) + ' ' + it.name + ' 소진 완료로 옮겼어요');
+    }
+  }
+  leftoverCard.addEventListener('click', onLeftoverClick);
+  leftoverCardMeals.addEventListener('click', onLeftoverClick);
 
   mealsEl.addEventListener('click', function (e) {
     if (e.target.closest('#replanBtn')) { replanAll(); return; }
@@ -1808,6 +2295,15 @@
   $('ingCancel').addEventListener('click', function () { closeSheets(); });
   ingDelete.addEventListener('click', deleteEditor);
   fName.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); saveEditor(); } });
+  fName.addEventListener('input', function () { if (!editor.emoji) renderEmoPick(); });
+
+  fEmo.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-emo]');
+    if (!b) return;
+    var emo = b.getAttribute('data-emo');
+    editor.emoji = emo === emojiFor(fName.value.trim()) ? null : emo;
+    renderEmoPick();
+  });
 
   eatConfirm.addEventListener('click', confirmEat);
   $('eatCancel').addEventListener('click', function () { closeSheets(); });
@@ -1817,7 +2313,23 @@
     if (!box || box.type !== 'checkbox') return;
     customSel[box.value] = box.checked;
     updateCustomCount();
+    renderSelBar();
   });
+
+  /* 선택 태그 ✕ → 바로 해제 */
+  cTags.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-unsel]');
+    if (!t) return;
+    toggleCustomSel(t.getAttribute('data-unsel'), false);
+  });
+
+  /* 추천 칩 → 즉시 추가 */
+  cRecs.addEventListener('click', function (e) {
+    var c = e.target.closest('[data-pick]');
+    if (!c) return;
+    toggleCustomSel(c.getAttribute('data-pick'), true);
+  });
+
   cSearch.addEventListener('input', renderCustomList);
   $('customSave').addEventListener('click', saveCustom);
   $('customCancel').addEventListener('click', function () { closeSheets(); });
