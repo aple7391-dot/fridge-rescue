@@ -310,6 +310,11 @@
   }
   .meal-card.is-skip{background:#F7F7F5;border-style:dashed;border-color:#DFE4DF}
   .meal-card.is-eaten{background:#F3FAF6;border-color:#CDEBDD}
+  .meal-card.is-mine{background:#F7FCF9;border-color:#C6E9D8}
+  .mine-tag{
+    font-size:10px;font-weight:800;color:#0B7B57;background:#DDF3E8;
+    padding:2.5px 6px;border-radius:6px;letter-spacing:-.01em;
+  }
 
   .meal-top{display:flex;align-items:center;gap:6px;margin-bottom:7px}
   .slot-pill{
@@ -343,8 +348,15 @@
     background:#fff;border-radius:9px;padding:8px 10px;
   }
   .steps.warn{background:#FFF6EC;color:#9A4C10}
+  .mine-empty{
+    margin-top:9px;font-size:11px;font-weight:600;color:var(--sub);
+    background:#fff;border:1px dashed #DCE4DD;border-radius:9px;padding:8px 10px;
+  }
+  .mine-empty b{color:var(--mint-deep)}
 
   .meal-actions{display:flex;gap:6px;margin-top:11px;flex-wrap:wrap}
+  .meal-actions.four{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .meal-actions.four .act.solid{grid-column:1 / -1}
   .act{
     flex:1 1 0;min-width:0;
     padding:9px 6px;border-radius:10px;
@@ -418,6 +430,17 @@
   .field input:focus{border-color:var(--mint);background:#fff}
   .field input::placeholder{color:#B4BDB6;font-weight:500}
   .field-row{display:flex;gap:10px}
+  .field textarea{
+    width:100%;padding:12px 13px;border-radius:12px;
+    background:#F5F7F4;border:1px solid #E8ECE7;
+    font:inherit;font-size:13px;font-weight:600;line-height:1.55;
+    outline:none;resize:vertical;min-height:66px;
+    transition:border-color .15s,background .15s;
+  }
+  .field textarea:focus{border-color:var(--mint);background:#fff}
+  .field textarea::placeholder{color:#B4BDB6;font-weight:500}
+  .field .hint-inline{font-size:10.5px;font-weight:600;color:var(--sub);margin-left:5px;letter-spacing:0}
+  .field .hint-inline b{color:var(--mint-deep);font-weight:800}
 
   .seg{display:flex;gap:6px}
   .seg button{
@@ -453,6 +476,16 @@
   .danger-link.is-hidden{display:none}
 
   .eat-list{margin-top:6px}
+  .cust-list{
+    margin-top:9px;max-height:33vh;overflow-y:auto;
+    border-radius:12px;background:#FBFCFA;border:1px solid #F0F3EF;padding:0 10px 4px;
+  }
+  .cust-group{
+    display:flex;align-items:center;gap:5px;
+    padding:9px 2px 3px;font-size:10.5px;font-weight:800;color:var(--sub);letter-spacing:.02em;
+    position:sticky;top:0;background:#FBFCFA;z-index:1;
+  }
+  .cust-empty{padding:18px 2px;text-align:center;font-size:11.5px;font-weight:600;color:var(--sub)}
   .eat-row{
     display:flex;align-items:center;gap:10px;
     padding:12px 2px;border-bottom:1px solid #F0F3EF;
@@ -607,6 +640,33 @@
   </div>
 </div>
 
+<div class="sheet" id="customSheet" role="dialog" aria-modal="true">
+  <div class="sheet-grip"></div>
+  <h2>메뉴 직접 등록</h2>
+  <p class="sheet-sub" id="customSub"></p>
+
+  <div class="field">
+    <label for="cName">메뉴 이름</label>
+    <input id="cName" type="text" placeholder="예: 에그 스크램블 파스타" maxlength="30" autocomplete="off">
+  </div>
+
+  <div class="field">
+    <label for="cSearch">사용할 내 재료 <span class="hint-inline" id="cCount">선택 안 함</span></label>
+    <input id="cSearch" type="text" placeholder="재료 검색 (예: 계란)" maxlength="16" autocomplete="off">
+    <div class="cust-list" id="cList"></div>
+  </div>
+
+  <div class="field">
+    <label for="cNote">간단 메모·조리법 <span class="hint-inline">선택</span></label>
+    <textarea id="cNote" maxlength="200" placeholder="예: 면 삶고 버터에 계란 스크램블, 치킨스톡 반 컵으로 소스"></textarea>
+  </div>
+
+  <div class="sheet-actions">
+    <button class="btn ghost" id="customCancel">취소</button>
+    <button class="btn primary" id="customSave">저장</button>
+  </div>
+</div>
+
 <div class="sheet" id="menuSheet" role="dialog" aria-modal="true">
   <div class="sheet-grip"></div>
   <h2>더보기</h2>
@@ -709,7 +769,10 @@
       steps: '목살 두툼하게 구워 김치와 함께 한입. 기름진 맛은 샐러드로 바로 정리해요.' },
     { id: 'spam-stew', name: '스팸 염분 뺀 김치찌개', slots: ['dinner'], key: 'pork', time: '20분', tag: '찌개',
       uses: ['spam', 'kimchi', 'tofu', 'onion', 'mushroom', 'rice'],
-      steps: '스팸은 끓는 물에 3분 데쳐 염분을 빼요. 김치·양파 볶다 물 붓고 두부·버섯 넣어 10분 끓임.' },
+      steps: '김치·양파를 볶다 물 400ml 붓고 두부·버섯 넣어 10분 끓이면 끝. 밥에 얹어 드세요.' },
+    { id: 'egg-scramble-pasta', name: '에그 스크램블 파스타', slots: ['lunch', 'dinner'], key: 'pasta', time: '15분', tag: '파스타',
+      uses: ['pasta', 'egg', 'butter', 'garlic', 'stock'],
+      steps: '면을 삶아 건져요. 버터에 다진마늘 볶다 계란을 풀어 스크램블처럼 익히고, 치킨스톡 반 컵과 면수를 넣어 소스로. 삶은 면을 넣고 비벼 마무리(바질페스토 한 스푼 있으면 더 좋아요).' },
     { id: 'pesto-pasta', name: '바질페스토 버섯·모짜렐라 파스타', slots: ['lunch'], key: 'pasta', time: '15분', tag: '파스타',
       uses: ['pasta', 'pesto', 'mushroom', 'mozzarella', 'garlic'],
       steps: '파스타 삶기 1분 전 버섯 넣어 함께 데치기. 물기 빼고 페스토 2스푼 비벼 모짜렐라 얹고 뚜껑.' },
@@ -789,10 +852,15 @@
   var eatSheet = $('eatSheet'), eatSub = $('eatSub'), eatList = $('eatList'), eatConfirm = $('eatConfirm');
   var menuSheet = $('menuSheet');
 
+  var customSheet = $('customSheet'), customSub = $('customSub');
+  var cName = $('cName'), cSearch = $('cSearch'), cList = $('cList'), cNote = $('cNote'), cCount = $('cCount');
+
   /* ── 상태 ── */
   var ui = { tab: 'pantry', filter: 'all', hideDone: false };
   var editor = { mode: 'add', id: null, loc: 'fridge', urg: 'normal' };
   var eatTarget = null;
+  var customTarget = null;
+  var customSel = {};
   var resetArmed = false;
 
   var state = loadState();
@@ -808,6 +876,7 @@
       plan: null,
       skips: {},
       eaten: {},
+      customMeals: {},
       snacks: { today: [], tomorrow: [] }
     };
   }
@@ -842,6 +911,14 @@
     });
     s.skips = s.skips || {};
     s.eaten = s.eaten || {};
+    s.customMeals = s.customMeals && typeof s.customMeals === 'object' ? s.customMeals : {};
+    Object.keys(s.customMeals).forEach(function (k) {
+      var c = s.customMeals[k];
+      if (!c || typeof c.name !== 'string' || !c.name.trim()) { delete s.customMeals[k]; return; }
+      c.name = String(c.name);
+      c.note = c.note ? String(c.note) : '';
+      c.uses = Array.isArray(c.uses) ? c.uses.map(String) : [];
+    });
     s.snacks = s.snacks || { today: [], tomorrow: [] };
     if (!Array.isArray(s.snacks.today)) s.snacks.today = [];
     if (!Array.isArray(s.snacks.tomorrow)) s.snacks.tomorrow = [];
@@ -881,6 +958,19 @@
   function recipeById(id) {
     for (var i = 0; i < RECIPES.length; i++) if (RECIPES[i].id === id) return RECIPES[i];
     return null;
+  }
+
+  /* 직접 등록한 끼니가 있으면 그걸, 없으면 추천 레시피를 돌려준다 */
+  function customMeal(day, meal) {
+    return (state.customMeals || {})[slotKey(day, meal)] || null;
+  }
+
+  function mealRecipe(day, meal) {
+    var c = customMeal(day, meal);
+    if (c) {
+      return { id: 'custom:' + slotKey(day, meal), name: c.name, uses: c.uses || [], steps: c.note || '', custom: true };
+    }
+    return recipeById(state.plan[day] && state.plan[day][meal]);
   }
 
   function slotKey(day, meal) { return day + '-' + meal; }
@@ -972,12 +1062,26 @@
         });
       });
     }
+    /* 직접 등록한 끼니는 그대로 유지하고, 그 끼니의 스킵·먹음 기록도 살린다 */
+    var keepSkips = {}, keepEaten = {}, mineCount = 0;
+    ['today', 'tomorrow'].forEach(function (d) {
+      ['lunch', 'dinner'].forEach(function (m) {
+        var k = slotKey(d, m);
+        if (!customMeal(d, m)) return;
+        mineCount++;
+        if (state.skips[k]) keepSkips[k] = true;
+        if (state.eaten[k]) keepEaten[k] = true;
+      });
+    });
+
     state.plan = buildPlan(state, { avoid: avoid });
-    state.skips = {};
-    state.eaten = {};
+    state.skips = keepSkips;
+    state.eaten = keepEaten;
     save();
     renderAll();
-    toast('남은 재료 기준으로 네 끼를 다시 짰어요');
+    toast(mineCount
+      ? '네 끼를 다시 짰어요 · 직접 등록한 ' + mineCount + '끼는 그대로 뒀어요'
+      : '남은 재료 기준으로 네 끼를 다시 짰어요');
   }
 
   function swapMeal(day, meal) {
@@ -1186,17 +1290,19 @@
 
   function mealCard(day, meal) {
     var k = slotKey(day, meal);
-    var rid = state.plan[day] && state.plan[day][meal];
-    var r = recipeById(rid);
+    var r = mealRecipe(day, meal);
     if (!r) return '';
+    var mine = !!r.custom;
     var skipped = !!state.skips[k];
     var eaten = !!state.eaten[k];
     var slotName = meal === 'lunch' ? '점심' : '저녁';
 
-    var cls = 'meal-card' + (skipped ? ' is-skip' : '') + (eaten ? ' is-eaten' : '');
+    var cls = 'meal-card' + (mine ? ' is-mine' : '') + (skipped ? ' is-skip' : '') + (eaten ? ' is-eaten' : '');
     var head = '<div class="meal-top">' +
       '<span class="slot-pill ' + meal + '">' + slotName + '</span>' +
-      '<span class="meal-meta">' + esc(r.time) + ' · ' + esc(r.tag) + '</span>' +
+      (mine
+        ? '<span class="mine-tag">내가 정한 메뉴</span>'
+        : '<span class="meal-meta">' + esc(r.time) + ' · ' + esc(r.tag) + '</span>') +
       (eaten ? '<span class="eat-stamp">✅ 먹음</span>' : '') +
     '</div>';
 
@@ -1210,21 +1316,42 @@
       '</article>';
     }
 
-    var warnNote = r.uses.indexOf('spam') !== -1;
-    var steps = '<p class="steps' + (warnNote ? ' warn' : '') + '">' +
-      (warnNote ? '⚠️ 스팸은 끓는 물에 3분 데쳐 염분부터 빼세요. ' : '') + esc(r.steps) + '</p>';
+    var steps;
+    if (mine) {
+      steps = r.steps ? '<p class="steps">' + esc(r.steps) + '</p>' : '';
+    } else {
+      var warnNote = r.uses.indexOf('spam') !== -1;
+      steps = '<p class="steps' + (warnNote ? ' warn' : '') + '">' +
+        (warnNote ? '⚠️ 스팸은 끓는 물에 3분 데쳐 염분부터 빼세요. ' : '') + esc(r.steps) + '</p>';
+    }
 
-    var actions = eaten
-      ? '<div class="meal-actions"><button class="act undo" data-act="uneat">기록 되돌리기</button></div>'
-      : '<div class="meal-actions">' +
+    var usesHtml = r.uses.length
+      ? '<div class="use-chips">' + useChips(r) + '</div>'
+      : (mine ? '<p class="mine-empty">쓸 재료를 고르지 않았어요 · <b>수정</b>에서 골라두면 먹을 때 한 번에 처리돼요</p>'
+              : '<div class="use-chips"></div>');
+
+    var actions;
+    if (eaten) {
+      actions = '<div class="meal-actions"><button class="act undo" data-act="uneat">기록 되돌리기</button></div>';
+    } else if (mine) {
+      actions = '<div class="meal-actions four">' +
+          '<button class="act" data-act="editCustom">✏️ 수정</button>' +
+          '<button class="act" data-act="swap">🔄 레시피로</button>' +
+          '<button class="act" data-act="skip">🍗 배달·외식</button>' +
+          '<button class="act solid" data-act="eat">✅ 이거 먹음 (재료 처리)</button>' +
+        '</div>';
+    } else {
+      actions = '<div class="meal-actions four">' +
+          '<button class="act" data-act="custom">✏️ 직접 입력</button>' +
           '<button class="act" data-act="swap">🔄 다른 메뉴</button>' +
           '<button class="act" data-act="skip">🍗 배달·외식</button>' +
           '<button class="act solid" data-act="eat">✅ 이거 먹음 (재료 처리)</button>' +
         '</div>';
+    }
 
     return '<article class="' + cls + '" data-day="' + day + '" data-meal="' + meal + '">' +
       head + body +
-      '<div class="use-chips">' + useChips(r) + '</div>' +
+      usesHtml +
       (eaten ? '' : steps) +
       actions +
     '</article>';
@@ -1268,7 +1395,8 @@
       dayBlock('today', 0) +
       dayBlock('tomorrow', 1) +
       '<div class="section-note">🍽️ 점심·저녁 두 끼만 제안해요. 취향에 안 맞으면 <b>다른 메뉴</b>로 바로 교체하고, ' +
-      '먹은 뒤 <b>이거 먹음</b>을 누르면 그 레시피 재료가 한 번에 처리돼요.</div>';
+      '먹은 뒤 <b>이거 먹음</b>을 누르면 그 레시피 재료가 한 번에 처리돼요. ' +
+      '먹고 싶은 메뉴가 따로 있으면 <b>✏️ 직접 입력</b>으로 이름·쓸 재료를 등록해 두세요 — 다시 짜도 그 끼니는 그대로 남아요.</div>';
   }
 
   /* =========================================================
@@ -1302,7 +1430,7 @@
   }
 
   function closeSheets(keepScrim) {
-    [ingSheet, eatSheet, menuSheet].forEach(function (el) { el.classList.remove('is-open'); });
+    [ingSheet, eatSheet, customSheet, menuSheet].forEach(function (el) { el.classList.remove('is-open'); });
     if (!keepScrim) scrim.classList.remove('is-open');
     resetArmed = false;
   }
@@ -1403,10 +1531,94 @@
     toast(it.name + ' 삭제했어요');
   }
 
+  /* ── 메뉴 직접 등록 시트 ── */
+  function updateCustomCount() {
+    var n = 0;
+    Object.keys(customSel).forEach(function (id) { if (customSel[id]) n++; });
+    cCount.innerHTML = n ? '<b>' + n + '개</b> 선택' : '선택 안 함';
+  }
+
+  function renderCustomList() {
+    var q = cSearch.value.trim().toLowerCase();
+    var html = '';
+    var total = 0;
+
+    ['fridge', 'freezer', 'pantry'].forEach(function (locId) {
+      var group = state.ingredients.filter(function (it) {
+        if (it.done || it.loc !== locId) return false;
+        return !q || it.name.toLowerCase().indexOf(q) !== -1;
+      });
+      if (!group.length) return;
+      total += group.length;
+      html += '<div class="cust-group">' + LOCS[locId].icon + ' ' + LOCS[locId].label + '</div>';
+      html += group.map(function (it) {
+        var on = !!customSel[it.id];
+        var badge = (it.urg === 'urgent' || it.urg === 'soon')
+          ? '<span class="badge ' + URG[it.urg].cls + '">' + URG[it.urg].short + ' ' + URG[it.urg].label + '</span>'
+          : '';
+        return '<label class="eat-row">' +
+          '<input type="checkbox" value="' + esc(it.id) + '"' + (on ? ' checked' : '') + '>' +
+          '<span class="eat-name">' + esc(it.name) + '</span>' +
+          badge +
+        '</label>';
+      }).join('');
+    });
+
+    if (!total) {
+      html = '<div class="cust-empty">' + (q ? '검색 결과가 없어요' : '남은 재료가 없어요') + '</div>';
+    }
+    cList.innerHTML = html;
+    updateCustomCount();
+  }
+
+  function openCustom(day, meal) {
+    var k = slotKey(day, meal);
+    customTarget = { day: day, meal: meal, key: k };
+    customSel = {};
+
+    var cur = customMeal(day, meal);
+    if (cur) {
+      (cur.uses || []).forEach(function (id) { customSel[id] = true; });
+    }
+
+    customSub.textContent = (day === 'today' ? '오늘 ' : '내일 ') + (meal === 'lunch' ? '점심' : '저녁') +
+      ' · ' + dayLabel(day === 'tomorrow' ? 1 : 0) +
+      ' — 직접 등록한 끼니는 다시 짜도 그대로 유지돼요.';
+
+    cName.value = cur ? cur.name : '';
+    cNote.value = cur ? cur.note : '';
+    cSearch.value = '';
+    renderCustomList();
+    openSheet(customSheet);
+    setTimeout(function () { cName.focus(); }, 260);
+  }
+
+  function saveCustom() {
+    if (!customTarget) return;
+    var name = cName.value.trim();
+    if (!name) {
+      cName.focus();
+      toast('메뉴 이름을 적어주세요');
+      return;
+    }
+    var uses = [];
+    state.ingredients.forEach(function (it) { if (customSel[it.id] && !it.done) uses.push(it.id); });
+
+    state.customMeals = state.customMeals || {};
+    state.customMeals[customTarget.key] = { name: name, uses: uses, note: cNote.value.trim() };
+    delete state.skips[customTarget.key];
+    delete state.eaten[customTarget.key];
+    save();
+    closeSheets();
+    customTarget = null;
+    renderAll();
+    toast(name + ' 등록 완료 · 이 끼니는 계속 유지돼요');
+  }
+
   /* ── 먹음 시트 ── */
   function openEat(day, meal) {
     var k = slotKey(day, meal);
-    var r = recipeById(state.plan[day][meal]);
+    var r = mealRecipe(day, meal);
     if (!r) return;
     eatTarget = { day: day, meal: meal, key: k, recipe: r };
 
@@ -1435,7 +1647,7 @@
     }).join('');
 
     if (!rows.length) {
-      eatList.innerHTML = '<div class="empty"><p>이 레시피에 연결된 재료가 없어요.</p></div>';
+      eatList.innerHTML = '<div class="empty"><p>' + (r.custom ? '고른 재료가 없어요.<br>먹은 기록만 남길 수 있어요.' : '이 레시피에 연결된 재료가 없어요.') + '</p></div>';
     }
 
     openSheet(eatSheet);
@@ -1545,7 +1757,11 @@
     var k = slotKey(d, m);
     var act = actBtn.getAttribute('data-act');
 
-    if (act === 'swap') swapMeal(d, m);
+    if (act === 'swap') {
+      if (customMeal(d, m)) delete state.customMeals[k];
+      swapMeal(d, m);
+    }
+    else if (act === 'custom' || act === 'editCustom') openCustom(d, m);
     else if (act === 'skip') {
       state.skips[k] = true;
       delete state.eaten[k];
@@ -1595,6 +1811,17 @@
 
   eatConfirm.addEventListener('click', confirmEat);
   $('eatCancel').addEventListener('click', function () { closeSheets(); });
+
+  cList.addEventListener('change', function (e) {
+    var box = e.target;
+    if (!box || box.type !== 'checkbox') return;
+    customSel[box.value] = box.checked;
+    updateCustomCount();
+  });
+  cSearch.addEventListener('input', renderCustomList);
+  $('customSave').addEventListener('click', saveCustom);
+  $('customCancel').addEventListener('click', function () { closeSheets(); });
+  cName.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); saveCustom(); } });
 
   $('menuBtn').addEventListener('click', function () { openSheet(menuSheet); });
 
