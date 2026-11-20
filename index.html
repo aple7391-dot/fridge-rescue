@@ -2493,7 +2493,7 @@
     mealsEl.innerHTML =
       '<div class="meals-head">' +
         '<div>' +
-          '<h2>오늘 뭐 먹지</h2>' +
+          '<h2>' + (day === 'today' ? '오늘' : '내일') + ' 뭐 먹지</h2>' +
           '<p>' + (urgentLeft
             ? '🚨 급한 재료 ' + urgentLeft + '개를 먼저 쓰는 순서로 짰어요'
             : '급한 재료는 다 정리됐어요 · 여유 재료로 골랐어요') + '</p>' +
