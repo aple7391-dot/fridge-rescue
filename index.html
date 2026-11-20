@@ -3015,7 +3015,7 @@
       var canTap = !it.done && it.count > 0 && it.count <= 2;
       var numAttr = canTap
         ? ' data-act="part" data-id="' + esc(it.id) + '" role="button" tabindex="0" aria-label="' + esc(it.name) +
-          (part ? ' 소량 표시 끄기' : ' 반' + un + ' 더 표시') + '"'
+          (part ? ' 소량 표시 끄기' : ' 반 ' + un + ' 더 표시') + '"'
         : '';
       var whole = Math.floor(it.count + 0.001);
       var numBody = part
@@ -3025,7 +3025,7 @@
         ? (it.count > 0.5 ? ' 소량 씀' : ' 다 씀')
         : (it.count > 1 ? ' 하나 차감' : ' 조금 먹어 소량으로'));
       var incLabel = esc(it.name) + (part
-        ? (it.count > 0.5 ? ' 반' + un + ' 더' : ' 1' + un + roParticle(unitOf(it)) + ' 되돌리기')
+        ? (it.count > 0.5 ? ' 반 ' + un + ' 더' : ' 1' + un + roParticle(unitOf(it)) + ' 되돌리기')
         : ' 하나 더');
       control = '<div class="step' + (part ? ' is-partial' : '') + '">' +
         '<button data-act="dec" data-id="' + esc(it.id) + '" aria-label="' + decLabel + '"' +
@@ -4254,7 +4254,7 @@
           }
         } else {
           cit.count = Math.round((cit.count + 0.5) * 2) / 2;
-          toast(cem + ' ' + cnm + ' ' + amountText(cit.count, cun) + ' 남음 · 반' + cun + '까지 표시했어요');
+          toast(cem + ' ' + cnm + ' ' + amountText(cit.count, cun) + ' 남음 · 반 ' + cun + '까지 표시했어요');
         }
       } else if (act === 'dec') {
         if (cit.done || cit.count <= 0) return;
