@@ -2708,7 +2708,7 @@
     if (isCountable(it)) {
       var canPart = !it.done && !part && it.count === 1;
       var numAttr = (canPart || part)
-        ? ' data-act="part" role="button" tabindex="0" aria-label="' + esc(it.name) +
+        ? ' data-act="part" data-id="' + esc(it.id) + '" role="button" tabindex="0" aria-label="' + esc(it.name) +
           (part ? ' 1' + esc(unitOf(it)) + '로 되돌리기' : ' 소량으로 바꾸기') + '"'
         : '';
       var numBody = part ? '소량' : it.count + '<small>' + esc(unitOf(it)) + '</small>';
