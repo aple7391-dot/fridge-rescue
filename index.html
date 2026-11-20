@@ -1166,7 +1166,7 @@
     return it.count === 1;
   }
 
-  /* 아직 소진 전인데 한 번 이상 먹은 '나눠 먹는 중' 재료 */
+  /* 아직 소진 전인데 한 번 이상 먹은 '소량' 재료 */
   function isSharing(it) {
     return !!it && isBulk(it) && !isDepleted(it) && (it.used || 0) >= 1;
   }
@@ -1777,7 +1777,7 @@
           ? '<span class="alert-pill hot">🚨 급하게 처리할 재료 <b>&nbsp;' + urgentLeft.length + '개</b></span>'
           : '<span class="alert-pill cool">🎉 급하게 처리할 재료 없음</span>') +
         (soonLeft ? '<span class="alert-pill">⏳ 곧 소진 ' + soonLeft + '개</span>' : '') +
-        (sharingLeft ? '<span class="alert-pill cool">🥛 나눠 먹는 중 ' + sharingLeft + '개</span>' : '') +
+        (sharingLeft ? '<span class="alert-pill cool">🥛 소량 남음 ' + sharingLeft + '개</span>' : '') +
       '</div>' +
       (chips ? '<div class="urgent-chips">' + chips + '</div>' : '');
   }
@@ -1798,12 +1798,13 @@
     var meta = [];
     if (isCountable(it)) {
       if (!it.done) meta.push('<span>' + it.count + esc(unitOf(it)) + ' 남음</span>');
-    } else if (it.qty) {
+    } else if (it.qty && !(isSharing(it) && String(it.qty).indexOf('소량') === 0)) {
+      /* 뱃지가 이미 '소량'을 말하니 수량 '소량'은 겹쳐 쓰지 않는다 */
       meta.push('<span>' + esc(it.qty) + '</span>');
     }
     if (isSharing(it)) {
       if (meta.length) meta.push('<span class="dot"></span>');
-      meta.push('<span class="share-pill">' + emojiOf(it) + ' 나눠 먹는 중 · ' + (it.used || 0) + '회</span>');
+      meta.push('<span class="share-pill">' + emojiOf(it) + ' 소량 · ' + (it.used || 0) + '회</span>');
     } else if (!isCountable(it) && it.used) {
       if (meta.length) meta.push('<span class="dot"></span>');
       meta.push('<span>🍽️ ' + it.used + '번 먹음</span>');
@@ -1973,7 +1974,7 @@
         tag = '<span class="gone">소진됨</span>';
       } else if (isBulk(it) && (it.used || 0) >= 1) {
         cls += ' is-sharing';
-        tag = '<span class="state">나눔 ' + it.used + '회</span>';
+        tag = '<span class="state">소량</span>';
       } else if (it.urg === 'urgent') cls += ' urgent';
       else if (it.urg === 'soon') cls += ' soon';
       return '<button type="button" class="' + cls + '" data-chipdel="' + esc(id) + '"' +
@@ -2695,7 +2696,7 @@
       it.used = (it.used || 0) + 1;
       shareCount++;
       usedIds.push(it.id);
-      parts.push(emojiOf(it) + ' ' + it.name + ' +1회(남음)');
+      parts.push(emojiOf(it) + ' ' + it.name + ' 소량');
     });
 
     /* 개수 재료: −/+로 정한 개수만큼 차감, 0이면 처리 완료 */
@@ -2730,7 +2731,7 @@
     if (finished.length) {
       var names = finished.map(function (it) { return emojiOf(it) + ' ' + it.name; }).join(' · ');
       msg = names + ' 소진 완료' + (swapped ? ' · 안 먹은 끼니 ' + swapped + '개 자동 교체' : '');
-      if (shareCount) msg += ' · 나눔 ' + shareCount + '개 기록';
+      if (shareCount) msg += ' · 소량으로 남긴 재료 ' + shareCount + '개';
     }
     toast(msg);
   }
@@ -2813,7 +2814,7 @@
     }
 
     if (act === 'finish') {
-      /* 나눠 먹는 중 → 다 먹음(소진) */
+      /* 소량 → 다 먹음(소진) */
       var fit = byId(id);
       if (!fit) return;
       var fem = emojiOf(fit), fnm = fit.name;
