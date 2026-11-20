@@ -427,7 +427,10 @@
   .day-count{font-size:12.5px;font-weight:700;color:var(--ink2);background:#F2F4F6;padding:5px 9px;border-radius:8px}
   .day-count.zero{color:var(--sub)}
 
-  .snacks{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 2px 16px}
+  .snackbar{display:flex;align-items:center;gap:10px;margin:0 2px 16px}
+  .snacks{flex:1;min-width:0;display:flex;align-items:center;gap:8px;overflow-x:auto;
+    scrollbar-width:none;-ms-overflow-style:none;padding:2px 0}
+  .snacks::-webkit-scrollbar{display:none}
   .snacks .day-count{margin-left:auto}
   .snacks-label{font-size:12.5px;font-weight:700;color:var(--sub);letter-spacing:-.01em;margin-right:2px}
   .snack{
@@ -604,23 +607,24 @@
     margin:0 0 14px;padding:20px;border-radius:24px;
     background:#FFF3F3;border:1px solid #FFE0E0;
   }
-  .uc-head{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;color:#C2323E;letter-spacing:-.035em}
-  .uc-sub{font-size:13px;color:#B4696E;font-weight:400;margin-top:6px;line-height:1.55}
-  .uc-list{margin-top:14px;display:flex;flex-direction:column;gap:10px}
-  .uc-row{
-    display:flex;align-items:center;gap:12px;
-    background:#fff;border-radius:16px;padding:14px 15px;
-    box-shadow:0 1px 2px rgba(190,60,60,.06);
+  .uc-head{display:flex;align-items:center;gap:8px;font-size:16.5px;font-weight:800;color:#C2323E;letter-spacing:-.035em}
+  .uc-sub{font-size:13px;color:#B4696E;font-weight:400;margin-top:7px;line-height:1.6}
+  .uc-list{margin-top:12px}
+  .uc-line{
+    display:flex;align-items:center;gap:10px;
+    padding:13px 0;border-top:1px solid rgba(200,80,80,.12);min-height:48px;
   }
-  .uc-emo{font-size:22px;line-height:1;flex:0 0 auto}
-  .uc-main{flex:1;min-width:0}
-  .uc-name{font-size:15px;font-weight:700;letter-spacing:-.03em;color:var(--ink);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-  .uc-note{font-size:12.5px;color:var(--sub);font-weight:500;margin-top:3px;letter-spacing:-.02em}
-  .uc-act{
-    flex:0 0 auto;font-size:12.5px;font-weight:700;color:#C2323E;
-    background:#FFF0F0;border-radius:11px;padding:10px 12px;min-height:40px;white-space:nowrap;
+  .uc-line:first-child{border-top:0;padding-top:4px}
+  .uc-emo{font-size:20px;line-height:1;flex:0 0 auto}
+  .uc-name{font-size:15px;font-weight:700;letter-spacing:-.03em;color:var(--ink);flex:0 1 auto;white-space:nowrap}
+  .uc-note{font-size:12.5px;color:#B4696E;font-weight:500;margin-left:auto;letter-spacing:-.02em;text-align:right}
+  .uc-more{font-size:12.5px;color:#B4696E;font-weight:600;padding-top:6px}
+  .uc-btn{
+    width:100%;margin-top:10px;min-height:48px;border-radius:14px;
+    background:#fff;color:#C2323E;font-size:14px;font-weight:700;letter-spacing:-.03em;
+    box-shadow:0 1px 2px rgba(190,60,60,.08);
   }
-  .uc-act:active{background:#FFE4E4}
+  .uc-btn:active{background:#FFEFEF}
 
   /* ── FAB ── */
   .fab{
@@ -2430,30 +2434,31 @@
     });
     if (!list.length) return '';
 
-    var when = day === 'today' ? '오늘 안에는 다 먹어야 해요' : '내일까지는 꼭 써야 해요';
+    var shown = list.slice(0, 5);
+    var rest = list.length - shown.length;
 
-    var rows = list.map(function (it) {
-      var bits = [];
-      if (it.note) bits.push(esc(it.note));
-      else if (isCountable(it)) bits.push(it.count + esc(unitOf(it)) + ' 남음');
-      else if (it.qty) bits.push(esc(it.qty));
-      bits.push(when);
-      return '<div class="uc-row">' +
+    var lines = shown.map(function (it) {
+      var note = it.note;
+      if (!note) {
+        if (isCountable(it)) note = it.count + unitOf(it) + ' 남음';
+        else if (it.qty) note = it.qty;
+        else note = URG[it.urg].label;
+      }
+      return '<div class="uc-line">' +
         '<span class="uc-emo">' + emojiOf(it) + '</span>' +
-        '<div class="uc-main">' +
-          '<p class="uc-name">' + esc(it.name) +
-            (it.urg === 'urgent' ? '<span class="badge urgent">🚨 급해요</span>' : '<span class="badge soon">⏳ 곧 소진</span>') +
-          '</p>' +
-          '<p class="uc-note">' + bits.join(' · ') + '</p>' +
-        '</div>' +
-        '<button class="uc-act" data-uc="' + esc(it.id) + '">정리하기</button>' +
+        '<span class="uc-name">' + esc(it.name) + '</span>' +
+        '<span class="uc-note">' + esc(note) + '</span>' +
+        '<span class="badge ' + URG[it.urg].cls + '">' + (it.urg === 'urgent' ? '🚨' : '⏳') + '</span>' +
       '</div>';
     }).join('');
 
     return '<section class="urgent-callout">' +
-      '<p class="uc-head">🚨 추천 레시피엔 아직 안 들어갔어요</p>' +
-      '<p class="uc-sub">' + (day === 'today' ? '오늘' : '내일') + ' 두 끼에 안 쓰이는 급한 재료예요. 지금 하나 챙겨 먹거나, 장 볼 때 같이 사 와서 같이 먹어요.</p>' +
-      '<div class="uc-list">' + rows + '</div>' +
+      '<p class="uc-head">🚨 ' + (day === 'today' ? '오늘' : '내일') + ' 안에는 다 먹어야 해요</p>' +
+      '<p class="uc-sub">추천 레시피엔 아직 안 들어간 급한 재료예요. 지금 하나 챙겨 먹거나, 장 볼 때 같이 사 오세요.</p>' +
+      '<div class="uc-list">' + lines +
+        (rest > 0 ? '<div class="uc-more">외 ' + rest + '개 더 있어요</div>' : '') +
+      '</div>' +
+      '<button class="uc-btn" data-uc="1">🧺 소진 체크에서 정리하기</button>' +
     '</section>';
   }
 
@@ -2475,8 +2480,10 @@
       return '<button class="snack' + (on ? ' is-on' : '') + '" data-snack="' + sn.id + '" data-snackday="' + day + '">' +
         sn.emo + ' ' + sn.label + '</button>';
     }).join('');
-    return '<div class="snacks"><span class="snacks-label">간식</span>' + snackHtml +
-      '<span class="day-count' + (eatenCount ? '' : ' zero') + '">' + eatenCount + '/2 끼</span></div>';
+    return '<div class="snackbar">' +
+      '<div class="snacks"><span class="snacks-label">간식</span>' + snackHtml + '</div>' +
+      '<span class="day-count' + (eatenCount ? '' : ' zero') + '">' + eatenCount + '/2 끼</span>' +
+    '</div>';
   }
 
   function renderMeals() {
