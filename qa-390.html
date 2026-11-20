@@ -6,22 +6,16 @@
 <title>냉장고 구조대 · 390px 미리보기</title>
 <style>
   html,body{margin:0;padding:0;background:#DDE1E6}
-  iframe{width:390px;height:844px;border:0;display:block;background:#fff}
+  iframe{width:390px;border:0;display:block;background:#fff;height:844px}
 </style>
 </head>
 <body>
 <iframe src="./index.html" title="냉장고 구조대 390px 미리보기"></iframe>
 <script>
-  /* 미리보기 harness — ?y=360 처럼 스크롤 위치만 맞춰 캡처하기 위한 것 */
+  /* 미리보기 harness — ?h=2400 처럼 앱을 한 번에 캡처할 높이를 정한다 */
   (function () {
-    var y = parseInt((new URLSearchParams(location.search)).get('y') || '0', 10) || 0;
-    if (!y) return;
-    var f = document.querySelector('iframe');
-    f.addEventListener('load', function () {
-      setTimeout(function () {
-        try { f.contentWindow.scrollTo(0, y); } catch (e) {}
-      }, 120);
-    });
+    var h = parseInt((new URLSearchParams(location.search)).get('h') || '0', 10);
+    if (h > 0) document.querySelector('iframe').style.height = h + 'px';
   })();
 </script>
 </body>
