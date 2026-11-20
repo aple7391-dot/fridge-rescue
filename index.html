@@ -567,6 +567,52 @@
   }
   .gone-bar button:active{background:#FDF1DC}
 
+  /* ── 탄단지 요약 ── */
+  .macro{
+    margin-top:16px;padding:14px 16px;border-radius:16px;background:#F7F8FA;
+  }
+  .macro-top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .macro-kcal{font-size:13px;font-weight:800;color:var(--ink);letter-spacing:-.02em}
+  .macro-pcts{margin-left:auto;display:flex;gap:7px;font-size:12.5px;letter-spacing:-.02em;white-space:nowrap}
+  .macro-pcts b{font-weight:700}
+  .macro-pcts .c{color:#B77900}
+  .macro-pcts .p{color:var(--blue-deep)}
+  .macro-pcts .f{color:#C9623F}
+  .macro-bar{display:flex;gap:3px;height:9px;margin-top:11px;background:#E7EBEF;border-radius:99px;overflow:hidden}
+  .macro-bar i{display:block;height:100%;border-radius:99px;min-width:3px;transition:width .25s ease}
+  .macro-bar .c{background:#FFC64D}
+  .macro-bar .p{background:#4C93F7}
+  .macro-bar .f{background:#FFA07A}
+  .macro-gram{display:flex;gap:9px;flex-wrap:wrap;margin-top:10px;font-size:11.5px;color:var(--sub);font-weight:500;letter-spacing:-.01em}
+  .macro-gram b{color:var(--ink2);font-weight:700}
+  .macro-gram .base{margin-left:auto;color:var(--sub2);font-weight:500}
+
+  /* ── 속 불편·영양 경고 박스 ── */
+  .mwarn{margin-top:12px;padding:15px 16px;border-radius:16px;border:1px solid transparent}
+  .mwarn.alert{background:#FFF1F1;border-color:#FFDCDC}
+  .mwarn.warn{background:#FFF8EC;border-color:#F5E6C9}
+  .mwarn-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:14.5px;font-weight:800;letter-spacing:-.03em;line-height:1.35}
+  .mwarn.alert .mwarn-head{color:#C2323E}
+  .mwarn.warn .mwarn-head{color:#8A5305}
+  .mwarn-head .ico{font-size:14px;line-height:1}
+  .mwarn-head .who{margin-left:auto;font-size:11.5px;font-weight:700;letter-spacing:-.01em;padding:3px 8px;border-radius:8px;background:rgba(255,255,255,.8);color:#A9525B;white-space:nowrap}
+  .mwarn.warn .mwarn-head .who{color:#8A6A2E}
+  .mwarn-why{margin-top:9px;font-size:13px;line-height:1.62;font-weight:500;letter-spacing:-.02em;color:#A9525B}
+  .mwarn.warn .mwarn-why{color:#8A6A2E}
+  .mwarn-why b{font-weight:800}
+  .mwarn.alert .mwarn-why b{color:#BF2E3B}
+  .mwarn.warn .mwarn-why b{color:#7A4A05}
+  .mwarn-tip{margin-top:11px;padding-top:10px;border-top:1px dashed rgba(160,120,60,.22);font-size:12.5px;line-height:1.6;font-weight:500;letter-spacing:-.02em;color:#8A6A2E}
+  .mwarn.alert .mwarn-tip{border-top-color:rgba(194,50,62,.18);color:#A9525B}
+  .mwarn-sug{
+    margin-top:11px;display:inline-flex;align-items:center;gap:5px;
+    padding:9px 13px;min-height:38px;border-radius:11px;
+    background:#fff;border:1px solid #F0DCB8;color:#7A4A05;
+    font-size:12.5px;font-weight:800;letter-spacing:-.02em;white-space:nowrap;
+  }
+  .mwarn-sug:active{background:#FDF1DC;transform:scale(.97)}
+  .rs-h3sub{font-size:11.5px;font-weight:600;color:var(--sub);margin-left:5px;letter-spacing:-.01em}
+
   /* 레시피 보기 버튼 */
   .recipe-btn{
     display:flex;align-items:center;justify-content:center;gap:7px;
@@ -1423,6 +1469,502 @@
 
   /* 기본 레시피에서 함께 쓰인 빈도 (추천 칩 1순위 재료) */
   var RECIPE_CO = buildCo(RECIPES.map(function (r) { return r.uses; }));
+
+  /* =========================================================
+     영양 균형 · 속 편안함 분석
+     · 재료마다 1인분(레시피 1회 사용량) 기준 탄수화물·단백질·지방 g
+     · 소화 자극 태그로 한 끼 조합 / 연속 두 끼 조합을 살핀다
+     ========================================================= */
+
+  /* 재료별 1회 사용량 기준 추정 영양 (탄수화물 g, 단백질 g, 지방 g) */
+  var NUTR = {
+    mackerel:    { c: 0,   p: 26,  f: 12 },
+    pork:        { c: 0,   p: 25,  f: 19 },
+    mozzarella:  { c: 1,   p: 10,  f: 5 },
+    vegmix:      { c: 8,   p: 2,   f: 0.5 },
+    duck:        { c: 0,   p: 21,  f: 14 },
+    chicken:     { c: 0,   p: 23,  f: 1.5 },
+    salad:       { c: 5,   p: 1,   f: 0.5 },
+    milk:        { c: 10,  p: 6.5, f: 6 },
+    kimchi:      { c: 4,   p: 1.5, f: 0.5 },
+    mushroom:    { c: 3,   p: 2,   f: 0.3 },
+    onion:       { c: 7,   p: 1,   f: 0.2 },
+    potato:      { c: 20,  p: 2.5, f: 0.2 },
+    tofu:        { c: 2,   p: 8,   f: 5 },
+    apple:       { c: 14,  p: 0.3, f: 0.2 },
+    tangerine:   { c: 8,   p: 0.5, f: 0.1 },
+    grape:       { c: 12,  p: 0.5, f: 0.1 },
+    egg:         { c: 0.5, p: 6.5, f: 5 },
+    pesto:       { c: 1,   p: 2,   f: 6 },
+    creamcheese: { c: 1,   p: 2,   f: 5 },
+    morningbun:  { c: 22,  p: 4,   f: 2 },
+    shake:       { c: 3,   p: 20,  f: 1.5 },
+    boiledegg:   { c: 0.5, p: 6.5, f: 5 },
+    rice:        { c: 45,  p: 4,   f: 0.5 },
+    pasta:       { c: 55,  p: 9,   f: 1.5 },
+    spam:        { c: 1.5, p: 7,   f: 14 },
+    tuna:        { c: 0,   p: 16,  f: 2 },
+    jjajang:     { c: 65,  p: 9,   f: 9 },
+    pastasauce:  { c: 8,   p: 3,   f: 6 },
+    butter:      { c: 0,   p: 0.2, f: 5 },
+    garlic:      { c: 2,   p: 0.3, f: 0 },
+    stock:       { c: 1,   p: 0.5, f: 0.3 },
+    dashida:     { c: 0.8, p: 0.3, f: 0 },
+    vinegar:     { c: 1,   p: 0,   f: 0 },
+    soy:         { c: 2,   p: 1,   f: 0 },
+    tunasauce:   { c: 1,   p: 1,   f: 0 },
+    peanut:      { c: 3,   p: 3.5, f: 8 },
+    jam:         { c: 12,  p: 0,   f: 0 }
+  };
+
+  /* 재료별 소화·속 자극 태그 */
+  var TAGS = {
+    mackerel:    ['highFat'],
+    pork:        ['highFat'],
+    mozzarella:  ['dairy', 'highFat'],
+    vegmix:      [],
+    duck:        ['highFat'],
+    chicken:     [],
+    salad:       ['rawCold'],
+    milk:        ['dairy'],
+    kimchi:      ['spicy', 'highSodium', 'acidic'],
+    mushroom:    [],
+    onion:       [],
+    potato:      [],
+    tofu:        [],
+    apple:       [],
+    tangerine:   [],
+    grape:       [],
+    egg:         [],
+    pesto:       ['highFat'],
+    creamcheese: ['dairy', 'highFat'],
+    morningbun:  ['refinedFlour'],
+    shake:       ['dairy'],
+    boiledegg:   [],
+    rice:        [],
+    pasta:       ['refinedFlour'],
+    spam:        ['highFat', 'highSodium'],
+    tuna:        [],
+    jjajang:     ['refinedFlour', 'highFat', 'highSodium'],
+    pastasauce:  ['highSodium'],
+    butter:      ['highFat'],
+    garlic:      [],
+    stock:       ['highSodium'],
+    dashida:     ['highSodium'],
+    vinegar:     ['acidic'],
+    soy:         ['highSodium'],
+    tunasauce:   ['highSodium'],
+    peanut:      ['highFat'],
+    jam:         []
+  };
+
+  var TAG_LABEL = {
+    spicy: '매운맛', dairy: '유제품', highFat: '기름진 재료', refinedFlour: '빵·면',
+    acidic: '산미', rawCold: '찬 생채소', highSodium: '짠 재료'
+  };
+
+  /* 장보기로 새로 넣은 재료는 이름 키워드로 영양을 추정한다 */
+  var NUTRI_RULES = [
+    [/닭가슴살|닭안심|가슴살/, { c: 0, p: 23, f: 1.5 }],
+    [/우유|라떼|요거트|요구르트|그릭|치즈|크림|모짜렐라|체다|아이스크림/, { c: 8, p: 5, f: 5 }],
+    [/삼겹살|목살|베이컨|소시지|스팸|햄|불고기|갈비|제육|닭|오리|고기|소고기|돼지/, { c: 1, p: 20, f: 13 }],
+    [/고등어|연어|삼치|생선|참치|새우|오징어|조개|홍합|어묵/, { c: 2, p: 17, f: 5 }],
+    [/계란|달걀/, { c: 0.5, p: 6.5, f: 5 }],
+    [/밥|쌀|현미|잡곡|죽/, { c: 45, p: 4, f: 0.5 }],
+    [/빵|베이글|토스트|크루아상|또띠아|케이크|쿠키/, { c: 24, p: 4, f: 4 }],
+    [/라면|국수|우동|파스타|면|짜장|떡볶이|만두|피자/, { c: 50, p: 9, f: 6 }],
+    [/두부|콩|렌틸/, { c: 2, p: 8, f: 5 }],
+    [/감자|고구마|단호박|옥수수|떡/, { c: 20, p: 2.5, f: 0.3 }],
+    [/사과|귤|포도|바나나|딸기|블루베리|오렌지|키위|복숭아|배|과일/, { c: 13, p: 0.6, f: 0.2 }],
+    [/샐러드|상추|양배추|오이|토마토|당근|시금치|나물|채소|야채|버섯|양파|대파/, { c: 6, p: 1.5, f: 0.4 }],
+    [/김치|장아찌|단무지|젓갈|액젓/, { c: 4, p: 1.5, f: 0.4 }],
+    [/견과|땅콩|아몬드|호두|잣/, { c: 4, p: 4, f: 8 }],
+    [/잼|꿀|설탕|시럽|초콜릿/, { c: 12, p: 0.2, f: 0.2 }],
+    [/소스|케첩|마요|드레싱|간장|고추장|된장|스톡|다시다|소금|양념/, { c: 3, p: 1, f: 3 }]
+  ];
+
+  var TAG_RULES = [
+    ['spicy', /김치|고추|매운|매콤|얼큰|신라|불닭|마라|떡볶이|청양|닭발|제육|짬뽕|양념치킨/],
+    ['dairy', /우유|치즈|요거트|요구르트|크림|버터|라떼|아이스크림|모짜렐라|체다|그릭/],
+    ['highFat', /삼겹살|목살|베이컨|소시지|스팸|햄|마요|버터|식용유|튀김|돈까스|크림|땅콩|견과|아보카도|고등어|연어|삼치|갈비|오리/],
+    ['refinedFlour', /빵|베이글|크루아상|또띠아|케이크|쿠키|파스타|국수|라면|우동|짜장|만두|밀가루|피자|떡볶이/],
+    ['acidic', /토마토|식초|레몬|김치|오렌지|자몽|파인애플|매실|요거트|사과/],
+    ['rawCold', /샐러드|상추|오이|양배추|생채|냉면|회|초밥|셀러리/],
+    ['highSodium', /스팸|햄|소시지|베이컨|김치|라면|국수|간장|된장|고추장|액젓|젓갈|치즈|스프|다시다|소금|장아찌|단무지|어묵|짬뽕/]
+  ];
+
+  function has(obj, key) { return Object.prototype.hasOwnProperty.call(obj, key); }
+
+  function estimateNutri(name) {
+    var n = String(name || '');
+    for (var i = 0; i < NUTRI_RULES.length; i++) {
+      if (NUTRI_RULES[i][0].test(n)) return NUTRI_RULES[i][1];
+    }
+    return { c: 6, p: 5, f: 4 };
+  }
+
+  function estimateTags(name) {
+    var n = String(name || '');
+    var out = [];
+    for (var i = 0; i < TAG_RULES.length; i++) {
+      if (TAG_RULES[i][1].test(n)) out.push(TAG_RULES[i][0]);
+    }
+    return out;
+  }
+
+  function nutriOf(it) {
+    if (!it) return { c: 0, p: 0, f: 0 };
+    if (has(NUTR, it.id)) return NUTR[it.id];
+    return estimateNutri(it.name);
+  }
+
+  function tagsOf(it) {
+    if (!it) return [];
+    if (has(TAGS, it.id)) return TAGS[it.id];
+    return estimateTags(it.name);
+  }
+
+  /* g 표기: 12 / 12.5 */
+  function g1(v) {
+    var n = Math.round((v || 0) * 10) / 10;
+    return n % 1 === 0 ? String(n) : n.toFixed(1);
+  }
+
+  /* 재료 목록 → 탄단지 합계와 열량 비중 */
+  function sumMacros(uses) {
+    var t = { c: 0, p: 0, f: 0, kcal: 0, pct: { c: 0, p: 0, f: 0 } };
+    (uses || []).forEach(function (id) {
+      var it = byId(id);
+      if (!it) return;
+      var n = nutriOf(it);
+      t.c += n.c; t.p += n.p; t.f += n.f;
+    });
+    var kcal = t.c * 4 + t.p * 4 + t.f * 9;
+    t.kcal = Math.round(kcal);
+    if (kcal > 0) {
+      var pP = Math.round(t.p * 4 / kcal * 100);
+      var cP = Math.round(t.c * 4 / kcal * 100);
+      if (pP + cP > 100) { pP = Math.min(pP, 97); cP = Math.min(cP, 100 - pP); }
+      t.pct = { c: cP, p: pP, f: Math.max(0, 100 - cP - pP) };
+    }
+    return t;
+  }
+
+  /* 끼니 재료 → 태그별 재료 이름 모음 */
+  function tagStats(uses) {
+    var st = {};
+    (uses || []).forEach(function (id) {
+      var it = byId(id);
+      if (!it) return;
+      tagsOf(it).forEach(function (t) {
+        if (!st[t]) st[t] = [];
+        if (st[t].indexOf(it.name) === -1) st[t].push(it.name);
+      });
+    });
+    return st;
+  }
+
+  function tagNames(st, key) {
+    var arr = st[key] || [];
+    var head = arr.slice(0, 2).join('·');
+    return arr.length > 2 ? head + ' 등 ' + arr.length + '가지' : head;
+  }
+
+  function minusList(arr, other) {
+    return (arr || []).filter(function (n) { return (other || []).indexOf(n) === -1; });
+  }
+
+  /* 한 끼 안에서 속이 불편할 수 있는 조합 */
+  function gutSingle(st) {
+    var out = [];
+    var sp = st.spicy || [], dy = st.dairy || [], hf = st.highFat || [],
+        rf = st.refinedFlour || [], ac = st.acidic || [], rc = st.rawCold || [], hs = st.highSodium || [];
+
+    if (sp.length && dy.length) out.push({
+      sev: 'alert', tag: '매운맛 + 유제품',
+      why: tagNames(st, 'spicy') + '의 매운 자극과 ' + tagNames(st, 'dairy') + '가 한 끼에 같이 들어가요. 유제품이 매운맛을 감싸 주긴 해도, 위가 예민한 날엔 더부룩함과 가스가 늘 수 있어요.',
+      tip: '우유는 물이나 두유로 바꾸고 매운 재료는 절반만 넣어 보세요.'
+    });
+    if (hf.length >= 2 && dy.length) out.push({
+      sev: 'alert', tag: '기름진 재료 + 유제품',
+      why: tagNames(st, 'highFat') + '처럼 기름진 재료가 여러 개에 유제품까지 더해져 소화가 오래 걸려요. 먹고 나서 속이 답답하고 나른할 수 있어요.',
+      tip: '기름진 재료를 하나 덜어내고, 샐러드 대신 데친 채소를 곁들여 보세요.'
+    });
+    if (sp.length && hs.length) out.push({
+      sev: 'warn', tag: '매운맛 + 짠맛',
+      why: (function () {
+        var salt = minusList(hs, sp);
+        if (!salt.length) return tagNames(st, 'spicy') + ' 하나에 매운맛과 짠맛이 같이 들어가요. 위산이 올라오거나 다음 날 얼굴·손이 붓기 쉬워요.';
+        return tagNames(st, 'spicy') + '의 매운맛에 ' + salt.slice(0, 2).join('·') + '의 짠맛까지 겹쳐요. 위산이 올라오거나 다음 날 얼굴·손이 붓기 쉬워요.';
+      })(),
+      tip: '국물은 건더기 위주로 먹고 물을 한 잔 더 마셔 주세요.'
+    });
+    if (rf.length && hf.length) out.push({
+      sev: 'warn', tag: '빵·면 + 기름진 재료',
+      why: (function () {
+        var fat = minusList(hf, rf);
+        if (!fat.length) return tagNames(st, 'refinedFlour') + ' 자체가 기름지게 조리돼 소화가 느려져요. 먹고 나서 졸리거나 더부룩할 수 있어요.';
+        return tagNames(st, 'refinedFlour') + '에 ' + fat.slice(0, 2).join('·') + '까지 더해져 소화가 느려져요. 먹고 나서 졸리거나 더부룩할 수 있어요.';
+      })(),
+      tip: '면·빵 양을 조금 줄이고 단백질 재료를 하나 더하면 부담이 덜해요.'
+    });
+    if (ac.length && dy.length) out.push({
+      sev: 'warn', tag: '산미 + 유제품',
+      why: (function () {
+        var acid = minusList(ac, dy);
+        if (!acid.length) return '산미가 있는 ' + tagNames(st, 'dairy') + '가 두 가지 역할을 해서 소화가 더뎌질 수 있어요.';
+        return acid.slice(0, 2).join('·') + '의 산미와 ' + tagNames(st, 'dairy') + '가 만나면 우유 단백질이 엉겨 소화가 더뎌질 수 있어요.';
+      })(),
+      tip: '산미 있는 재료와 유제품은 한 끼에 같이 먹지 말고 나눠 보세요.'
+    });
+    if (rc.length && sp.length) out.push({
+      sev: 'warn', tag: '찬 생채소 + 매운맛',
+      why: '찬 ' + tagNames(st, 'rawCold') + '에 매운 재료까지 더해져 배가 찬 느낌이 들거나 금방 화장실이 급해질 수 있어요.',
+      tip: '샐러드는 실온에 5분 두었다가 먹고, 매운 양은 줄여 보세요.'
+    });
+    if (hs.length >= 3) out.push({
+      sev: 'warn', tag: '짠맛 누적',
+      why: tagNames(st, 'highSodium') + ' 등 짠 재료가 한 끼에 ' + hs.length + '가지나 들어가요. 다음 날 붓기와 갈증으로 이어질 수 있어요.',
+      tip: '간장·소금은 반만 쓰고 김치 국물은 남겨 주세요.'
+    });
+
+    out.sort(function (a, b) { return (a.sev === 'alert' ? 0 : 1) - (b.sev === 'alert' ? 0 : 1); });
+    return out.slice(0, 2);
+  }
+
+  /* 한 끼 탄단지 균형 */
+  function macroSingle(t) {
+    var out = [];
+    if (!t || t.kcal <= 0) return out;
+    var cb = t.pct.c, pb = t.pct.p, fb = t.pct.f;
+    if (pb < 15 || t.p < 16) out.push({
+      sev: 'warn', title: '단백질이 부족해요',
+      why: '단백질 ' + g1(t.p) + 'g · 열량 비중 ' + pb + '% (한 끼 18g 이상, 18~35% 권장)',
+      tip: '계란·닭가슴살·두부·참치처럼 단백질 재료를 하나 더하면 균형이 맞아요.',
+      sug: 'protein'
+    });
+    if (fb > 38) out.push({
+      sev: 'warn', title: '지방 비중이 높아요',
+      why: '지방 ' + g1(t.f) + 'g · 열량 비중 ' + fb + '% (권장 15~35%)',
+      tip: '버터·치즈·기름진 고기는 양을 절반으로 줄이고, 곁들이는 채소를 늘려 보세요.'
+    });
+    if (cb > 68) out.push({
+      sev: 'warn', title: '탄수화물에 치우쳤어요',
+      why: '탄수화물 ' + g1(t.c) + 'g · 열량 비중 ' + cb + '% (권장 35~62%)',
+      tip: '밥·면·빵 양을 조금 줄이고 단백질 반찬을 더해 보세요.',
+      sug: 'protein'
+    });
+    if (cb < 18) out.push({
+      sev: 'warn', title: '탄수화물이 너무 적어요',
+      why: '탄수화물 ' + g1(t.c) + 'g · 열량 비중 ' + cb + '% (권장 35~62%)',
+      tip: '밥 반 공기나 과일 한 조각을 더하면 오후까지 힘이 덜 빠져요.'
+    });
+    return out.slice(0, 2);
+  }
+
+  /* 실제로 먹는 끼니 순서 (외식으로 비운 끼니는 건너뛴다) */
+  function mealSequence() {
+    return [['today', 'lunch'], ['today', 'dinner'], ['tomorrow', 'lunch'], ['tomorrow', 'dinner']]
+      .filter(function (s) { return !state.skips[slotKey(s[0], s[1])]; });
+  }
+
+  function nextSlotOf(day, meal) {
+    var seq = mealSequence();
+    for (var i = 0; i < seq.length; i++) {
+      if (seq[i][0] === day && seq[i][1] === meal) return seq[i + 1] || null;
+    }
+    return null;
+  }
+
+  function slotLabel(day, meal) {
+    return (day === 'today' ? '오늘 ' : '내일 ') + (meal === 'lunch' ? '점심' : '저녁');
+  }
+
+  /* 이 끼니 + 바로 다음 끼니를 함께 본 경고 */
+  function crossCheck(day, meal) {
+    var nx = nextSlotOf(day, meal);
+    if (!nx) return null;
+    var rA = mealRecipe(day, meal), rB = mealRecipe(nx[0], nx[1]);
+    if (!rA || !rB) return null;
+
+    var label = slotLabel(nx[0], nx[1]);
+    var stA = tagStats(rA.uses), stB = tagStats(rB.uses);
+    var a = sumMacros(rA.uses), b = sumMacros(rB.uses);
+    var why = [], sev = 'warn', tip = '';
+
+    var aSp = (stA.spicy || []).length, bSp = (stB.spicy || []).length;
+    var aDy = (stA.dairy || []).length, bDy = (stB.dairy || []).length;
+    var aHf = (stA.highFat || []).length, bHf = (stB.highFat || []).length;
+    var aRf = (stA.refinedFlour || []).length, bRf = (stB.refinedFlour || []).length;
+
+    if (aSp && bSp) {
+      sev = 'alert';
+      why.push('<b>매운 끼니가 연속</b> — 두 끼 모두 매운 재료가 들어가요. 위가 쉬지 못해 속이 쓰리거나 더부룩할 수 있어요.');
+      tip = '한 끼는 순한 메뉴로 바꾸면 속이 훨씬 편해져요.';
+    }
+    if (aHf && bHf) {
+      why.push('<b>기름진 재료가 연속</b> — 기름진 재료나 가공육이 두 끼 이어지면 소화가 느려지고 다음 끼니까지 나른해질 수 있어요.');
+      if (!tip) tip = '한 끼는 구이·찜처럼 담백한 조리로 바꿔 보세요.';
+    }
+    if (aRf && bRf) {
+      why.push('<b>빵·면이 연속</b> — 정제 밀가루가 두 끼 이어지면 혈당이 오르내리며 금방 배고파질 수 있어요.');
+      if (!tip) tip = label + '은 밥이나 단백질 위주 메뉴로 골라 보세요.';
+    }
+    if ((aSp && bDy) || (aDy && bSp)) {
+      why.push('<b>유제품과 자극이 이어짐</b> — 한 끼는 매운맛, 다른 끼는 유제품이라 위가 번갈아 자극을 받아요.');
+      if (!tip) tip = '유제품은 매운 끼니와 떨어진 시간에 먹는 게 좋아요.';
+    }
+
+    /* 두 끼 합산 탄단지 */
+    var tot = { c: a.c + b.c, p: a.p + b.p, f: a.f + b.f };
+    var tk = tot.c * 4 + tot.p * 4 + tot.f * 9;
+    if (tk > 0) {
+      var pP = Math.round(tot.p * 4 / tk * 100);
+      var cP = Math.round(tot.c * 4 / tk * 100);
+      if (pP + cP > 100) { pP = Math.min(pP, 97); cP = Math.min(cP, 100 - pP); }
+      var fP = Math.max(0, 100 - cP - pP);
+      if (pP < 16 || tot.p < 36) {
+        why.push('<b>두 끼 합산 단백질 ' + g1(tot.p) + 'g</b> — 열량 비중 ' + pP + '%로 낮아요. ' + label + '에 단백질 재료를 하나 더 채워 주세요.');
+      }
+      if (fP > 36) {
+        why.push('<b>두 끼 합산 지방 ' + g1(tot.f) + 'g</b> — 열량 비중 ' + fP + '%로 높아요. 다음 끼니는 담백하게 골라 보세요.');
+      }
+      if (cP > 65) {
+        why.push('<b>두 끼 합산 탄수화물 ' + g1(tot.c) + 'g</b> — 열량 비중 ' + cP + '%로 높아요. 밥·면 양을 줄여 보세요.');
+      }
+    }
+
+    if (!why.length) return null;
+    if (!tip) tip = '한 끼만 조금 가볍게 바꿔도 두 끼 합산이 훨씬 편해져요.';
+    return { label: label, why: why.slice(0, 3), sev: sev, tip: tip };
+  }
+
+  function mealCheck(day, meal) {
+    var r = mealRecipe(day, meal);
+    if (!r || !(r.uses || []).length) return null;
+    var t = sumMacros(r.uses);
+    if (t.kcal <= 0) return null;
+    var st = tagStats(r.uses);
+    return { macro: t, gut: gutSingle(st), mac: macroSingle(t), cross: crossCheck(day, meal) };
+  }
+
+  /* 단백질이 부족할 때 지금 냉장고에서 바로 더할 재료 */
+  function proteinPick(uses) {
+    var inUse = {};
+    (uses || []).forEach(function (id) { inUse[id] = true; });
+    var pref = ['egg', 'boiledegg', 'chicken', 'tofu', 'tuna', 'mackerel', 'duck', 'pork', 'shake', 'milk'];
+    var cands = [];
+    state.ingredients.forEach(function (it) {
+      if (inUse[it.id] || isDepleted(it)) return;
+      if (nutriOf(it).p < 6) return;
+      cands.push({ it: it, p: nutriOf(it).p });
+    });
+    cands.sort(function (a, b) {
+      var ia = pref.indexOf(a.it.id), ib = pref.indexOf(b.it.id);
+      if (ia === -1 && ib === -1) return b.p - a.p;
+      if (ia === -1) return 1;
+      if (ib === -1) return -1;
+      return ia - ib;
+    });
+    return cands.length ? cands[0].it : null;
+  }
+
+  /* ── 영양·경고 UI 조각 ── */
+  function macroBarHtml(n) {
+    if (!n || n.kcal <= 0) return '';
+    var cP = n.pct.c, pP = n.pct.p, fP = n.pct.f;
+    return '<div class="macro">' +
+      '<div class="macro-top">' +
+        '<span class="macro-kcal">약 ' + n.kcal + 'kcal</span>' +
+        '<span class="macro-pcts">' +
+          '<b class="c">탄 ' + cP + '%</b>' +
+          '<b class="p">단 ' + pP + '%</b>' +
+          '<b class="f">지 ' + fP + '%</b>' +
+        '</span>' +
+      '</div>' +
+      '<div class="macro-bar" aria-hidden="true">' +
+        '<i class="c" style="width:' + cP + '%"></i>' +
+        '<i class="p" style="width:' + pP + '%"></i>' +
+        '<i class="f" style="width:' + fP + '%"></i>' +
+      '</div>' +
+      '<div class="macro-gram">' +
+        '<span>탄 <b>' + g1(n.c) + 'g</b></span>' +
+        '<span>단 <b>' + g1(n.p) + 'g</b></span>' +
+        '<span>지 <b>' + g1(n.f) + 'g</b></span>' +
+        '<span class="base">성인 여성 한 끼 기준</span>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function warnBox(sev, icon, title, who, lines, tip, extra) {
+    var h = '<div class="mwarn ' + (sev === 'alert' ? 'alert' : 'warn') + '">' +
+      '<div class="mwarn-head"><span class="ico">' + icon + '</span>' + esc(title) +
+      (who ? '<span class="who">' + esc(who) + '</span>' : '') + '</div>';
+    (lines || []).forEach(function (l) { h += '<p class="mwarn-why">' + l + '</p>'; });
+    if (tip) h += '<p class="mwarn-tip">💡 ' + tip + '</p>';
+    if (extra) h += extra;
+    return h + '</div>';
+  }
+
+  function sugButton(day, meal, uses) {
+    var pick = proteinPick(uses);
+    if (!pick) return '';
+    return '<button type="button" class="mwarn-sug" data-suggest="' + esc(pick.id) + '" data-day="' + day + '" data-meal="' + meal + '">' +
+      '＋ ' + emojiOf(pick) + ' ' + esc(pick.name) + ' 더하기' +
+    '</button>';
+  }
+
+  /* 카드·시트에 넣을 [탄단지 요약] + [경고 박스] */
+  function checkHtml(day, meal, opts) {
+    var o = opts || {};
+    var ck = mealCheck(day, meal);
+    if (!ck) return { macro: '', warns: '' };
+    var html = '';
+
+    if (ck.gut.length) {
+      var gSev = ck.gut[0].sev;
+      html += warnBox(
+        gSev, '⚠️',
+        gSev === 'alert' ? '속이 불편할 수 있는 조합이에요' : '속에 조금 부담되는 조합이에요',
+        '',
+        ck.gut.map(function (x) { return '<b>' + esc(x.tag) + '</b> — ' + esc(x.why); }),
+        esc(ck.gut[0].tip)
+      );
+    }
+
+    if (ck.mac.length) {
+      var title = ck.mac.length > 1 ? '탄단지 균형이 두 군데 치우쳐요' : ck.mac[0].title;
+      var needSug = ck.mac.some(function (x) { return x.sug === 'protein'; });
+      html += warnBox(
+        'warn', '⚖️', title, '',
+        ck.mac.length > 1
+          ? ck.mac.map(function (x) { return '<b>' + esc(x.title) + '</b> — ' + esc(x.why); })
+          : ck.mac.map(function (x) { return esc(x.why); }),
+        esc(ck.mac[0].tip),
+        needSug ? sugButton(day, meal, (mealRecipe(day, meal) || {}).uses) : ''
+      );
+    }
+
+    if (!o.noCross && ck.cross) {
+      html += warnBox(ck.cross.sev, '🔁', '다음 끼니와 겹쳐요', ck.cross.label, ck.cross.why, esc(ck.cross.tip));
+    }
+
+    return { macro: macroBarHtml(ck.macro), warns: html };
+  }
+
+  /* 경고 박스의 ＋ 재료 버튼: 그 끼니 재료에 바로 더한다 */
+  function addUseToMeal(day, meal, id) {
+    var r = mealRecipe(day, meal);
+    var it = byId(id);
+    if (!r || !it) return;
+    var list = (r.uses || []).slice();
+    if (list.indexOf(id) !== -1) return;
+    list.push(id);
+    setMealUses(day, meal, list);
+    save();
+    renderAll();
+    toast(emojiOf(it) + ' ' + it.name + ' 더했어요 · 탄단지를 다시 계산했어요');
+  }
 
   var FILTERS = [
     { id: 'all',    label: '전체' },
@@ -2368,6 +2910,14 @@
       steps = '<p class="steps">' + esc(r.steps) + '</p>';
     }
 
+    /* 탄단지 요약 + 속 불편·영양 경고 (먹은 끼니는 요약만, 외식 끼니는 생략) */
+    var macroHtml = '', warnHtml = '';
+    if (!skipped) {
+      var chk = checkHtml(day, meal, { noCross: eaten });
+      macroHtml = chk.macro;
+      warnHtml = eaten ? '' : chk.warns;
+    }
+
     var usesHtml;
     if (skipped) {
       usesHtml = '';
@@ -2404,7 +2954,7 @@
     actions += '</div>';
 
     return '<article class="' + cls + '" data-day="' + day + '" data-meal="' + meal + '">' +
-      head + title + meta + tools + steps +
+      head + title + meta + tools + macroHtml + warnHtml + steps +
       usesHtml +
       goneBar +
       skipNote +
@@ -2574,6 +3124,13 @@
     }
     if (metaBits.length) {
       html += '<div class="rs-meta">' + metaBits.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>';
+    }
+
+    /* ⓵ 탄단지 균형 + 영양·속 경고 */
+    var chk = checkHtml(day, meal, { noCross: true });
+    if (chk.macro) {
+      html += '<section class="rs-block"><h3>탄단지 균형 <span class="rs-h3sub">1인분 추정</span></h3>' +
+        chk.macro + chk.warns + '</section>';
     }
 
     /* ① 재료: 냉장고에 있는 것 / 사와야 하는 것 */
@@ -3414,6 +3971,12 @@
 
   mealsEl.addEventListener('click', function (e) {
     if (e.target.closest('#replanBtn')) { replanAll(); return; }
+
+    var sug = e.target.closest('[data-suggest]');
+    if (sug) {
+      addUseToMeal(sug.getAttribute('data-day'), sug.getAttribute('data-meal'), sug.getAttribute('data-suggest'));
+      return;
+    }
 
     var dt = e.target.closest('[data-daytab]');
     if (dt) {
