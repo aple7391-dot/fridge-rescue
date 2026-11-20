@@ -2043,7 +2043,7 @@
   /* 아직 소진 전인데 '소량'만 남은 재료 (개수 재료는 1개에서 조금 먹은 상태) */
   function isSharing(it) {
     if (!it || isDepleted(it)) return false;
-    if (isCountable(it)) return hasPartial(it) || (it.count === 1 && (it.used || 0) >= 1);
+    if (isCountable(it)) return hasPartial(it);
     return (it.used || 0) >= 1;
   }
 
