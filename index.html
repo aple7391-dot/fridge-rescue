@@ -6,23 +6,30 @@
 <meta name="theme-color" content="#16251F">
 <title>냉장고 구조대 · 한 달 소진 프로젝트</title>
 <style>
+  /* ══════════════════════════════════════════════
+     냉장고 구조대 — Toss 스타일 스킨
+     쿨그레이 배경 · 순백 카드 · 넉넉한 여백 · 큰 터치 타겟
+     ══════════════════════════════════════════════ */
   :root{
-    --bg:#F3F5F1;
+    --bg:#F2F4F6;
     --card:#FFFFFF;
-    --ink:#1B231F;
-    --ink2:#4C5751;
-    --sub:#7D8984;
-    --line:#E8ECE7;
-    --mint:#0E9F6E;
-    --mint-deep:#0A7A54;
-    --mint-soft:#E6F6EF;
-    --red:#E5484D;
-    --red-soft:#FDEDEE;
-    --amber:#C07608;
-    --amber-soft:#FFF5E2;
-    --grey-soft:#F1F4F0;
-    --shadow:0 2px 12px rgba(22,45,33,.055);
-    --shadow-lg:0 14px 40px rgba(18,35,26,.16);
+    --ink:#191F28;
+    --ink2:#4E5968;
+    --sub:#8B95A1;
+    --sub2:#B0B8C1;
+    --line:#EDF0F3;
+    --line2:#E5E8EB;
+    --blue:#3182F6;
+    --blue-deep:#1B64DA;
+    --blue-soft:#E8F3FF;
+    --red:#F04452;
+    --red-soft:#FFEEEE;
+    --amber:#B26E00;
+    --amber-soft:#FFF6E5;
+    --green:#00C471;
+    --green-soft:#E5F9F0;
+    --shadow:0 1px 2px rgba(17,24,39,.03), 0 8px 24px rgba(17,24,39,.04);
+    --shadow-lg:0 18px 48px rgba(17,24,39,.16);
   }
 
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -33,10 +40,12 @@
     font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Segoe UI",Roboto,sans-serif;
     background:var(--bg);
     color:var(--ink);
-    letter-spacing:-.01em;
+    letter-spacing:-.02em;
     -webkit-font-smoothing:antialiased;
     display:flex;
     justify-content:center;
+    font-size:15px;
+    line-height:1.5;
   }
 
   button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer;font-size:inherit}
@@ -50,7 +59,7 @@
     display:flex;
     flex-direction:column;
     position:relative;
-    padding-bottom:calc(96px + env(safe-area-inset-bottom));
+    padding-bottom:calc(108px + env(safe-area-inset-bottom));
   }
 
   /* ── 상단 바 ── */
@@ -61,225 +70,209 @@
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:10px;
-    padding:14px 18px 10px;
-    background:rgba(243,245,241,.92);
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
+    gap:12px;
+    padding:20px 20px 14px;
+    background:rgba(242,244,246,.94);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
   }
-  .brand{display:flex;align-items:center;gap:9px}
+  .brand{display:flex;align-items:center;gap:10px}
   .brand-mark{
-    width:34px;height:34px;border-radius:11px;
+    width:38px;height:38px;border-radius:12px;
     background:#fff;box-shadow:var(--shadow);
-    display:grid;place-items:center;font-size:18px;
+    display:grid;place-items:center;font-size:20px;
   }
-  .brand-text h1{font-size:16px;font-weight:800;letter-spacing:-.03em;line-height:1.2}
-  .brand-text p{font-size:11px;color:var(--sub);font-weight:500;margin-top:2px}
+  .brand-text h1{font-size:18px;font-weight:800;letter-spacing:-.04em;line-height:1.25}
+  .brand-text p{font-size:13px;color:var(--sub);font-weight:500;margin-top:1px;letter-spacing:-.02em}
   .ghost-btn{
-    width:34px;height:34px;border-radius:11px;background:#fff;
+    width:40px;height:40px;border-radius:12px;background:#fff;
     box-shadow:var(--shadow);color:var(--ink2);
-    font-size:16px;font-weight:700;line-height:1;display:grid;place-items:center;
+    font-size:18px;font-weight:700;line-height:1;display:grid;place-items:center;
   }
   .ghost-btn:active{transform:scale(.95)}
 
   /* ── 대시보드 ── */
   .dash{
-    margin:4px 18px 0;
-    border-radius:22px;
-    padding:16px 16px 14px;
+    margin:6px 20px 0;
+    border-radius:24px;
+    padding:22px 22px 20px;
     flex:0 0 auto;
-    background:linear-gradient(148deg,#15241E 0%,#213C31 62%,#28493B 100%);
-    color:#fff;
-    box-shadow:0 12px 28px rgba(21,38,30,.22);
-    position:relative;
-    overflow:hidden;
+    background:var(--card);
+    box-shadow:var(--shadow);
   }
-  .dash::after{
-    content:"";position:absolute;right:-46px;top:-58px;width:150px;height:150px;
-    border-radius:50%;background:radial-gradient(circle,rgba(52,211,153,.26),transparent 70%);
-    pointer-events:none;
-  }
-  .dash-top{display:flex;align-items:center;gap:14px;position:relative;z-index:1}
-  .ring-wrap{position:relative;width:62px;height:62px;flex:0 0 auto}
-  .ring{width:62px;height:62px;transform:rotate(-90deg)}
-  .ring circle{fill:none;stroke-width:5.5;stroke-linecap:round}
-  .ring .ring-bg{stroke:rgba(255,255,255,.14)}
-  .ring .ring-fg{stroke:#3EE0A6;transition:stroke-dashoffset .5s ease}
-  .ring-label{
-    position:absolute;inset:0;display:grid;place-items:center;
-    font-size:14.5px;font-weight:800;letter-spacing:-.04em;
-  }
-  .ring-label small{font-size:9px;font-weight:700;opacity:.7;margin-left:1px}
+  .dash-top{display:flex;align-items:center;gap:16px}
+  .ring-wrap{display:none}
   .dash-main{flex:1;min-width:0}
-  .dash-eyebrow{font-size:10.5px;font-weight:700;color:rgba(255,255,255,.62);letter-spacing:.06em}
-  .dash-num{display:flex;align-items:baseline;gap:5px;margin-top:3px}
-  .dash-num strong{font-size:25px;font-weight:800;letter-spacing:-.05em;line-height:1}
-  .dash-num span{font-size:12px;color:rgba(255,255,255,.6);font-weight:600}
-  .dash-sub{font-size:11.5px;color:rgba(255,255,255,.72);margin-top:6px;font-weight:500}
+  .dash-eyebrow{font-size:13px;font-weight:600;color:var(--sub);letter-spacing:-.01em}
+  .dash-num{display:flex;align-items:baseline;gap:6px;margin-top:6px}
+  .dash-num strong{font-size:30px;font-weight:800;letter-spacing:-.06em;line-height:1.05}
+  .dash-num span{font-size:16px;color:var(--sub2);font-weight:600;letter-spacing:-.03em}
+  .dash-sub{font-size:14px;color:var(--ink2);margin-top:8px;font-weight:500;letter-spacing:-.02em}
 
   .bar{
-    margin-top:13px;height:6px;border-radius:99px;background:rgba(255,255,255,.14);
-    overflow:hidden;position:relative;z-index:1;
+    margin-top:16px;height:10px;border-radius:99px;background:#EDF1F4;
+    overflow:hidden;position:relative;
   }
   .bar i{
     display:block;height:100%;border-radius:99px;
-    background:linear-gradient(90deg,#34D399,#7EF0C4);
+    background:var(--blue);
     transition:width .45s cubic-bezier(.4,0,.2,1);
   }
 
   .alert-row{
-    margin-top:13px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-    position:relative;z-index:1;
+    margin-top:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;
   }
   .alert-pill{
     display:inline-flex;align-items:center;gap:5px;
-    font-size:12px;font-weight:800;letter-spacing:-.02em;
-    padding:6px 10px;border-radius:99px;
-    background:rgba(255,255,255,.13);color:#fff;
+    font-size:13px;font-weight:700;letter-spacing:-.02em;
+    padding:8px 12px;border-radius:10px;min-height:36px;
+    background:#F2F4F6;color:var(--ink2);
   }
-  .alert-pill.hot{background:rgba(255,107,107,.22);color:#FFC9C9}
-  .alert-pill.cool{background:rgba(62,224,166,.16);color:#9DF3D0}
-  .urgent-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;position:relative;z-index:1}
+  .alert-pill.hot{background:var(--red-soft);color:var(--red)}
+  .alert-pill.cool{background:var(--green-soft);color:#059669}
+  .urgent-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
   .urgent-chip{
-    font-size:11.5px;font-weight:700;padding:5px 9px;border-radius:8px;
-    background:rgba(255,255,255,.1);color:#EAF7F1;border:1px solid rgba(255,255,255,.09);
+    font-size:13.5px;font-weight:600;padding:9px 13px;border-radius:12px;min-height:40px;
+    background:#F7F8FA;color:var(--ink2);border:1px solid #EDF0F3;
+    display:inline-flex;align-items:center;
   }
-  .urgent-chip:active{background:rgba(255,255,255,.2)}
+  .urgent-chip:active{background:#EFF2F6}
 
   /* ── 탭 ── */
   .tabs{
-    margin:14px 18px 0;
+    margin:20px 20px 0;
     display:flex;gap:4px;
-    background:#E7EBE5;
-    padding:4px;border-radius:14px;
+    background:#E7EAEE;
+    padding:5px;border-radius:16px;
   }
   .tab{
-    flex:1;padding:9px 6px;border-radius:11px;
-    font-size:13px;font-weight:700;color:var(--ink2);
+    flex:1;padding:12px 6px;border-radius:12px;min-height:46px;
+    font-size:15px;font-weight:700;letter-spacing:-.03em;color:var(--ink2);
     transition:background .18s,color .18s,box-shadow .18s;
   }
-  .tab.is-active{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(20,40,30,.1)}
+  .tab.is-active{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(17,24,39,.08)}
   .tab:active{transform:scale(.985)}
 
-  .main{padding:16px 18px 8px;flex:1}
+  .main{padding:20px 20px 8px;flex:1}
   .view.is-hidden{display:none}
 
   /* ── 필터 ── */
   .filters{
-    display:flex;gap:7px;overflow-x:auto;padding:2px 0 4px;
+    display:flex;gap:8px;overflow-x:auto;padding:2px 0 6px;
     scrollbar-width:none;-ms-overflow-style:none;
   }
   .filters::-webkit-scrollbar{display:none}
   .chip{
-    flex:0 0 auto;padding:8px 12px;border-radius:10px;
+    flex:0 0 auto;padding:11px 15px;border-radius:12px;min-height:44px;
+    display:inline-flex;align-items:center;
     background:#fff;color:var(--ink2);
-    font-size:12.5px;font-weight:700;white-space:nowrap;
-    box-shadow:var(--shadow);border:1px solid transparent;
+    font-size:14px;font-weight:700;letter-spacing:-.02em;white-space:nowrap;
+    box-shadow:0 1px 2px rgba(17,24,39,.03);border:1px solid transparent;
     transition:background .15s,color .15s,border-color .15s;
   }
-  .chip.is-on{background:#1D2F27;color:#fff;border-color:#1D2F27}
+  .chip.is-on{background:#191F28;color:#fff;border-color:#191F28}
   .chip:active{transform:scale(.97)}
-  .chip.toggle{display:inline-flex;align-items:center;gap:6px}
+  .chip.toggle{display:inline-flex;align-items:center;gap:8px;padding-right:13px}
   .mini-switch{
-    width:26px;height:15px;border-radius:99px;background:#D7DDD6;
-    position:relative;display:inline-block;transition:background .2s;
+    width:34px;height:20px;border-radius:99px;background:#DCE1E6;
+    position:relative;display:inline-block;transition:background .2s;flex:0 0 auto;
   }
   .mini-switch i{
-    position:absolute;top:2px;left:2px;width:11px;height:11px;border-radius:50%;
-    background:#fff;transition:transform .2s;box-shadow:0 1px 2px rgba(0,0,0,.15);
+    position:absolute;top:2.5px;left:2.5px;width:15px;height:15px;border-radius:50%;
+    background:#fff;transition:transform .2s;box-shadow:0 1px 2px rgba(0,0,0,.14);
   }
-  .chip.toggle.is-on .mini-switch{background:#3EE0A6}
-  .chip.toggle.is-on .mini-switch i{transform:translateX(11px)}
+  .chip.toggle.is-on .mini-switch{background:var(--blue)}
+  .chip.toggle.is-on .mini-switch i{transform:translateX(14px)}
 
   /* ── 재료 리스트 ── */
   .group-head{
     display:flex;align-items:center;justify-content:space-between;
-    margin:18px 2px 8px;
+    margin:26px 4px 12px;
   }
-  .group-head:first-child{margin-top:6px}
-  .group-title{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:var(--ink2);letter-spacing:.01em}
-  .group-title .cnt{font-size:11px;font-weight:700;color:var(--sub)}
-  .group-title .cnt b{color:var(--mint-deep)}
-  .group-hint{font-size:10.5px;color:var(--sub);font-weight:600}
+  .group-head:first-child{margin-top:8px}
+  .group-title{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:800;color:var(--ink);letter-spacing:-.03em}
+  .group-title .cnt{font-size:13px;font-weight:600;color:var(--sub)}
+  .group-title .cnt b{color:var(--blue-deep);font-weight:700}
+  .group-hint{font-size:12.5px;color:var(--sub);font-weight:500}
 
   .item{
-    display:flex;align-items:center;gap:10px;
-    background:#fff;border-radius:15px;
-    padding:12px 13px;margin-bottom:9px;
+    display:flex;align-items:center;gap:12px;
+    background:var(--card);border-radius:20px;
+    padding:16px 16px 16px 18px;margin-bottom:10px;
     box-shadow:var(--shadow);
+    min-height:76px;
     transition:opacity .2s,background .2s;
   }
-  .item.is-done{opacity:.52;background:#FBFCFA}
-  .item-main{flex:1;min-width:0;text-align:left;display:block}
+  .item.is-done{opacity:.5;background:#FAFBFC;box-shadow:none}
+  .item-main{flex:1;min-width:0;text-align:left;display:block;padding:2px 0}
   .item-name{
-    display:flex;align-items:Center;gap:6px;flex-wrap:wrap;
-    font-size:14px;font-weight:700;letter-spacing:-.02em;line-height:1.35;
+    display:flex;align-items:center;gap:7px;flex-wrap:wrap;
+    font-size:16px;font-weight:700;letter-spacing:-.03em;line-height:1.35;
   }
   .item.is-done .item-name{text-decoration:line-through;color:var(--sub);text-decoration-thickness:1.5px}
   .item-meta{
-    display:flex;align-items:center;gap:5px;flex-wrap:wrap;
-    margin-top:4px;font-size:11.5px;color:var(--sub);font-weight:500;line-height:1.4;
+    display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+    margin-top:6px;font-size:13px;color:var(--sub);font-weight:500;line-height:1.4;
   }
-  .item-meta .warn{color:#C2410C;font-weight:700}
-  .item-meta .dot{width:3px;height:3px;border-radius:50%;background:#C9D0CB}
+  .item-meta .warn{color:#E8590C;font-weight:600}
+  .item-meta .dot{width:3px;height:3px;border-radius:50%;background:#D6DBE0}
   .share-pill{
     display:inline-flex;align-items:center;gap:3px;
-    font-size:10.5px;font-weight:800;letter-spacing:-.015em;
-    color:var(--mint-deep);background:var(--mint-soft);
-    border:1px solid #CDEDDE;padding:1.5px 6px;border-radius:6px;
+    font-size:12px;font-weight:700;letter-spacing:-.02em;
+    color:var(--blue-deep);background:var(--blue-soft);
+    padding:3px 8px;border-radius:8px;
   }
   .finish-btn{
-    flex:0 0 auto;font-size:10.5px;font-weight:800;letter-spacing:-.015em;
-    padding:7px 9px;border-radius:9px;white-space:nowrap;
-    background:var(--mint-soft);color:var(--mint-deep);border:1px solid #BDE9D7;
+    flex:0 0 auto;font-size:13px;font-weight:700;letter-spacing:-.02em;
+    padding:10px 13px;border-radius:12px;white-space:nowrap;min-height:44px;
+    background:#F2F4F6;color:var(--ink2);
     transition:background .15s,transform .12s;
   }
-  .finish-btn:active{background:#D5F2E6;transform:scale(.96)}
+  .finish-btn:active{background:#E5E8EB;transform:scale(.96)}
   .mine{
-    font-size:9.5px;font-weight:800;color:var(--mint-deep);
-    background:var(--mint-soft);padding:1.5px 5px;border-radius:5px;letter-spacing:.02em;
+    font-size:11px;font-weight:700;color:var(--blue-deep);
+    background:var(--blue-soft);padding:3px 7px;border-radius:7px;letter-spacing:-.01em;
   }
 
-  .emo{font-size:14.5px;line-height:1;margin-right:1px;flex:0 0 auto}
+  .emo{font-size:18px;line-height:1;flex:0 0 auto}
 
   /* ── 개수 차감 스테퍼 ── */
   .step{
-    flex:0 0 auto;display:flex;align-items:center;gap:1px;
-    background:#F1F5F0;border-radius:11px;padding:2px;
+    flex:0 0 auto;display:flex;align-items:center;gap:2px;
+    background:#F2F4F6;border-radius:14px;padding:3px;
   }
   .step button{
-    width:27px;height:27px;border-radius:9px;
+    width:38px;height:38px;border-radius:11px;
     display:grid;place-items:center;
-    font-size:15px;font-weight:800;line-height:1;color:var(--ink2);
-    background:#fff;box-shadow:0 1px 2px rgba(20,40,30,.09);
+    font-size:18px;font-weight:700;line-height:1;color:var(--ink2);
+    background:#fff;box-shadow:0 1px 2px rgba(17,24,39,.06);
   }
   .step button:active{transform:scale(.92)}
-  .step button:disabled{opacity:.3;box-shadow:none;background:transparent}
+  .step button:disabled{opacity:.35;box-shadow:none;background:transparent}
   .step-num{
-    min-width:36px;text-align:center;font-size:12.5px;font-weight:800;
-    letter-spacing:-.03em;color:var(--ink);white-space:nowrap;
+    min-width:44px;text-align:center;font-size:14px;font-weight:800;
+    letter-spacing:-.04em;color:var(--ink);white-space:nowrap;
   }
-  .step-num small{font-size:9px;font-weight:700;color:var(--sub);margin-left:1px}
+  .step-num small{font-size:11px;font-weight:600;color:var(--sub);margin-left:1px}
 
   /* ── 아직 많이 남았나요? ── */
   .leftover{
-    margin:2px 0 13px;border-radius:16px;padding:12px 13px 11px;
-    background:linear-gradient(142deg,#FFFAEC,#FFF3D9);
-    border:1px solid #F1E0B6;
-    box-shadow:0 2px 10px rgba(150,110,20,.08);
+    margin:14px 0 6px;border-radius:22px;padding:20px;
+    background:#FFFDF6;border:1px solid #F5EAD2;
+    box-shadow:var(--shadow);
   }
-  .leftover-head{display:flex;align-items:center;gap:5px;font-size:12.5px;font-weight:800;color:#7A5A0C;letter-spacing:-.02em}
-  .leftover-sub{font-size:11px;color:#9A7B3C;font-weight:600;margin-top:4px;line-height:1.5}
+  .leftover-head{display:flex;align-items:center;gap:6px;font-size:15.5px;font-weight:800;color:#7A5A0C;letter-spacing:-.03em}
+  .leftover-sub{font-size:13px;color:#967A45;font-weight:400;margin-top:6px;line-height:1.55}
   .leftover-row{
-    display:flex;align-items:center;gap:6px;flex-wrap:wrap;
-    margin-top:8px;padding-top:8px;border-top:1px solid rgba(180,140,40,.16);
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    margin-top:14px;padding-top:14px;border-top:1px solid rgba(180,140,40,.14);
   }
-  .leftover-row:first-of-type{border-top:0;padding-top:7px}
-  .leftover-name{flex:1 1 100%;min-width:0;font-size:12px;font-weight:800;color:#5E4A11;display:flex;align-items:center;gap:5px}
-  .leftover-name em{font-style:normal;font-size:10.5px;font-weight:700;color:#A98A42}
+  .leftover-row:first-of-type{border-top:0;padding-top:4px}
+  .leftover-name{flex:1 1 100%;min-width:0;font-size:14px;font-weight:700;color:#5E4A11;display:flex;align-items:center;gap:6px;letter-spacing:-.02em}
+  .leftover-name em{font-style:normal;font-size:12px;font-weight:500;color:#A98A42}
   .lo-btn{
-    flex:1 1 0;font-size:10.5px;font-weight:800;padding:7px 6px;border-radius:9px;
-    background:#fff;color:#7A5A0C;border:1px solid #EBD9AC;white-space:nowrap;
+    flex:1 1 0;font-size:13px;font-weight:700;padding:12px 8px;border-radius:12px;min-height:46px;
+    background:#fff;color:#7A5A0C;border:1px solid #EFE0BC;white-space:nowrap;
   }
   .lo-btn.solid{background:#8A6210;color:#fff;border-color:#8A6210}
   .lo-btn:active{transform:scale(.97)}
@@ -287,315 +280,367 @@
   /* ── 직접 입력: 고정 선택 태그 + 추천 칩 ── */
   .selbar{
     position:sticky;top:-10px;z-index:5;
-    margin:12px -18px 0;padding:10px 18px 9px;
+    margin:14px -20px 0;padding:14px 20px 12px;
     background:#fff;border-bottom:1px solid var(--line);
-    box-shadow:0 6px 12px -10px rgba(20,40,30,.25);
+    box-shadow:0 8px 16px -14px rgba(17,24,39,.3);
   }
   .tagrow{
-    display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;
+    display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;
     scrollbar-width:none;-ms-overflow-style:none;
   }
   .tagrow::-webkit-scrollbar{display:none}
   .ptag{
-    flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;
-    font-size:11.5px;font-weight:800;padding:6px 10px;border-radius:99px;
-    background:var(--mint-soft);color:var(--mint-deep);border:1px solid #BDE9D7;
+    flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;
+    font-size:13px;font-weight:700;padding:9px 12px;border-radius:99px;min-height:38px;
+    background:var(--blue-soft);color:var(--blue-deep);
     letter-spacing:-.02em;white-space:nowrap;
   }
-  .ptag .x{font-size:9.5px;font-weight:800;color:#79BCA1;margin-left:1px}
+  .ptag .x{font-size:11px;font-weight:700;color:#7FA9E0;margin-left:1px}
   .ptag:active{transform:scale(.96)}
-  .tag-empty{font-size:11px;font-weight:600;color:var(--sub);padding:6px 2px}
-  .recbox{margin-top:9px}
-  .rec-label{font-size:10.5px;font-weight:800;color:var(--sub);letter-spacing:.02em;margin-bottom:5px}
+  .tag-empty{font-size:13px;font-weight:400;color:var(--sub);padding:9px 2px}
+  .recbox{margin-top:12px}
+  .rec-label{font-size:12.5px;font-weight:700;color:var(--sub);letter-spacing:-.01em;margin-bottom:8px}
   .rec-row{
-    display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;
+    display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;
     scrollbar-width:none;-ms-overflow-style:none;
   }
   .rec-row::-webkit-scrollbar{display:none}
   .rec{
-    flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;
-    font-size:11.5px;font-weight:700;padding:6px 10px;border-radius:99px;
-    background:#FFF8E8;color:#8A6210;border:1px solid #F0DFB6;white-space:nowrap;
+    flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;
+    font-size:13px;font-weight:600;padding:9px 12px;border-radius:99px;min-height:38px;
+    background:#FFF9EC;color:#8A6210;border:1px solid #F3E5C6;white-space:nowrap;
   }
   .rec:active{transform:scale(.96)}
 
-  .eat-sub{font-size:10.5px;font-weight:700;color:var(--sub);white-space:nowrap}
+  .eat-sub{font-size:12.5px;font-weight:500;color:var(--sub);white-space:nowrap;letter-spacing:-.02em}
   .eat-row .step{margin-left:auto}
 
   /* 먹음 방식 선택 — 조금 먹음(남음) / 다 먹음(소진) */
-  .eat-row.eat-bulk{display:block;padding:11px 2px}
-  .eat-bulk .eat-top{display:flex;align-items:center;gap:8px}
+  .eat-row.eat-bulk{display:block;padding:16px 2px}
+  .eat-bulk .eat-top{display:flex;align-items:center;gap:10px}
   .eat-bulk .eat-name{flex:1;min-width:0}
   .eat-bulk .eat-sub{flex:0 1 auto;max-width:56%;overflow:hidden;text-overflow:ellipsis;padding-top:1px}
-  .eat-modes{display:flex;gap:5px;margin-top:8px}
+  .eat-modes{display:flex;gap:8px;margin-top:10px}
   .emode{
-    flex:1;padding:8px 4px;border-radius:10px;
-    background:#F5F7F4;border:1px solid #E8ECE7;
-    font-size:11.5px;font-weight:700;color:#68746D;white-space:nowrap;
+    flex:1;padding:12px 6px;border-radius:12px;min-height:46px;
+    background:#F5F7F9;border:1px solid #EDF0F3;
+    font-size:13.5px;font-weight:600;color:var(--ink2);white-space:nowrap;
     transition:background .15s,color .15s,border-color .15s;
   }
-  .emode em{font-style:normal;font-size:10px;font-weight:700;opacity:.66;margin-left:1px}
-  .emode.is-on{background:var(--mint-soft);border-color:#8FD9BE;color:var(--mint-deep);font-weight:800}
-  .emode.all.is-on{background:#1D2F27;border-color:#1D2F27;color:#fff}
-  .emode.all.is-on em{opacity:.68}
-  .emode.none{flex:0 0 34px;font-size:12px;font-weight:800;color:#AEB6AF}
-  .emode.none.is-on{background:#F1F3F1;border-color:#DDE3DD;color:#7D8984}
+  .emode em{font-style:normal;font-size:11px;font-weight:600;opacity:.62;margin-left:2px}
+  .emode.is-on{background:var(--blue-soft);border-color:#BFD9FB;color:var(--blue-deep);font-weight:700}
+  .emode.all.is-on{background:#191F28;border-color:#191F28;color:#fff}
+  .emode.all.is-on em{opacity:.66}
+  .emode.none{flex:0 0 46px;font-size:15px;font-weight:700;color:var(--sub2)}
+  .emode.none.is-on{background:#F1F3F5;border-color:#E1E6EA;color:var(--sub)}
   .emode:active{transform:scale(.97)}
-  .eat-row .emode.finish-all{flex:0 0 auto;padding:7px 8px;font-size:10px;border-radius:8px;border-color:#E1E7E1;color:#68746D}
-  .eat-row .emode.finish-all.is-on{background:#1D2F27;border-color:#1D2F27;color:#fff}
-  .eat-row.eat-bulk.is-none{opacity:.5}
-  .eat-row.is-done .eat-sub{color:#B4BDB6}
+  .eat-row .emode.finish-all{flex:0 0 auto;padding:10px 10px;font-size:11.5px;border-radius:10px;min-height:36px;border-color:#E5E8EB;color:var(--ink2)}
+  .eat-row .emode.finish-all.is-on{background:#191F28;border-color:#191F28;color:#fff}
+  .eat-row.eat-bulk.is-none{opacity:.45}
+  .eat-row.is-done .eat-sub{color:var(--sub2)}
 
   /* ── 이모지 선택 ── */
-  .emopick{display:flex;gap:6px;flex-wrap:wrap}
+  .emopick{display:flex;gap:8px;flex-wrap:wrap}
   .emopick button{
-    width:36px;height:35px;border-radius:10px;font-size:17px;
-    background:#F5F7F4;border:1px solid #E8ECE7;display:grid;place-items:center;
+    width:46px;height:46px;border-radius:14px;font-size:22px;
+    background:#F5F7F9;border:1px solid transparent;display:grid;place-items:center;
   }
-  .emopick button.is-on{background:var(--mint-soft);border-color:#8FD9BE}
+  .emopick button.is-on{background:var(--blue-soft);border-color:#BFD9FB}
   .emopick button:active{transform:scale(.94)}
 
   .badge{
     flex:0 0 auto;
-    font-size:10px;font-weight:800;letter-spacing:-.01em;
-    padding:2.5px 6px;border-radius:6px;white-space:nowrap;
+    font-size:11.5px;font-weight:700;letter-spacing:-.01em;
+    padding:3px 8px;border-radius:8px;white-space:nowrap;
   }
   .badge.urgent{background:var(--red-soft);color:var(--red)}
   .badge.soon{background:var(--amber-soft);color:var(--amber)}
-  .badge.normal{background:#EEF2EE;color:#5F6B65}
-  .badge.safe{background:var(--mint-soft);color:var(--mint-deep)}
-  .badge.pantry{background:#F2F3F0;color:#8A948E}
-  .badge.done{background:#EEF2EE;color:#98A29B}
+  .badge.normal{background:#F2F4F6;color:var(--ink2)}
+  .badge.safe{background:var(--green-soft);color:#0A8A5F}
+  .badge.pantry{background:#F4F5F7;color:var(--sub)}
+  .badge.done{background:#F2F4F6;color:var(--sub2)}
 
   .switch{
-    flex:0 0 auto;width:46px;height:27px;border-radius:99px;
-    background:#DDE3DC;position:relative;transition:background .22s ease;
+    flex:0 0 auto;width:54px;height:32px;border-radius:99px;
+    background:#DCE1E6;position:relative;transition:background .22s ease;
   }
   .switch span{
-    position:absolute;top:2.5px;left:2.5px;width:22px;height:22px;border-radius:50%;
-    background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18);
+    position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.16);
     transition:transform .22s cubic-bezier(.4,0,.2,1);
-    display:grid;place-items:center;font-size:11px;color:transparent;
+    display:grid;place-items:center;font-size:12px;color:transparent;
   }
-  .switch.on{background:var(--mint)}
-  .switch.on span{transform:translateX(19px)}
-  .switch.on span::after{content:"✓";color:var(--mint);font-weight:900;font-size:11px}
+  .switch.on{background:var(--blue)}
+  .switch.on span{transform:translateX(22px)}
+  .switch.on span::after{content:"✓";color:var(--blue);font-weight:900;font-size:13px}
   .switch:active{transform:scale(.94)}
 
   .empty{
-    text-align:center;padding:42px 16px;color:var(--sub);
+    text-align:center;padding:52px 20px;color:var(--sub);
   }
-  .empty .emo{font-size:30px;display:block;margin-bottom:10px;opacity:.8}
-  .empty p{font-size:12.5px;font-weight:600;line-height:1.6}
+  .empty .emo{font-size:34px;display:block;margin-bottom:14px;opacity:.85}
+  .empty p{font-size:14px;font-weight:500;line-height:1.65}
 
   .section-note{
     display:block;
-    margin:14px 2px 2px;padding:10px 12px;
-    background:#EFF4EF;border-radius:12px;
-    font-size:11.5px;color:#5A675F;line-height:1.55;font-weight:500;
+    margin:20px 0 4px;padding:18px 20px;
+    background:#EEF1F4;border-radius:20px;
+    font-size:13px;color:var(--ink2);line-height:1.65;font-weight:400;letter-spacing:-.02em;
   }
-  .section-note b{font-weight:800;color:#2F4139}
+  .section-note b{font-weight:700;color:var(--ink)}
 
   /* ── 식단 탭 ── */
-  .meals-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin:2px 2px 12px}
-  .meals-head h2{font-size:15px;font-weight:800;letter-spacing:-.03em}
-  .meals-head p{font-size:11.5px;color:var(--sub);font-weight:500;margin-top:4px}
+  .meals-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:2px 2px 16px}
+  .meals-head h2{font-size:22px;font-weight:800;letter-spacing:-.05em;line-height:1.3}
+  .meals-head p{font-size:13.5px;color:var(--sub);font-weight:400;margin-top:6px;line-height:1.5}
   .mini-btn{
-    flex:0 0 auto;font-size:11.5px;font-weight:800;
-    padding:8px 11px;border-radius:10px;background:#fff;color:var(--ink2);
-    box-shadow:var(--shadow);
+    flex:0 0 auto;font-size:13.5px;font-weight:700;letter-spacing:-.02em;
+    padding:12px 15px;border-radius:14px;background:#fff;color:var(--ink2);
+    box-shadow:var(--shadow);min-height:46px;
   }
   .mini-btn:active{transform:scale(.96)}
 
-  .day{
-    background:#fff;border-radius:20px;padding:15px 14px 6px;
-    margin-bottom:14px;box-shadow:var(--shadow);
+  /* ── 오늘 / 내일 세그먼트 ── */
+  .daytabs{
+    display:flex;gap:6px;background:#E7EAEE;padding:5px;border-radius:16px;margin-bottom:16px;
   }
-  .day-head{display:flex;align-items:center;justify-content:space-between;padding:0 2px}
+  .daytab{
+    flex:1;padding:12px 6px;border-radius:12px;min-height:48px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+    font-size:15px;font-weight:700;letter-spacing:-.03em;color:var(--ink2);
+    transition:background .18s,color .18s,box-shadow .18s;
+  }
+  .daytab em{font-style:normal;font-size:12px;font-weight:600;color:var(--sub);letter-spacing:-.01em}
+  .daytab.is-on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(17,24,39,.08)}
+  .daytab.is-on em{color:var(--blue-deep);font-weight:700}
+  .daytab:active{transform:scale(.985)}
+
+  .day{margin-bottom:0}
+  .day-head{display:flex;align-items:center;justify-content:space-between;padding:0 4px;margin-bottom:8px}
   .day-left{display:flex;align-items:center;gap:8px}
   .day-tag{
-    font-size:11.5px;font-weight:800;color:#fff;background:#1D2F27;
-    padding:4px 8px;border-radius:7px;letter-spacing:-.01em;
+    font-size:13px;font-weight:700;color:var(--blue-deep);background:var(--blue-soft);
+    padding:5px 10px;border-radius:9px;letter-spacing:-.02em;
   }
-  .day-tag.tomorrow{background:#94A39B}
-  .day-date{font-size:11.5px;color:var(--sub);font-weight:600}
-  .day-count{font-size:11px;font-weight:800;color:var(--mint-deep);background:var(--mint-soft);padding:3px 7px;border-radius:6px}
-  .day-count.zero{color:var(--sub);background:#F2F4F1}
+  .day-tag.tomorrow{color:var(--ink2);background:#EDF0F3}
+  .day-date{font-size:13px;color:var(--sub);font-weight:500}
+  .day-count{font-size:12.5px;font-weight:700;color:var(--ink2);background:#F2F4F6;padding:5px 9px;border-radius:8px}
+  .day-count.zero{color:var(--sub)}
 
-  .snacks{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:11px 0 3px}
-  .snacks-label{font-size:10.5px;font-weight:800;color:var(--sub);letter-spacing:.03em;margin-right:1px}
+  .snacks{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 2px 16px}
+  .snacks .day-count{margin-left:auto}
+  .snacks-label{font-size:12.5px;font-weight:700;color:var(--sub);letter-spacing:-.01em;margin-right:2px}
   .snack{
-    font-size:11.5px;font-weight:700;padding:5px 9px;border-radius:8px;
-    background:#F4F6F3;color:#68746D;border:1px solid transparent;
+    font-size:13px;font-weight:600;padding:9px 13px;border-radius:12px;min-height:40px;
+    background:#fff;color:var(--ink2);border:1px solid transparent;
+    box-shadow:0 1px 2px rgba(17,24,39,.03);
     transition:background .15s,color .15s,border-color .15s;
   }
-  .snack.is-on{background:var(--mint-soft);color:var(--mint-deep);border-color:#B8E8D4}
+  .snack.is-on{background:var(--blue-soft);color:var(--blue-deep);border-color:#CBDFFA;font-weight:700}
   .snack:active{transform:scale(.96)}
 
+  /* ── 끼니 카드 ── */
   .meal-card{
     position:relative;
-    border-radius:16px;background:#FBFCFA;
-    border:1px solid #EAEEE9;
-    padding:12px 13px 12px;margin:9px 0;
-    transition:background .18s,border-color .18s,opacity .2s;
+    border-radius:24px;background:var(--card);
+    padding:22px 20px 20px;margin:0 0 14px;
+    box-shadow:var(--shadow);
+    transition:background .18s,opacity .2s;
   }
-  .meal-card.is-skip{background:#F8F8F6;border-style:dashed;border-color:#E2E6E1}
-  .meal-card.is-eaten{background:#F5FBF7;border-color:#D6EEE2}
-  .meal-card.is-mine{background:#F8FCFA;border-color:#D3ECDF}
-  .meal-card.has-gone{background:#FDFBF6;border-color:#F0E4CF}
+  .meal-card.is-skip{background:#FAFBFC}
+  .meal-card.is-eaten{background:#FBFDFF}
+  .meal-card.is-mine{background:#FBFDFF}
+  .meal-card.has-gone{background:#FFFCF7}
 
   /* 카드 상단: 끼니 라벨 + 상태 배지 · 우측 교체 버튼 */
-  .mc-top{display:flex;align-items:center;gap:8px;margin-bottom:7px}
-  .mc-label{flex:1;min-width:0;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
-  .mc-meal{font-size:11px;font-weight:800;color:#3F4C45;letter-spacing:-.015em;white-space:nowrap}
-  .mc-dot{font-style:normal;font-size:10px;font-weight:700;color:#C3CAC4;line-height:1}
-  .mc-date{font-size:10.5px;font-weight:600;color:#98A29B;white-space:nowrap}
+  .mc-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .mc-label{flex:1;min-width:0;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .mc-meal{font-size:13.5px;font-weight:700;color:var(--ink2);letter-spacing:-.02em;white-space:nowrap}
+  .mc-dot{font-style:normal;font-size:11px;font-weight:500;color:var(--sub2);line-height:1}
+  .mc-date{font-size:13px;font-weight:500;color:var(--sub);white-space:nowrap}
   .mc-badge{
-    font-size:9.5px;font-weight:800;letter-spacing:-.01em;
-    padding:2.5px 6px;border-radius:5px;
-    background:#EDF1EC;color:#6E7A73;white-space:nowrap;
+    font-size:11.5px;font-weight:700;letter-spacing:-.01em;
+    padding:3px 8px;border-radius:8px;
+    background:#F2F4F6;color:var(--ink2);white-space:nowrap;
   }
-  .mc-badge.mine{background:#DCF3E8;color:#0B7B57}
-  .mc-badge.eaten{background:#DFF5EA;color:#0A7A54}
-  .mc-badge.skip{background:#EFEFED;color:#8B938D}
+  .mc-badge.mine{background:var(--blue-soft);color:var(--blue-deep)}
+  .mc-badge.eaten{background:var(--green-soft);color:#0A8A5F}
+  .mc-badge.skip{background:#EDF0F3;color:var(--sub)}
   .mc-swap{
-    flex:0 0 auto;display:inline-flex;align-items:center;gap:3px;
-    font-size:10.5px;font-weight:800;letter-spacing:-.015em;color:#5C6A62;
-    padding:5px 9px;border-radius:99px;background:#fff;border:1px solid #E4E9E4;
-    white-space:nowrap;transition:background .15s,transform .12s;
+    flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;
+    font-size:13px;font-weight:700;letter-spacing:-.02em;color:var(--ink2);
+    padding:9px 12px;border-radius:12px;background:#F5F7F9;
+    white-space:nowrap;min-height:40px;transition:background .15s,transform .12s;
   }
-  .mc-swap:active{background:#EFF3EE;transform:scale(.97)}
+  .mc-swap:active{background:#E9EDF1;transform:scale(.97)}
 
   /* 제목 줄 + 인라인 편집 버튼 */
-  .mc-title{display:flex;align-items:flex-start;gap:8px}
+  .mc-title{display:block}
   .meal-name{
-    flex:1;min-width:0;font-size:15px;font-weight:800;letter-spacing:-.04em;line-height:1.36;color:#1B231F;
+    font-size:21px;font-weight:800;letter-spacing:-.045em;line-height:1.34;color:var(--ink);
+    word-break:keep-all;
   }
-  .meal-card.is-skip .meal-name{color:#8B958F;text-decoration:line-through;text-decoration-thickness:1.5px;font-size:13.5px}
+  .meal-card.is-skip .meal-name{color:var(--sub);text-decoration:line-through;text-decoration-thickness:2px;font-size:18px}
+  .mc-tools{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
   .mc-edit{
-    flex:0 0 auto;margin-top:0;
-    font-size:10.5px;font-weight:800;letter-spacing:-.015em;line-height:1.35;
-    color:#0A7A54;background:#EDF8F2;border:1px solid #D2EBE0;
-    padding:3px 8px;border-radius:8px;white-space:nowrap;
+    flex:0 0 auto;
+    font-size:13px;font-weight:600;letter-spacing:-.02em;line-height:1.35;
+    color:var(--ink2);background:#F5F7F9;
+    padding:9px 12px;border-radius:12px;white-space:nowrap;min-height:40px;
+    display:inline-flex;align-items:center;gap:4px;
     transition:background .15s;
   }
-  .mc-edit:active{background:#DCF1E7}
+  .mc-edit:active{background:#E9EDF1}
 
   /* 조리 시간·태그 */
-  .mc-meta{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:10.5px;font-weight:600;color:#939D96}
-  .mc-meta em{font-style:normal;color:#CDD4CE}
+  .mc-meta{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:13.5px;font-weight:500;color:var(--sub);letter-spacing:-.02em}
+  .mc-meta em{font-style:normal;color:var(--sub2)}
 
   /* 조리 한 줄 */
-  .steps{margin-top:8px;font-size:11.5px;line-height:1.65;color:#5A675F;font-weight:500;letter-spacing:-.005em}
+  .steps{margin-top:12px;font-size:14px;line-height:1.7;color:var(--ink2);font-weight:400;letter-spacing:-.02em}
   .steps.warn{
-    margin-top:8px;padding:8px 10px;border-radius:9px;
-    background:#FFF7EC;color:#8F4E14;font-weight:600;
+    margin-top:14px;padding:14px 16px;border-radius:16px;
+    background:#FFF8EC;color:#8A5305;font-weight:500;
   }
   .mine-empty{
-    margin-top:9px;font-size:11px;font-weight:600;color:var(--sub);
-    background:#fff;border:1px dashed #DCE4DD;border-radius:9px;padding:8px 10px;
+    margin-top:16px;font-size:13.5px;font-weight:400;color:var(--sub);
+    background:#F5F7F9;border-radius:14px;padding:14px 16px;line-height:1.55;
   }
-  .mine-empty b{color:var(--mint-deep)}
+  .mine-empty b{color:var(--ink2);font-weight:700}
 
   /* 재료 칩 */
-  .use-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+  .use-chips{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
   .ichip{
-    display:inline-flex;align-items:center;gap:4px;
-    min-height:29px;padding:3px 4px 3px 8px;border-radius:8px;
-    background:#F1F4F0;border:1px solid #E6ECE5;
-    font-size:10.5px;font-weight:700;letter-spacing:-.01em;color:#5E6B64;
+    display:inline-flex;align-items:center;gap:6px;
+    min-height:40px;padding:6px 6px 6px 12px;border-radius:13px;
+    background:#F5F7F9;border:1px solid transparent;
+    font-size:13.5px;font-weight:600;letter-spacing:-.02em;color:var(--ink2);
     transition:background .15s;
   }
-  .ichip .nm{display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+  .ichip .nm{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
   .ichip .x{
-    width:19px;height:19px;border-radius:6px;display:grid;place-items:center;
-    font-size:8.5px;font-weight:900;color:#9FAAA3;background:#E5EAE4;line-height:1;
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    font-size:10px;font-weight:800;color:var(--sub);background:#E7EBEF;line-height:1;
   }
-  .ichip:active{background:#E9EEE8}
-  .ichip:active .x{background:#D8E0D8}
-  .ichip.urgent{background:#FDEEEF;border-color:#F8DADC;color:#C0393E}
-  .ichip.urgent .x{background:#F7DCDD;color:#C77F81}
-  .ichip.soon{background:#FFF6E5;border-color:#F7E4C3;color:#94600A}
+  .ichip:active{background:#EDF1F5}
+  .ichip:active .x{background:#DCE2E8}
+  .ichip.urgent{background:var(--red-soft);border-color:#FFDCDC;color:#C2323E}
+  .ichip.urgent .x{background:#FFDCDC;color:#C77F81}
+  .ichip.soon{background:var(--amber-soft);border-color:#F7E6C4;color:#94600A}
   .ichip.soon .x{background:#F8E7C9;color:#B58C4A}
-  .ichip.is-depleted{background:#F4F5F2;border-color:#EAEBE7;color:#A9B1AA}
+  .ichip.is-depleted{background:#F4F5F7;border-color:#EDF0F3;color:var(--sub2)}
   .ichip.is-depleted .nm{text-decoration:line-through;text-decoration-thickness:1px}
-  .ichip.is-depleted .x{background:#EDEEEA;color:#C0C6C1}
+  .ichip.is-depleted .x{background:#EDEFF2;color:#C4CAD1}
   .ichip .gone{
-    font-size:8px;font-weight:800;letter-spacing:-.01em;
-    padding:1px 3px;border-radius:4px;background:#F1EDE5;color:#A07B3C;
+    font-size:10px;font-weight:700;letter-spacing:-.01em;
+    padding:2px 5px;border-radius:6px;background:#F1EDE5;color:#A07B3C;
   }
   .ichip .state{
-    font-size:8px;font-weight:800;letter-spacing:-.01em;
-    padding:1px 3px;border-radius:4px;background:var(--mint-soft);color:#0A7A54;
+    font-size:10px;font-weight:700;letter-spacing:-.01em;
+    padding:2px 5px;border-radius:6px;background:var(--blue-soft);color:var(--blue-deep);
   }
-  .ichip.is-sharing{background:#F0FAF5;border-color:#CFEBDD;color:#0B7A57}
-  .ichip.is-finished{background:#F4F5F2;border-color:#E9EBE7;color:#9BA49C}
-  .ichip.is-finished .state{background:#EDEFEA;color:#8B948D}
-  .ichip.is-finished .x{background:#EDEEEA;color:#C0C6C1}
+  .ichip.is-sharing{background:#F2F8FF;border-color:#DCEAFA;color:var(--blue-deep)}
+  .ichip.is-finished{background:#F4F5F7;border-color:#EDF0F3;color:var(--sub)}
+  .ichip.is-finished .state{background:#EDEFF2;color:var(--sub)}
+  .ichip.is-finished .x{background:#EDEFF2;color:#C4CAD1}
   .ichip.add{
-    padding:3px 9px;background:#fff;border:1px dashed #CBDCCF;
-    color:#0A7A54;font-weight:800;
+    padding:6px 14px;background:#fff;border:1px dashed #CBD5DE;
+    color:var(--ink2);font-weight:700;
   }
-  .ichip.add:active{background:#F0FAF5}
+  .ichip.add:active{background:#F5F7F9}
 
   /* 소진 알림 바 */
   .gone-bar{
-    margin-top:9px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;
-    padding:7px 9px;border-radius:10px;
-    background:#FFF8EC;border:1px solid #F5E3C5;
-    font-size:10.5px;font-weight:700;letter-spacing:-.01em;color:#95610A;line-height:1.45;
+    margin-top:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    padding:14px 16px;border-radius:16px;
+    background:#FFF8EC;border:1px solid #F5E6C9;
+    font-size:13px;font-weight:500;letter-spacing:-.02em;color:#8A5305;line-height:1.55;
   }
-  .gone-bar strong{font-weight:800}
+  .gone-bar strong{font-weight:700}
   .gone-bar button{
     margin-left:auto;flex:0 0 auto;
-    font-size:10.5px;font-weight:800;color:#8A5305;
-    background:#fff;border:1px solid #EED9B6;border-radius:7px;padding:4px 8px;
+    font-size:12.5px;font-weight:700;color:#7A4A05;
+    background:#fff;border:1px solid #EFDCBA;border-radius:10px;padding:9px 11px;min-height:38px;
     white-space:nowrap;
   }
-  .gone-bar button:active{background:#FDF0DC}
+  .gone-bar button:active{background:#FDF1DC}
+
+  /* 레시피 보기 버튼 */
+  .recipe-btn{
+    display:flex;align-items:center;justify-content:center;gap:7px;
+    width:100%;margin-top:16px;padding:14px 12px;min-height:50px;
+    border-radius:15px;background:#F5F7F9;color:var(--ink);
+    font-size:14.5px;font-weight:700;letter-spacing:-.03em;
+    transition:background .15s,transform .12s;
+  }
+  .recipe-btn:active{background:#E9EDF1;transform:scale(.99)}
+  .recipe-btn .cnt{color:var(--sub);font-weight:600;font-size:13px}
 
   /* 하단 메인 액션: 외식 | 먹었음 한 열 */
-  .mc-actions{display:grid;grid-template-columns:1fr 1.35fr;gap:7px;margin-top:11px}
+  .mc-actions{display:grid;grid-template-columns:1fr 1.35fr;gap:9px;margin-top:10px}
   .act{
-    min-width:0;padding:10px 6px;border-radius:11px;
-    font-size:12px;font-weight:800;letter-spacing:-.02em;white-space:nowrap;
-    background:#fff;border:1px solid #E4E9E4;color:#57645D;
+    min-width:0;padding:15px 8px;border-radius:15px;min-height:52px;
+    font-size:15px;font-weight:700;letter-spacing:-.03em;white-space:nowrap;
+    background:#F5F7F9;color:var(--ink2);
     transition:background .15s,transform .12s;
   }
   .act:active{transform:scale(.975)}
-  .act.out{background:#fff;color:#5A675F}
-  .act.out:active{background:#F2F5F1}
+  .act.out{background:#F5F7F9;color:var(--ink2)}
+  .act.out:active{background:#E9EDF1}
   .act.solid{
-    background:#1D2F27;border-color:#1D2F27;color:#fff;
-    box-shadow:0 4px 12px rgba(21,38,30,.16);
+    background:var(--blue);color:#fff;
+    box-shadow:0 6px 16px rgba(49,130,246,.22);
   }
-  .act.solid:active{background:#2A4438}
-  .act.undo{grid-column:1 / -1;background:#fff;color:var(--ink2);font-weight:700}
+  .act.solid:active{background:var(--blue-deep)}
+  .act.undo{grid-column:1 / -1;background:#F5F7F9;color:var(--ink2);font-weight:600}
 
   .skip-note{
-    margin-top:10px;display:flex;align-items:center;gap:7px;
-    font-size:11.5px;font-weight:700;color:#7A857E;
+    margin-top:18px;display:flex;align-items:center;gap:8px;
+    font-size:13.5px;font-weight:500;color:var(--sub);
   }
+
+  /* ── 급한 재료 사인 카드 (카드 사이) ── */
+  .urgent-callout{
+    margin:0 0 14px;padding:20px;border-radius:24px;
+    background:#FFF3F3;border:1px solid #FFE0E0;
+  }
+  .uc-head{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;color:#C2323E;letter-spacing:-.035em}
+  .uc-sub{font-size:13px;color:#B4696E;font-weight:400;margin-top:6px;line-height:1.55}
+  .uc-list{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+  .uc-row{
+    display:flex;align-items:center;gap:12px;
+    background:#fff;border-radius:16px;padding:14px 15px;
+    box-shadow:0 1px 2px rgba(190,60,60,.06);
+  }
+  .uc-emo{font-size:22px;line-height:1;flex:0 0 auto}
+  .uc-main{flex:1;min-width:0}
+  .uc-name{font-size:15px;font-weight:700;letter-spacing:-.03em;color:var(--ink);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .uc-note{font-size:12.5px;color:var(--sub);font-weight:500;margin-top:3px;letter-spacing:-.02em}
+  .uc-act{
+    flex:0 0 auto;font-size:12.5px;font-weight:700;color:#C2323E;
+    background:#FFF0F0;border-radius:11px;padding:10px 12px;min-height:40px;white-space:nowrap;
+  }
+  .uc-act:active{background:#FFE4E4}
 
   /* ── FAB ── */
   .fab{
     position:fixed;z-index:40;
-    bottom:calc(20px + env(safe-area-inset-bottom));
-    right:max(18px,calc(50% - 215px + 18px));
-    display:inline-flex;align-items:center;gap:6px;
-    padding:13px 18px;border-radius:99px;
-    background:#1D2F27;color:#fff;
-    font-size:13px;font-weight:800;letter-spacing:-.02em;
-    box-shadow:0 10px 24px rgba(21,38,30,.3);
+    bottom:calc(22px + env(safe-area-inset-bottom));
+    right:max(20px,calc(50% - 215px + 20px));
+    display:inline-flex;align-items:center;gap:7px;
+    padding:17px 22px;border-radius:99px;min-height:56px;
+    background:var(--blue);color:#fff;
+    font-size:15px;font-weight:700;letter-spacing:-.03em;
+    box-shadow:0 10px 26px rgba(49,130,246,.34);
     transition:transform .12s;
   }
   .fab:active{transform:scale(.96)}
 
   /* ── 시트 ── */
   .scrim{
-    position:fixed;inset:0;background:rgba(18,28,23,.42);
+    position:fixed;inset:0;background:rgba(17,24,39,.46);
     opacity:0;pointer-events:none;transition:opacity .24s ease;z-index:50;
-    backdrop-filter:blur(1px);
+    backdrop-filter:blur(2px);
   }
   .scrim.is-open{opacity:1;pointer-events:auto}
 
@@ -603,130 +648,131 @@
     position:fixed;z-index:60;
     left:50%;bottom:0;width:100%;max-width:430px;
     transform:translate(-50%,104%);
-    transition:transform .3s cubic-bezier(.32,.72,.3,1);
+    transition:transform .32s cubic-bezier(.32,.72,.3,1);
     background:#fff;
-    border-radius:24px 24px 0 0;
-    padding:10px 18px calc(22px + env(safe-area-inset-bottom));
-    max-height:88vh;overflow-y:auto;
-    box-shadow:0 -10px 40px rgba(18,35,26,.18);
+    border-radius:28px 28px 0 0;
+    padding:12px 20px calc(26px + env(safe-area-inset-bottom));
+    max-height:90vh;overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    box-shadow:var(--shadow-lg);
   }
   .sheet.is-open{transform:translate(-50%,0)}
   .sheet-grip{
-    width:38px;height:4px;border-radius:99px;background:#E1E6E0;
-    margin:2px auto 14px;
+    width:40px;height:4px;border-radius:99px;background:#E1E6EA;
+    margin:2px auto 18px;
   }
-  .sheet h2{font-size:17px;font-weight:800;letter-spacing:-.035em}
-  .sheet-sub{font-size:12px;color:var(--sub);font-weight:500;margin-top:5px;line-height:1.5}
+  .sheet h2{font-size:21px;font-weight:800;letter-spacing:-.045em;line-height:1.35}
+  .sheet-sub{font-size:13.5px;color:var(--sub);font-weight:400;margin-top:8px;line-height:1.6}
 
-  .field{margin-top:14px;flex:1;min-width:0}
-  .field label{display:block;font-size:11px;font-weight:800;color:var(--sub);letter-spacing:.02em;margin-bottom:6px}
+  .field{margin-top:20px;flex:1;min-width:0}
+  .field label{display:block;font-size:13px;font-weight:700;color:var(--ink2);letter-spacing:-.02em;margin-bottom:9px}
   .field input{
-    width:100%;padding:12px 13px;border-radius:12px;
-    background:#F5F7F4;border:1px solid #E8ECE7;
-    font-size:14px;font-weight:600;outline:none;
+    width:100%;padding:15px 16px;border-radius:15px;min-height:52px;
+    background:#F5F7F9;border:1px solid transparent;
+    font-size:16px;font-weight:600;outline:none;letter-spacing:-.02em;
     transition:border-color .15s,background .15s;
   }
-  .field input:focus{border-color:var(--mint);background:#fff}
-  .field input::placeholder{color:#B4BDB6;font-weight:500}
-  .field-row{display:flex;gap:10px}
+  .field input:focus{border-color:var(--blue);background:#fff}
+  .field input::placeholder{color:var(--sub2);font-weight:400}
+  .field-row{display:flex;gap:12px}
   .field textarea{
-    width:100%;padding:12px 13px;border-radius:12px;
-    background:#F5F7F4;border:1px solid #E8ECE7;
-    font:inherit;font-size:13px;font-weight:600;line-height:1.55;
-    outline:none;resize:vertical;min-height:66px;
+    width:100%;padding:15px 16px;border-radius:15px;
+    background:#F5F7F9;border:1px solid transparent;
+    font:inherit;font-size:15px;font-weight:500;line-height:1.6;
+    outline:none;resize:vertical;min-height:88px;letter-spacing:-.02em;
     transition:border-color .15s,background .15s;
   }
-  .field textarea:focus{border-color:var(--mint);background:#fff}
-  .field textarea::placeholder{color:#B4BDB6;font-weight:500}
-  .field .hint-inline{font-size:10.5px;font-weight:600;color:var(--sub);margin-left:5px;letter-spacing:0}
-  .field .hint-inline b{color:var(--mint-deep);font-weight:800}
+  .field textarea:focus{border-color:var(--blue);background:#fff}
+  .field textarea::placeholder{color:var(--sub2);font-weight:400}
+  .field .hint-inline{font-size:12px;font-weight:600;color:var(--sub);margin-left:5px;letter-spacing:0}
+  .field .hint-inline b{color:var(--blue-deep);font-weight:700}
 
-  .seg{display:flex;gap:6px}
+  .seg{display:flex;gap:8px;flex-wrap:wrap}
   .seg button{
-    flex:1;padding:10px 4px;border-radius:11px;
-    background:#F5F7F4;border:1px solid #E8ECE7;
-    font-size:11.5px;font-weight:700;color:#68746D;
-    white-space:nowrap;
+    flex:1 1 0;padding:14px 6px;border-radius:14px;min-height:50px;
+    background:#F5F7F9;border:1px solid transparent;
+    font-size:14px;font-weight:600;color:var(--ink2);
+    white-space:nowrap;letter-spacing:-.02em;
   }
-  .seg button.is-on{background:#1D2F27;border-color:#1D2F27;color:#fff}
+  .seg button.is-on{background:#191F28;border-color:#191F28;color:#fff;font-weight:700}
   .seg button:active{transform:scale(.97)}
 
-  .quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
-  .quick-label{width:100%;font-size:10.5px;font-weight:700;color:var(--sub);margin-bottom:1px}
+  .quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+  .quick-label{width:100%;font-size:12.5px;font-weight:700;color:var(--sub);margin-bottom:2px}
   .quick button{
-    font-size:11.5px;font-weight:700;padding:6px 10px;border-radius:8px;
-    background:#F2F6F2;color:#5C6A62;border:1px solid #E6ECE6;
+    font-size:13.5px;font-weight:600;padding:11px 14px;border-radius:12px;min-height:44px;
+    background:#F5F7F9;color:var(--ink2);
   }
-  .quick button:active{background:#E6F6EF;color:var(--mint-deep)}
+  .quick button:active{background:var(--blue-soft);color:var(--blue-deep)}
 
-  .sheet-actions{display:flex;gap:8px;margin-top:20px}
+  .sheet-actions{display:flex;gap:10px;margin-top:26px}
   .btn{
-    flex:1;padding:13px 10px;border-radius:13px;
-    font-size:14px;font-weight:800;letter-spacing:-.02em;
+    flex:1;padding:17px 12px;border-radius:16px;min-height:56px;
+    font-size:16px;font-weight:700;letter-spacing:-.03em;
   }
-  .btn.primary{flex:1.6;background:#1D2F27;color:#fff}
-  .btn.primary:active{background:#2A4438}
-  .btn.ghost{background:#F2F5F1;color:#5C6A62}
-  .btn.ghost:active{background:#E9EEE8}
+  .btn.primary{flex:1.6;background:var(--blue);color:#fff}
+  .btn.primary:active{background:var(--blue-deep)}
+  .btn.ghost{background:#F2F4F6;color:var(--ink2)}
+  .btn.ghost:active{background:#E5E8EB}
   .danger-link{
-    width:100%;margin-top:12px;padding:10px;border-radius:10px;
-    font-size:12px;font-weight:700;color:#C3363B;background:var(--red-soft);
+    width:100%;margin-top:14px;padding:15px;border-radius:14px;min-height:52px;
+    font-size:14px;font-weight:700;color:var(--red);background:var(--red-soft);
   }
   .danger-link.is-hidden{display:none}
 
-  .eat-list{margin-top:6px}
+  .eat-list{margin-top:8px}
   .cust-list{
-    margin-top:9px;max-height:33vh;overflow-y:auto;
-    border-radius:12px;background:#FBFCFA;border:1px solid #F0F3EF;padding:0 10px 4px;
+    margin-top:12px;max-height:34vh;overflow-y:auto;
+    border-radius:18px;background:#FAFBFC;border:1px solid #F0F3F6;padding:0 14px 6px;
   }
   .cust-group{
-    display:flex;align-items:center;gap:5px;
-    padding:9px 2px 3px;font-size:10.5px;font-weight:800;color:var(--sub);letter-spacing:.02em;
-    position:sticky;top:0;background:#FBFCFA;z-index:1;
+    display:flex;align-items:center;gap:6px;
+    padding:14px 2px 6px;font-size:12.5px;font-weight:700;color:var(--sub);letter-spacing:-.01em;
+    position:sticky;top:0;background:#FAFBFC;z-index:1;
   }
-  .cust-empty{padding:18px 2px;text-align:center;font-size:11.5px;font-weight:600;color:var(--sub)}
+  .cust-empty{padding:26px 2px;text-align:center;font-size:13.5px;font-weight:500;color:var(--sub)}
   .eat-row{
-    display:flex;align-items:center;gap:10px;
-    padding:12px 2px;border-bottom:1px solid #F0F3EF;
+    display:flex;align-items:center;gap:12px;
+    padding:15px 2px;border-bottom:1px solid #F0F3F6;min-height:60px;
   }
   .eat-row:last-child{border-bottom:0}
   .eat-row input{
     appearance:none;-webkit-appearance:none;
-    width:22px;height:22px;border-radius:7px;flex:0 0 auto;
-    border:1.5px solid #D5DDD6;background:#fff;position:relative;
+    width:26px;height:26px;border-radius:9px;flex:0 0 auto;
+    border:1.5px solid #D5DBE1;background:#fff;position:relative;
     transition:background .15s,border-color .15s;
   }
-  .eat-row input:checked{background:var(--mint);border-color:var(--mint)}
+  .eat-row input:checked{background:var(--blue);border-color:var(--blue)}
   .eat-row input:checked::after{
     content:"✓";position:absolute;inset:0;display:grid;place-items:center;
-    color:#fff;font-size:13px;font-weight:900;
+    color:#fff;font-size:14px;font-weight:900;
   }
-  .eat-row.is-done{opacity:.45}
-  .eat-name{flex:1;font-size:13.5px;font-weight:700;letter-spacing:-.02em}
+  .eat-row.is-done{opacity:.42}
+  .eat-name{flex:1;font-size:15px;font-weight:600;letter-spacing:-.02em}
   .eat-row.is-done .eat-name{text-decoration:line-through}
-  .eat-check{font-size:11px;font-weight:800;color:var(--mint-deep)}
+  .eat-check{font-size:13px;font-weight:700;color:#0A8A5F}
 
-  .menu-list{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+  .menu-list{display:flex;flex-direction:column;gap:10px;margin-top:20px}
   .menu-list button{
-    text-align:left;padding:14px;border-radius:13px;background:#F5F7F4;
-    font-size:13.5px;font-weight:800;letter-spacing:-.02em;
-    display:flex;flex-direction:column;gap:4px;
+    text-align:left;padding:18px;border-radius:18px;background:#F5F7F9;
+    font-size:15.5px;font-weight:700;letter-spacing:-.03em;
+    display:flex;flex-direction:column;gap:5px;
   }
-  .menu-list button em{font-style:normal;font-size:11.5px;font-weight:500;color:var(--sub)}
-  .menu-list button.danger{color:#C3363B}
-  .menu-list button.danger em{color:#B47576}
+  .menu-list button em{font-style:normal;font-size:13px;font-weight:400;color:var(--sub);letter-spacing:-.01em}
+  .menu-list button.danger{color:var(--red)}
+  .menu-list button.danger em{color:#C08589}
 
   /* ── 토스트 ── */
   .toast{
-    position:fixed;z-index:70;
-    left:50%;bottom:calc(90px + env(safe-area-inset-bottom));
+    position:fixed;z-index:90;
+    left:50%;bottom:calc(100px + env(safe-area-inset-bottom));
     transform:translate(-50%,14px);
-    background:rgba(23,36,29,.94);color:#fff;
-    font-size:12.5px;font-weight:700;letter-spacing:-.01em;
-    padding:11px 16px;border-radius:12px;
+    background:rgba(25,31,40,.94);color:#fff;
+    font-size:14px;font-weight:600;letter-spacing:-.02em;line-height:1.5;
+    padding:14px 18px;border-radius:15px;
     opacity:0;pointer-events:none;transition:opacity .22s,transform .22s;
-    max-width:calc(100% - 48px);text-align:center;
-    box-shadow:0 8px 22px rgba(18,35,26,.24);
+    max-width:calc(100% - 44px);text-align:center;
+    box-shadow:0 10px 26px rgba(17,24,39,.24);
   }
   .toast.is-open{opacity:1;transform:translate(-50%,0)}
 
@@ -735,53 +781,129 @@
     position:fixed;inset:0;z-index:85;
     display:flex;align-items:center;justify-content:center;
     padding:0 26px;
-    background:rgba(17,27,22,.46);
+    background:rgba(17,24,39,.5);
     -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
     opacity:0;pointer-events:none;transition:opacity .2s ease;
   }
   .modal.is-open{opacity:1;pointer-events:auto}
   .modal-card{
-    position:relative;width:100%;max-width:330px;
-    background:#fff;border-radius:22px;padding:22px 20px 18px;
-    box-shadow:0 24px 60px rgba(15,30,23,.3);
+    position:relative;width:100%;max-width:340px;
+    background:#fff;border-radius:24px;padding:28px 22px 20px;
+    box-shadow:var(--shadow-lg);
     transform:translateY(12px) scale(.97);
     transition:transform .24s cubic-bezier(.32,.72,.3,1);
   }
   .modal.is-open .modal-card{transform:none}
-  .modal-emo{font-size:30px;line-height:1;text-align:center;margin-bottom:9px}
-  .modal-card h2{font-size:15.5px;font-weight:800;letter-spacing:-.035em;text-align:center;line-height:1.4}
-  .modal-sub{margin-top:7px;font-size:11.5px;line-height:1.6;color:#7D8984;font-weight:500;text-align:center}
-  .modal-actions{margin-top:16px;display:flex;flex-direction:column;gap:7px}
-  .modal-actions .btn{padding:13px 10px;border-radius:13px;font-size:13.5px;font-weight:800}
-  .modal-actions .btn.hint{font-size:12px;font-weight:700;padding:11px 10px}
+  .modal-emo{font-size:34px;line-height:1;text-align:center;margin-bottom:12px}
+  .modal-card h2{font-size:18.5px;font-weight:800;letter-spacing:-.04em;text-align:center;line-height:1.42}
+  .modal-sub{margin-top:10px;font-size:13.5px;line-height:1.65;color:var(--sub);font-weight:400;text-align:center}
+  .modal-actions{margin-top:22px;display:flex;flex-direction:column;gap:9px}
+  .modal-actions .btn{padding:16px 12px;border-radius:15px;font-size:15.5px;font-weight:700;min-height:54px}
+  .modal-actions .btn.hint{font-size:14px;font-weight:600;padding:14px 12px;min-height:50px}
   .modal-close{
-    position:absolute;top:9px;right:9px;width:28px;height:28px;border-radius:9px;
-    background:#F3F5F2;color:#98A29B;font-size:11px;font-weight:800;display:grid;place-items:center;
+    position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:11px;
+    background:#F2F4F6;color:var(--sub);font-size:13px;font-weight:700;display:grid;place-items:center;
   }
 
   /* ── 끼니 재료 추가 시트 ── */
   .pick-head{
-    display:flex;align-items:center;gap:7px;
-    margin-top:12px;padding:8px 10px;border-radius:10px;
-    background:#F4F8F4;font-size:10.5px;font-weight:700;color:#6C7972;
+    display:flex;align-items:center;gap:8px;
+    margin-top:14px;padding:12px 14px;border-radius:14px;
+    background:#F5F9FF;font-size:12.5px;font-weight:500;color:var(--ink2);line-height:1.5;
   }
-  .pick-head b{color:#0A7A54;font-weight:800}
+  .pick-head b{color:var(--blue-deep);font-weight:700}
+
+  /* ── 레시피 팝업(바텀시트) ── */
+  .recipe-sheet{padding-bottom:calc(30px + env(safe-area-inset-bottom))}
+  .rs-kicker{font-size:13px;font-weight:700;color:var(--blue-deep);letter-spacing:-.02em}
+  .rs-title{font-size:23px;font-weight:800;letter-spacing:-.05em;line-height:1.34;margin-top:8px;word-break:keep-all}
+  .rs-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .rs-meta span{
+    font-size:13px;font-weight:600;color:var(--ink2);
+    background:#F5F7F9;border-radius:11px;padding:9px 12px;min-height:38px;
+    display:inline-flex;align-items:center;gap:5px;
+  }
+  .rs-block{margin-top:26px}
+  .rs-block h3{font-size:16px;font-weight:800;letter-spacing:-.04em;color:var(--ink)}
+  .rs-sublabel{
+    display:flex;align-items:center;gap:6px;
+    font-size:12.5px;font-weight:700;color:var(--sub);letter-spacing:-.01em;
+    margin:16px 2px 8px;
+  }
+  .rs-sublabel.buy{color:#B26E00}
+  .rs-sublabel span{font-weight:600;color:var(--sub2)}
+  .rs-ing{
+    display:flex;align-items:center;gap:12px;
+    background:#FAFBFC;border-radius:16px;padding:14px 15px;margin-bottom:8px;min-height:56px;
+  }
+  .rs-ing.buy{background:#FFFBF2}
+  .rs-ing .emo{font-size:20px}
+  .rs-ing-name{flex:1;min-width:0;font-size:14.5px;font-weight:700;letter-spacing:-.025em;color:var(--ink)}
+  .rs-ing-state{flex:0 0 auto;font-size:12.5px;font-weight:600;color:var(--sub);letter-spacing:-.02em}
+  .rs-ing-state.ok{color:#0A8A5F}
+  .rs-ing-state.warn{color:#B26E00}
+  .rs-ing-state.none{color:#C2323E}
+  .rs-empty{
+    background:#FAFBFC;border-radius:16px;padding:16px;
+    font-size:13.5px;font-weight:500;color:var(--sub);line-height:1.6;
+  }
+  .rs-steps{list-style:none;margin-top:16px;counter-reset:step}
+  .rs-steps li{
+    position:relative;padding:0 0 20px 46px;counter-increment:step;
+  }
+  .rs-steps li::before{
+    content:counter(step);
+    position:absolute;left:0;top:-1px;
+    width:32px;height:32px;border-radius:11px;
+    background:var(--blue-soft);color:var(--blue-deep);
+    display:grid;place-items:center;
+    font-size:14px;font-weight:800;letter-spacing:-.02em;
+  }
+  .rs-steps li::after{
+    content:"";position:absolute;left:15.5px;top:36px;bottom:4px;width:1.5px;background:#EDF0F3;
+  }
+  .rs-steps li:last-child{padding-bottom:0}
+  .rs-steps li:last-child::after{display:none}
+  .rs-steps li p{font-size:14.5px;line-height:1.65;color:var(--ink2);font-weight:400;letter-spacing:-.02em}
+  .rs-steps li b{
+    display:block;font-size:11.5px;font-weight:800;color:var(--sub2);
+    letter-spacing:.04em;margin-bottom:3px;
+  }
+  .rs-tip{
+    margin-top:28px;padding:18px 19px;border-radius:18px;
+    background:#FFF9EC;color:#7A5A0C;
+    font-size:14px;font-weight:500;line-height:1.65;letter-spacing:-.02em;
+  }
+  .rs-tip b{font-weight:800}
+  .rs-note{
+    margin-top:20px;padding:16px 18px;border-radius:16px;
+    background:#F5F7F9;font-size:13.5px;color:var(--ink2);line-height:1.6;
+  }
+  .rs-note b{font-weight:700;color:var(--ink)}
+  .rs-actions{display:flex;gap:9px;margin-top:28px}
+  .rs-actions .btn{min-height:54px;font-size:15.5px}
 
   .flash{animation:flash 1.1s ease}
   @keyframes flash{
-    0%{box-shadow:0 0 0 0 rgba(14,159,110,.4)}
-    40%{box-shadow:0 0 0 4px rgba(14,159,110,.22)}
+    0%{box-shadow:0 0 0 0 rgba(49,130,246,.4)}
+    40%{box-shadow:0 0 0 5px rgba(49,130,246,.2)}
     100%{box-shadow:var(--shadow)}
   }
 
   @media (min-width:431px){
-    body{background:#E9EDE7}
-    .app{box-shadow:0 0 46px rgba(20,40,30,.1);min-height:100vh}
+    body{background:#E9ECEF}
+    .app{box-shadow:0 0 46px rgba(17,24,39,.08);min-height:100vh}
   }
 
   @media (max-width:359px){
-    .mc-edit,.mc-swap{font-size:10px;padding:4px 7px}
-    .act{font-size:11.5px;padding:9px 4px}
+    .mc-edit,.mc-swap{font-size:12px;padding:8px 10px}
+    .act{font-size:14px;padding:14px 6px}
+    .meal-name{font-size:19px}
+    .topbar{padding:16px 16px 12px}
+    .dash{margin-left:16px;margin-right:16px;padding:18px}
+    .tabs{margin-left:16px;margin-right:16px}
+    .main{padding:16px 16px 8px}
+    .item{padding:14px}
   }
 </style>
 </head>
@@ -952,6 +1074,11 @@
   </div>
 </div>
 
+<div class="sheet recipe-sheet" id="recipeSheet" role="dialog" aria-modal="true" aria-labelledby="recipeTitle">
+  <div class="sheet-grip"></div>
+  <div id="recipeBody"></div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <div class="modal" id="depModal" role="dialog" aria-modal="true" aria-labelledby="depTitle">
@@ -1037,69 +1164,257 @@
   ];
 
   var RECIPES = [
-    { id: 'bun-sandwich', name: '모닝빵 바질·크림치즈 샌드 & 우유', slots: ['lunch'], key: 'bread', time: '10분', tag: '노쿡',
+    { id: 'bun-sandwich', name: '모닝빵 바질·크림치즈 샌드 & 우유', slots: ['lunch'], key: 'bread', time: '10분', tag: '노쿡', method: '노쿡', level: '쉬움',
       uses: ['morningbun', 'pesto', 'creamcheese', 'salad', 'milk', 'shake'],
-      steps: '모닝빵을 반 갈라 바질페스토를 바르고 크림치즈·샐러드를 채워요. 우유나 단백질 쉐이크 한 잔이면 점심 끝.' },
-    { id: 'french-toast', name: '우유 모닝빵 프렌치토스트 + 사과', slots: ['lunch'], key: 'bread', time: '12분', tag: '간단',
+      steps: '모닝빵을 반 갈라 바질페스토를 바르고 크림치즈·샐러드를 채워요. 우유나 단백질 쉐이크 한 잔이면 점심 끝.',
+      detail: [
+        '모닝빵을 위아래로 반 갈라 속을 살짝 파내요. 파낸 속은 그대로 먹어도 좋아요.',
+        '아래쪽 빵에 바질 페스토를 얇게 바르고 크림치즈를 올려요.',
+        '샐러드를 한 줌 올린 뒤 위쪽 빵을 덮고 손바닥으로 가볍게 눌러요.',
+        '우유 한 컵이나 단백질 쉐이크를 곁들이면 점심 완성.'
+      ],
+      tip: '크림치즈가 소량이면 페스토와 1:1로 섞어 발라도 맛이 충분해요. 우유 큰 팩은 여기서 한 컵 쓰면 유통기한 안에 정리하기 쉬워요.',
+      extra: [] },
+
+    { id: 'french-toast', name: '우유 모닝빵 프렌치토스트 + 사과', slots: ['lunch'], key: 'bread', time: '12분', tag: '간단', method: '팬', level: '쉬움',
       uses: ['morningbun', 'milk', 'egg', 'butter', 'apple'],
-      steps: '계란·우유·소금을 풀어 모닝빵을 적셔요. 버터 두른 팬에 노릇하게 굽고 사과 슬라이스 곁들임.' },
-    { id: 'mackerel-butter', name: '고등어 버터마늘구이 + 밥', slots: ['dinner'], key: 'fish', time: '20분', tag: '에어프라이어',
+      steps: '계란·우유·소금을 풀어 모닝빵을 적셔요. 버터 두른 팬에 노릇하게 굽고 사과 슬라이스 곁들임.',
+      detail: [
+        '넓은 그릇에 계란 1개, 우유 100ml, 소금 한 꼬집을 넣고 잘 풀어요.',
+        '모닝빵을 반 갈라 계란물에 30초쯤 담가 속까지 적셔요.',
+        '팬에 버터를 녹이고 약불에서 앞뒤로 노릇하게 구워요.',
+        '사과를 얇게 썰어 곁들이고, 남은 계란물은 팬에 부어 스크램블로 마무리해요.'
+      ],
+      tip: '불이 세면 겉만 타고 속이 젖어요. 약불에서 천천히 굽는 게 포인트예요. 사과는 3mm 두께로 얇게 썰면 한 개로도 넉넉해요.',
+      extra: ['소금'] },
+
+    { id: 'mackerel-butter', name: '고등어 버터마늘구이 + 밥', slots: ['dinner'], key: 'fish', time: '20분', tag: '에어프라이어', method: '에어프라이어', level: '쉬움',
       uses: ['mackerel', 'butter', 'garlic', 'rice'],
-      steps: '고등어 물기를 꼭 닦고 버터·다진마늘 올려 200도 15분. 따뜻한 밥 위에 올려 먹으면 됩니다.' },
-    { id: 'mackerel-soy', name: '고등어 간장조림 + 밥', slots: ['dinner'], key: 'fish', time: '25분', tag: '밥도둑',
+      steps: '고등어 물기를 꼭 닦고 버터·다진마늘 올려 200도 15분. 따뜻한 밥 위에 올려 먹으면 됩니다.',
+      detail: [
+        '고등어는 키친타월로 겉과 속 물기를 꼭 닦아요.',
+        '말랑해진 버터에 다진마늘을 섞어 마늘버터를 만들어요.',
+        '고등어 양면에 소금을 살짝 뿌리고 마늘버터를 올려 200도 에어프라이어에서 15분 구워요.',
+        '따뜻한 밥 위에 올리고 남은 마늘버터를 팬에 녹여 살짝 끼얹어요.'
+      ],
+      tip: '물기를 안 닦으면 비린내가 올라와요. 에어프라이어가 없으면 팬에 버터를 두르고 껍질부터 중불 8분, 뒤집어 5분 구우면 돼요.',
+      extra: ['소금'] },
+
+    { id: 'mackerel-soy', name: '고등어 간장조림 + 밥', slots: ['dinner'], key: 'fish', time: '25분', tag: '밥도둑', method: '냄비', level: '보통',
       uses: ['mackerel', 'soy', 'garlic', 'onion', 'rice'],
-      steps: '간장·물·다진마늘·양파를 끓이다 고등어를 넣고 중불 15분. 국물은 밥에 얹어 마무리.' },
-    { id: 'pork-kimchi-jjim', name: '목살 김치찜 (버섯·두부·양파 푸짐하게)', slots: ['dinner'], key: 'pork', time: '35분', tag: '한 냄비',
+      steps: '간장·물·다진마늘·양파를 끓이다 고등어를 넣고 중불 15분. 국물은 밥에 얹어 마무리.',
+      detail: [
+        '냄비에 물 200ml, 간장 3큰술, 다진마늘 1큰술, 채 썬 양파를 넣고 끓여요.',
+        '끓어오르면 고등어를 넣고 중불에서 15분 졸여요.',
+        '국물을 숟가락으로 위에 끼얹으며 5분 더 졸여 간이 배게 해요.',
+        '밥 위에 고등어를 올리고 국물을 한두 숟가락 얹어요.'
+      ],
+      tip: '고등어를 넣은 뒤에는 뒤집지 말고 국물만 끼얹어야 살이 부서지지 않아요. 남은 국물은 밥에 비벼도 좋아요.',
+      extra: [] },
+
+    { id: 'pork-kimchi-jjim', name: '목살 김치찜 (버섯·두부·양파 푸짐하게)', slots: ['dinner'], key: 'pork', time: '35분', tag: '한 냄비', method: '냄비', level: '보통',
       uses: ['pork', 'kimchi', 'mushroom', 'tofu', 'onion'],
-      steps: '목살 앞뒤로 지글지글 굽고 김치·양파·버섯 깔고 물 반 컵. 25분 뭉근하게 끓인 뒤 두부 넣고 5분.' },
-    { id: 'pork-kimchi-grill', name: '김치 목살구이 + 샐러드', slots: ['dinner'], key: 'pork', time: '15분', tag: '구이',
+      steps: '목살 앞뒤로 지글지글 굽고 김치·양파·버섯 깔고 물 반 컵. 25분 뭉근하게 끓인 뒤 두부 넣고 5분.',
+      detail: [
+        '목살을 두툼하게 썰어 센 불에 앞뒤로 지글지글 구워 기름을 내요.',
+        '잘 익은 김치와 양파, 버섯을 넣고 함께 볶아요.',
+        '물 반 컵을 붓고 뚜껑을 덮어 약불에서 25분 뭉근하게 끓여요.',
+        '두부를 도톰하게 썰어 넣고 5분 더 끓여 마무리해요.'
+      ],
+      tip: '김치가 덜 익었으면 설탕 반 작은술을 넣으면 깊은 맛이 나요. 목살은 한 덩이만 써도 두 끼 분량이에요.',
+      extra: ['설탕'] },
+
+    { id: 'pork-kimchi-grill', name: '김치 목살구이 + 샐러드', slots: ['dinner'], key: 'pork', time: '15분', tag: '구이', method: '팬', level: '쉬움',
       uses: ['pork', 'kimchi', 'salad', 'garlic'],
-      steps: '목살 두툼하게 구워 김치와 함께 한입. 기름진 맛은 샐러드로 바로 정리해요.' },
-    { id: 'spam-stew', name: '스팸 염분 뺀 김치찌개', slots: ['dinner'], key: 'pork', time: '20분', tag: '찌개',
+      steps: '목살 두툼하게 구워 김치와 함께 한입. 기름진 맛은 샐러드로 바로 정리해요.',
+      detail: [
+        '목살을 1.5cm 두께로 썰고 소금·후추로 밑간해요.',
+        '달군 팬에 올려 한 면 4분, 뒤집어 3분 구워요.',
+        '같은 팬에 김치와 다진마늘을 넣고 3분 볶아 기름을 입혀요.',
+        '그릇에 샐러드를 깔고 목살과 김치를 올려 한입씩 싸 먹어요.'
+      ],
+      tip: '고기를 구운 뒤 2분 쉬게 두면 육즙이 덜 빠져요. 샐러드는 1개뿐이니 이 끼니에 다 쓰는 게 좋아요.',
+      extra: ['소금', '후추'] },
+
+    { id: 'spam-stew', name: '스팸 염분 뺀 김치찌개', slots: ['dinner'], key: 'pork', time: '20분', tag: '찌개', method: '냄비', level: '쉬움',
       uses: ['spam', 'kimchi', 'tofu', 'onion', 'mushroom', 'rice'],
-      steps: '김치·양파를 볶다 물 400ml 붓고 두부·버섯 넣어 10분 끓이면 끝. 밥에 얹어 드세요.' },
-    { id: 'egg-scramble-pasta', name: '에그 스크램블 파스타', slots: ['lunch', 'dinner'], key: 'pasta', time: '15분', tag: '파스타',
+      steps: '김치·양파를 볶다 물 400ml 붓고 두부·버섯 넣어 10분 끓이면 끝. 밥에 얹어 드세요.',
+      detail: [
+        '스팸을 먹기 좋게 썰어 끓는 물에 3분 데쳐 염분을 빼요. 이 과정이 핵심이에요.',
+        '냄비에 김치와 양파를 넣고 5분 볶아 신맛을 날려요.',
+        '물 400ml를 붓고 스팸과 버섯을 넣어 10분 끓여요.',
+        '두부를 넣고 3분 더 끓인 뒤 밥과 함께 내요.'
+      ],
+      tip: '스팸은 끓는 물에 데치면 짠맛이 절반으로 줄어요. 간이 부족하면 김치 국물을 한 숟가락 넣고, 대파가 있으면 마지막에 올려요.',
+      extra: ['대파(선택)'] },
+
+    { id: 'egg-scramble-pasta', name: '에그 스크램블 파스타', slots: ['lunch', 'dinner'], key: 'pasta', time: '15분', tag: '파스타', method: '팬', level: '보통',
       uses: ['pasta', 'egg', 'butter', 'garlic', 'stock'],
-      steps: '면을 삶아 건져요. 버터에 다진마늘 볶다 계란을 풀어 스크램블처럼 익히고, 치킨스톡 반 컵과 면수를 넣어 소스로. 삶은 면을 넣고 비벼 마무리(바질페스토 한 스푼 있으면 더 좋아요).' },
-    { id: 'pesto-pasta', name: '바질페스토 버섯·모짜렐라 파스타', slots: ['lunch'], key: 'pasta', time: '15분', tag: '파스타',
+      steps: '면을 삶아 건져요. 버터에 다진마늘 볶다 계란을 풀어 스크램블처럼 익히고, 치킨스톡 반 컵과 면수를 넣어 소스로. 삶은 면을 넣고 비벼 마무리(바질페스토 한 스푼 있으면 더 좋아요).',
+      detail: [
+        '끓는 물에 소금을 넣고 파스타면 1인분을 삶아요. 면수 한 컵은 남겨두세요.',
+        '팬에 버터를 녹이고 다진마늘을 30초 볶아 향을 내요.',
+        '계란 2개를 풀어 넣고 젓가락으로 저어 스크램블처럼 익혀요.',
+        '치킨스톡 반 컵과 면수 3큰술을 붓고 삶은 면을 넣어 빠르게 비벼요.'
+      ],
+      tip: '계란은 70%만 익었을 때 불을 끄고 면을 넣어야 부드러워요. 바질페스토가 있으면 마지막에 한 스푼 넣으면 향이 살아나요.',
+      extra: ['소금', '후추'] },
+
+    { id: 'pesto-pasta', name: '바질페스토 버섯·모짜렐라 파스타', slots: ['lunch'], key: 'pasta', time: '15분', tag: '파스타', method: '팬', level: '쉬움',
       uses: ['pasta', 'pesto', 'mushroom', 'mozzarella', 'garlic'],
-      steps: '파스타 삶기 1분 전 버섯 넣어 함께 데치기. 물기 빼고 페스토 2스푼 비벼 모짜렐라 얹고 뚜껑.' },
-    { id: 'cream-pasta', name: '명란크림 버섯 파스타 + 샐러드', slots: ['lunch'], key: 'pasta', time: '15분', tag: '파스타',
+      steps: '파스타 삶기 1분 전 버섯 넣어 함께 데치기. 물기 빼고 페스토 2스푼 비벼 모짜렐라 얹고 뚜껑.',
+      detail: [
+        '끓는 물에 파스타면을 넣고 삶기 시작해요.',
+        '삶기 1분 전에 버섯을 넣어 함께 데쳐요.',
+        '물기를 빼고 그릇에 옮겨 페스토 2큰술을 넣고 고루 비벼요.',
+        '모짜렐라를 얹고 뚜껑을 덮어 1분 두어 살짝 녹여요.'
+      ],
+      tip: '페스토는 불에 오래 가열하면 향이 날아가요. 불을 끈 뒤에 비비는 게 좋아요.',
+      extra: ['소금'] },
+
+    { id: 'cream-pasta', name: '명란크림 버섯 파스타 + 샐러드', slots: ['lunch'], key: 'pasta', time: '15분', tag: '파스타', method: '팬', level: '쉬움',
       uses: ['pasta', 'pastasauce', 'mushroom', 'milk', 'salad'],
-      steps: '파스타 삶아 소스에 우유 조금 풀어 농도 조절. 볶은 버섯 섞고 샐러드 곁들이면 균형 완성.' },
-    { id: 'tomato-pasta', name: '토마토 야채믹스 치즈 파스타', slots: ['lunch'], key: 'pasta', time: '15분', tag: '파스타',
+      steps: '파스타 삶아 소스에 우유 조금 풀어 농도 조절. 볶은 버섯 섞고 샐러드 곁들이면 균형 완성.',
+      detail: [
+        '파스타면을 삶고, 버섯은 슬라이스해 팬에 볶아요.',
+        '파스타 소스에 우유 3큰술을 풀어 농도를 조절해요.',
+        '삶은 면을 소스에 넣고 1분 볶아 소스가 면에 붙게 해요.',
+        '볶은 버섯을 올리고 샐러드를 곁들여요.'
+      ],
+      tip: '우유 큰 팩을 여기서 100ml 쓰면 유통기한 안에 정리하기 좋아요. 소스가 되직하면 면수를 조금씩 넣어 풀어요.',
+      extra: ['소금', '후추'] },
+
+    { id: 'tomato-pasta', name: '토마토 야채믹스 치즈 파스타', slots: ['lunch'], key: 'pasta', time: '15분', tag: '파스타', method: '팬', level: '쉬움',
       uses: ['pasta', 'pastasauce', 'vegmix', 'mozzarella', 'onion'],
-      steps: '야채믹스·양파 볶아 토마토소스 붓고 끓여요. 삶은 파스타와 버무린 뒤 치즈 올려 뚜껑.' },
-    { id: 'duck-stirfry', name: '오리고기 양파·버섯 볶음', slots: ['dinner'], key: 'duck', time: '15분', tag: '볶음',
+      steps: '야채믹스·양파 볶아 토마토소스 붓고 끓여요. 삶은 파스타와 버무린 뒤 치즈 올려 뚜껑.',
+      detail: [
+        '양파를 채 썰어 기름 두른 팬에 3분 볶아요.',
+        '냉동 야채믹스를 넣고 2분 더 볶아 수분을 날려요.',
+        '토마토 소스를 붓고 3분 끓여요.',
+        '삶은 파스타를 넣어 버무리고 모짜렐라를 올려 뚜껑을 덮어 녹여요.'
+      ],
+      tip: '냉동 야채믹스는 물이 생기니 먼저 볶아 수분을 빼야 소스가 묽어지지 않아요.',
+      extra: ['소금'] },
+
+    { id: 'duck-stirfry', name: '오리고기 양파·버섯 볶음', slots: ['dinner'], key: 'duck', time: '15분', tag: '볶음', method: '팬', level: '보통',
       uses: ['duck', 'onion', 'mushroom', 'garlic', 'rice'],
-      steps: '오리고기를 센 불에 노릇하게 구워 기름을 빼요. 양파·버섯·마늘 넣고 볶아 밥과 함께.' },
-    { id: 'potato-tuna-jjagyeol', name: '감자 양파 참치짜글이', slots: ['dinner'], key: 'tuna', time: '20분', tag: '얼큰',
+      steps: '오리고기를 센 불에 노릇하게 구워 기름을 빼요. 양파·버섯·마늘 넣고 볶아 밥과 함께.',
+      detail: [
+        '팬을 센 불로 달군 뒤 오리고기를 껍질부터 올려 노릇하게 구워요.',
+        '기름이 나오면 오리고기를 잠시 건져두고 팬의 기름을 키친타월로 닦아요.',
+        '양파, 버섯, 다진마늘을 넣고 4분 볶아요.',
+        '오리고기를 다시 넣고 소금·후추로 간해 밥과 함께 내요.'
+      ],
+      tip: '오리고기 기름을 닦아내면 느끼함이 줄어요. 굴소스가 있으면 1큰술 넣으면 감칠맛이 확 좋아져요.',
+      extra: ['소금', '후추'] },
+
+    { id: 'potato-tuna-jjagyeol', name: '감자 양파 참치짜글이', slots: ['dinner'], key: 'tuna', time: '20분', tag: '얼큰', method: '냄비', level: '쉬움',
       uses: ['potato', 'onion', 'tuna', 'garlic', 'dashida', 'rice'],
-      steps: '감자·양파에 물 400ml, 다시다 반 스푼 넣고 10분. 참치·마늘 넣고 5분 더 끓여 밥과.' },
-    { id: 'tuna-fried-rice', name: '참치 김치볶음밥 + 계란후라이', slots: ['lunch'], key: 'rice', time: '12분', tag: '한 그릇',
+      steps: '감자·양파에 물 400ml, 다시다 반 스푼 넣고 10분. 참치·마늘 넣고 5분 더 끓여 밥과.',
+      detail: [
+        '감자를 한입 크기로, 양파를 굵게 썰어 냄비에 담아요.',
+        '물 400ml와 다시다 반 스푼을 넣고 10분 끓여요.',
+        '참치 캔의 기름을 빼고 넣은 뒤 다진마늘 1큰술을 더해 5분 끓여요.',
+        '국물이 살짝 졸면 밥과 함께 내요.'
+      ],
+      tip: '고춧가루 1큰술을 넣으면 얼큰한 맛이 살아요. 감자는 익을수록 국물이 걸쭉해져요.',
+      extra: ['고춧가루'] },
+
+    { id: 'tuna-fried-rice', name: '참치 김치볶음밥 + 계란후라이', slots: ['lunch'], key: 'rice', time: '12분', tag: '한 그릇', method: '팬', level: '쉬움',
       uses: ['tuna', 'kimchi', 'rice', 'egg', 'butter'],
-      steps: '버터에 김치 볶다 밥·참치 넣고 센 불로. 계란후라이는 상온 계란부터 써서 올려요.' },
-    { id: 'chicken-salad', name: '닭가슴살 샐러드 볼 + 삶은달걀', slots: ['lunch'], key: 'chicken', time: '12분', tag: '가벼움',
+      steps: '버터에 김치 볶다 밥·참치 넣고 센 불로. 계란후라이는 상온 계란부터 써서 올려요.',
+      detail: [
+        '팬에 버터를 녹이고 김치를 잘게 썰어 3분 볶아요.',
+        '밥 한 공기를 넣고 센 불에서 눌리듯 볶아요.',
+        '기름을 뺀 참치를 넣어 함께 볶고 간장 반 큰술로 간해요.',
+        '다른 팬에 계란후라이를 만들어 위에 올려요.'
+      ],
+      tip: '찬밥이 더 고슬고슬해요. 계란은 상온에 둔 것부터 써서 유통기한을 지켜요.',
+      extra: ['식용유', '간장'] },
+
+    { id: 'chicken-salad', name: '닭가슴살 샐러드 볼 + 삶은달걀', slots: ['lunch'], key: 'chicken', time: '12분', tag: '가벼움', method: '전자레인지', level: '쉬움',
       uses: ['chicken', 'salad', 'boiledegg', 'apple', 'vinegar'],
-      steps: '칼집 닭가슴살 전자레인지 2분 30초. 샐러드에 사과 슬라이스·삶은달걀 올리고 식초 드레싱.' },
-    { id: 'jjajang', name: '짜슐랭 치즈·계란 업그레이드', slots: ['lunch'], key: 'noodle', time: '8분', tag: '3분 요리',
+      steps: '칼집 닭가슴살 전자레인지 2분 30초. 샐러드에 사과 슬라이스·삶은달걀 올리고 식초 드레싱.',
+      detail: [
+        '냉동 닭가슴살을 전자레인지용 그릇에 담아 2분 30초 돌려요.',
+        '샐러드를 그릇에 깔고 사과를 얇게 썰어 올려요.',
+        '삶은 달걀을 반으로 갈라 올려요.',
+        '식초 2큰술, 소금 약간, 올리브유(있으면)를 섞어 드레싱을 만들어 뿌려요.'
+      ],
+      tip: '식초 드레싱은 소량으로도 맛이 또렷해요. 사과는 반 개씩 쓰면 일주일 안에 정리돼요.',
+      extra: ['소금', '올리브유(선택)'] },
+
+    { id: 'jjajang', name: '짜슐랭 치즈·계란 업그레이드', slots: ['lunch'], key: 'noodle', time: '8분', tag: '3분 요리', method: '냄비', level: '쉬움',
       uses: ['jjajang', 'mozzarella', 'egg'],
-      steps: '짜슐랭 3분 30초 끓이고 물 3스푼만 남겨 비벼요. 치즈 얹어 녹이고 계란후라이 올리면 끝.' },
-    { id: 'potato-egg-soup', name: '치킨스톡 감자 계란국 + 밥', slots: ['dinner'], key: 'soup', time: '15분', tag: '국물',
+      steps: '짜슐랭 3분 30초 끓이고 물 3스푼만 남겨 비벼요. 치즈 얹어 녹이고 계란후라이 올리면 끝.',
+      detail: [
+        '물 500ml를 끓여 짜슐랭 면과 스프를 넣고 3분 30초 끓여요.',
+        '물을 3큰술만 남기고 따라 버린 뒤 비벼요.',
+        '모짜렐라를 얹고 뚜껑을 덮어 30초 녹여요.',
+        '계란후라이를 만들어 위에 올리면 완성.'
+      ],
+      tip: '물을 다 버리면 짜요. 3큰술 남기는 게 포인트예요. 모짜렐라가 없으면 슬라이스 치즈도 괜찮아요.',
+      extra: [] },
+
+    { id: 'potato-egg-soup', name: '치킨스톡 감자 계란국 + 밥', slots: ['dinner'], key: 'soup', time: '15분', tag: '국물', method: '냄비', level: '쉬움',
       uses: ['potato', 'egg', 'stock', 'onion', 'rice', 'tunasauce'],
-      steps: '감자·양파에 물 500ml, 치킨스톡 1개 넣고 10분. 계란 풀고 참치액으로 간해 밥 말아 먹어요.' },
-    { id: 'tofu-kimchi', name: '두부 김치볶음 + 밥', slots: ['dinner'], key: 'tofu', time: '15분', tag: '집밥',
+      steps: '감자·양파에 물 500ml, 치킨스톡 1개 넣고 10분. 계란 풀고 참치액으로 간해 밥 말아 먹어요.',
+      detail: [
+        '감자와 양파를 한입 크기로 썰어 냄비에 담아요.',
+        '물 500ml와 치킨스톡 1개를 넣고 10분 끓여요.',
+        '계란 1~2개를 풀어 넣고 젓가락으로 살살 저어 계란꽃을 만들어요.',
+        '참치액 반 큰술로 간을 맞추고 밥을 말아 먹어요.'
+      ],
+      tip: '계란은 국물이 보글보글할 때 넣고 바로 불을 줄여야 부드러워요. 감자 3개 중 2개를 쓰면 이틀치 국물이 돼요.',
+      extra: ['소금'] },
+
+    { id: 'tofu-kimchi', name: '두부 김치볶음 + 밥', slots: ['dinner'], key: 'tofu', time: '15분', tag: '집밥', method: '팬', level: '쉬움',
       uses: ['tofu', 'kimchi', 'onion', 'soy', 'rice'],
-      steps: '두부는 도톰하게 썰어 노릇하게 구워요. 김치·양파 볶아 간장으로 간하고 두부 위에 올림.' },
-    { id: 'apple-pb-toast', name: '사과 땅콩버터 토스트 + 우유', slots: ['lunch'], key: 'bread', time: '5분', tag: '노쿡',
+      steps: '두부는 도톰하게 썰어 노릇하게 구워요. 김치·양파 볶아 간장으로 간하고 두부 위에 올림.',
+      detail: [
+        '두부를 1.5cm 두께로 썰고 키친타월로 물기를 닦아요.',
+        '기름 두른 팬에 두부를 앞뒤로 노릇하게 구워 건져요.',
+        '같은 팬에 김치와 양파를 넣고 5분 볶고 간장 1큰술로 간해요.',
+        '두부 위에 김치볶음을 올려 밥과 함께 내요.'
+      ],
+      tip: '두부는 물기를 빼야 부서지지 않아요. 한 모뿐이니 이 끼니에 다 쓰면 소진 완료로 넘어가요.',
+      extra: ['식용유', '간장'] },
+
+    { id: 'apple-pb-toast', name: '사과 땅콩버터 토스트 + 우유', slots: ['lunch'], key: 'bread', time: '5분', tag: '노쿡', method: '노쿡', level: '쉬움',
       uses: ['apple', 'peanut', 'morningbun', 'milk'],
-      steps: '모닝빵 갈라 땅콩버터 바르고 사과 얇게 썰어 올려요. 우유 한 잔이면 든든한 점심.' },
-    { id: 'yogurt-bowl', name: '단쉐 요거트볼 + 딸기잼 (귤·청포도·사과)', slots: ['lunch'], key: 'fruit', time: '5분', tag: '노쿡',
+      steps: '모닝빵 갈라 땅콩버터 바르고 사과 얇게 썰어 올려요. 우유 한 잔이면 든든한 점심.',
+      detail: [
+        '모닝빵을 반 갈라 살짝 구워 겉을 바삭하게 해요. 구우면 맛이 훨씬 좋아져요.',
+        '땅콩버터 스프레드를 얇게 발라요.',
+        '사과를 얇게 썰어 올리고 우유 한 잔을 곁들여요.',
+        '남은 사과는 밀폐 용기에 담아 냉장 보관해요.'
+      ],
+      tip: '땅콩버터는 열량이 높으니 1큰술 정도가 적당해요. 모닝빵 4개 중 2개를 쓰면 남은 2개는 프렌치토스트로 쓰면 돼요.',
+      extra: [] },
+
+    { id: 'yogurt-bowl', name: '단쉐 요거트볼 + 딸기잼 (귤·청포도·사과)', slots: ['lunch'], key: 'fruit', time: '5분', tag: '노쿡', method: '노쿡', level: '쉬움',
       uses: ['shake', 'tangerine', 'grape', 'apple', 'jam'],
-      steps: '단백질 쉐이크를 걸쭉하게 타 그릇에. 과일 잘라 올리고 딸기잼 한 스푼 얹으면 든든한 한 끼.' },
-    { id: 'tofu-mushroom-bake', name: '두부 버섯 간장구이 + 밥', slots: ['dinner'], key: 'tofu', time: '15분', tag: '담백',
+      steps: '단백질 쉐이크를 걸쭉하게 타 그릇에. 과일 잘라 올리고 딸기잼 한 스푼 얹으면 든든한 한 끼.',
+      detail: [
+        '단백질 쉐이크를 물을 적게 잡아 걸쭉하게 타요.',
+        '그릇에 부어 베이스로 깔아요.',
+        '귤, 청포도, 사과를 먹기 좋게 잘라 올려요.',
+        '딸기잼 한 스푼을 얹어 단맛을 더해요.'
+      ],
+      tip: '쉐이크가 물리면 그릭요거트로 대체해도 좋아요. 과일이 6개씩 있으니 이 끼니로 소진 계획을 세우면 좋아요.',
+      extra: [] },
+
+    { id: 'tofu-mushroom-bake', name: '두부 버섯 간장구이 + 밥', slots: ['dinner'], key: 'tofu', time: '15분', tag: '담백', method: '팬', level: '쉬움',
       uses: ['tofu', 'mushroom', 'soy', 'garlic', 'rice'],
-      steps: '두부·버섯 도톰하게 썰어 노릇하게 구워요. 간장·다진마늘·물 약간 졸여 위에 얹으면 완성.' }
+      steps: '두부·버섯 도톰하게 썰어 노릇하게 구워요. 간장·다진마늘·물 약간 졸여 위에 얹으면 완성.',
+      detail: [
+        '두부와 버섯을 도톰하게 썰어요.',
+        '팬에 두부를 노릇하게 굽고 버섯도 살짝 구워요.',
+        '간장 1.5큰술, 다진마늘 1작은술, 물 2큰술을 섞어 팬에 부어 살짝 졸여요.',
+        '두부와 버섯 위에 간장 소스를 끼얹어 밥과 함께 내요.'
+      ],
+      tip: '버섯은 소량이라 이 끼니에 다 쓰면 소진이에요. 두부 한 모를 다 쓰면 자동으로 소진 처리돼요.',
+      extra: ['소금', '후추'] }
   ];
 
   /* 기본 레시피에서 함께 쓰인 빈도 (추천 칩 1순위 재료) */
@@ -1232,11 +1547,13 @@
   var pickSheet = $('pickSheet'), pickSub = $('pickSub');
   var pSearch = $('pSearch'), pList = $('pList'), pTags = $('pTags'), pRecs = $('pRecs'), pCount = $('pCount');
 
+  var recipeSheet = $('recipeSheet'), recipeBody = $('recipeBody');
+
   var depModal = $('depModal'), depEmo = $('depEmo'), depTitle = $('depTitle'), depSub = $('depSub');
   var depYes = $('depYes'), depNo = $('depNo');
 
   /* ── 상태 ── */
-  var ui = { tab: 'pantry', filter: 'all', hideDone: false };
+  var ui = { tab: 'pantry', filter: 'all', hideDone: false, day: 'today' };
   var editor = { mode: 'add', id: null, loc: 'fridge', urg: 'normal', emoji: null, origQty: '' };
   var eatTarget = null;
   var eatQty = {};
@@ -1417,10 +1734,10 @@
     /* 끼니별 재료 조정값이 있으면 그 목록을 쓴다 */
     var ov = state.mealUses && state.mealUses[slotKey(day, meal)];
     if (ov && Array.isArray(ov)) {
-      return {
-        id: base.id, name: base.name, uses: ov.slice(), steps: base.steps,
-        custom: base.custom, time: base.time, tag: base.tag, key: base.key, slots: base.slots
-      };
+      var out = {};
+      Object.keys(base).forEach(function (k) { out[k] = base[k]; });
+      out.uses = ov.slice();
+      return out;
     }
     return base;
   }
@@ -1989,6 +2306,7 @@
     return html;
   }
 
+  /* ── 끼니 카드 ── */
   function mealCard(day, meal) {
     var k = slotKey(day, meal);
     var r = mealRecipe(day, meal);
@@ -1997,7 +2315,6 @@
     var skipped = !!state.skips[k];
     var eaten = !!state.eaten[k];
     var mealName = meal === 'lunch' ? '점심' : '저녁';
-    var dayName = day === 'today' ? '오늘' : '내일';
     var dateStr = shortDate(day === 'tomorrow' ? 1 : 0);
     var gone = goneUses(r.uses);
 
@@ -2012,38 +2329,39 @@
 
     var head = '<div class="mc-top">' +
       '<div class="mc-label">' +
-        '<span class="mc-meal">' + dayName + ' ' + mealName + '</span>' +
+        '<span class="mc-meal">' + mealName + '</span>' +
         '<i class="mc-dot">·</i>' +
         '<span class="mc-date">' + dateStr + '</span>' +
         badges +
       '</div>' +
-      (!eaten && !skipped
-        ? '<button class="mc-swap" data-act="swap">🔄 ' + (mine ? '레시피로' : '다른 메뉴') + '</button>'
-        : '') +
     '</div>';
 
-    var title = '<div class="mc-title">' +
-      '<h3 class="meal-name">' + esc(r.name) + '</h3>' +
-      (!eaten && !skipped
-        ? '<button class="mc-edit" data-act="' + (mine ? 'editCustom' : 'custom') + '">' +
-          (mine ? '✏️ 수정' : '✏️ 직접 입력') + '</button>'
-        : '') +
-    '</div>';
+    var title = '<div class="mc-title"><h3 class="meal-name">' + esc(r.name) + '</h3></div>';
 
-    var meta = '';
-    if (!mine && r.time) {
-      meta = '<div class="mc-meta">⏱ ' + esc(r.time) + (r.tag ? '<em>·</em>' + esc(r.tag) : '') + '</div>';
+    var metaBits = [];
+    if (mine) {
+      metaBits.push('✏️ 직접 등록한 메뉴');
+    } else {
+      if (r.time) metaBits.push('⏱ ' + esc(r.time));
+      if (r.method || r.tag) metaBits.push(esc(r.method || r.tag));
+      if (r.level) metaBits.push('난이도 ' + esc(r.level));
+    }
+    var meta = metaBits.length
+      ? '<div class="mc-meta">' + metaBits.map(function (t) { return esc(t); }).join('<em>·</em>') + '</div>'
+      : '';
+
+    var tools = '';
+    if (!eaten && !skipped) {
+      tools = '<div class="mc-tools">' +
+        '<button class="mc-edit" data-act="' + (mine ? 'editCustom' : 'custom') + '">' +
+          (mine ? '✏️ 수정' : '✏️ 직접 입력') + '</button>' +
+        '<button class="mc-edit" data-act="swap">🔄 ' + (mine ? '레시피로' : '다른 메뉴') + '</button>' +
+      '</div>';
     }
 
     var steps = '';
-    if (!skipped && !eaten) {
-      if (mine) {
-        steps = r.steps ? '<p class="steps">' + esc(r.steps) + '</p>' : '';
-      } else if (r.steps) {
-        var warnNote = r.uses.indexOf('spam') !== -1;
-        steps = '<p class="steps' + (warnNote ? ' warn' : '') + '">' +
-          (warnNote ? '⚠️ 스팸은 끓는 물에 3분 데쳐 염분부터 빼세요. ' : '') + esc(r.steps) + '</p>';
-      }
+    if (mine && !skipped && r.steps) {
+      steps = '<p class="steps">' + esc(r.steps) + '</p>';
     }
 
     var usesHtml;
@@ -2066,6 +2384,12 @@
       '</div>';
     }
 
+    var recipeBtn = skipped ? '' :
+      '<button class="recipe-btn" data-act="recipe">' +
+        (mine ? '📖 내 메뉴 보기' : '📖 레시피 보기') +
+        '<span class="cnt">' + (mine ? '재료·메모' : (r.detail && r.detail.length ? r.detail.length + '단계' : '조리법')) + '</span>' +
+      '</button>';
+
     var skipNote = skipped ? '<div class="skip-note">🍗 이 끼니는 배달·외식으로 패스했어요</div>' : '';
 
     var actions = '<div class="mc-actions">';
@@ -2076,15 +2400,74 @@
     actions += '</div>';
 
     return '<article class="' + cls + '" data-day="' + day + '" data-meal="' + meal + '">' +
-      head + title + meta + steps +
+      head + title + meta + tools + steps +
       usesHtml +
       goneBar +
       skipNote +
+      recipeBtn +
       actions +
     '</article>';
   }
 
-  function dayBlock(day, offset) {
+  /* ── 보고 있는 날의 레시피에 안 쓰인 급한 재료 사인 ── */
+  function urgentCallout(day) {
+    var used = {};
+    ['lunch', 'dinner'].forEach(function (m) {
+      if (state.skips[slotKey(day, m)]) return;
+      var r = mealRecipe(day, m);
+      if (r) (r.uses || []).forEach(function (id) { used[id] = true; });
+    });
+
+    var list = state.ingredients.filter(function (it) {
+      if (isDepleted(it)) return false;
+      if (it.urg !== 'urgent' && it.urg !== 'soon') return false;
+      return !used[it.id];
+    });
+    list.sort(function (a, b) {
+      var d = URG[a.urg].order - URG[b.urg].order;
+      if (d !== 0) return d;
+      return LOCS[a.loc].order - LOCS[b.loc].order;
+    });
+    if (!list.length) return '';
+
+    var when = day === 'today' ? '오늘 안에는 다 먹어야 해요' : '내일까지는 꼭 써야 해요';
+
+    var rows = list.map(function (it) {
+      var bits = [];
+      if (it.note) bits.push(esc(it.note));
+      else if (isCountable(it)) bits.push(it.count + esc(unitOf(it)) + ' 남음');
+      else if (it.qty) bits.push(esc(it.qty));
+      bits.push(when);
+      return '<div class="uc-row">' +
+        '<span class="uc-emo">' + emojiOf(it) + '</span>' +
+        '<div class="uc-main">' +
+          '<p class="uc-name">' + esc(it.name) +
+            (it.urg === 'urgent' ? '<span class="badge urgent">🚨 급해요</span>' : '<span class="badge soon">⏳ 곧 소진</span>') +
+          '</p>' +
+          '<p class="uc-note">' + bits.join(' · ') + '</p>' +
+        '</div>' +
+        '<button class="uc-act" data-uc="' + esc(it.id) + '">정리하기</button>' +
+      '</div>';
+    }).join('');
+
+    return '<section class="urgent-callout">' +
+      '<p class="uc-head">🚨 추천 레시피엔 아직 안 들어갔어요</p>' +
+      '<p class="uc-sub">' + (day === 'today' ? '오늘' : '내일') + ' 두 끼에 안 쓰이는 급한 재료예요. 지금 하나 챙겨 먹거나, 장 볼 때 같이 사 와서 같이 먹어요.</p>' +
+      '<div class="uc-list">' + rows + '</div>' +
+    '</section>';
+  }
+
+  /* ── 오늘 / 내일 세그먼트 ── */
+  function dayTabs() {
+    var day = ui.day === 'tomorrow' ? 'tomorrow' : 'today';
+    function tab(id, label, offset) {
+      return '<button class="daytab' + (day === id ? ' is-on' : '') + '" data-daytab="' + id + '" role="tab" aria-selected="' + (day === id) + '">' +
+        label + '<em>' + shortDate(offset) + '</em></button>';
+    }
+    return '<div class="daytabs" role="tablist">' + tab('today', '오늘', 0) + tab('tomorrow', '내일', 1) + '</div>';
+  }
+
+  function snackRow(day) {
     var snacks = state.snacks[day] || [];
     var eatenCount = (state.eaten[day + '-lunch'] ? 1 : 0) + (state.eaten[day + '-dinner'] ? 1 : 0);
     var snackHtml = SNACKS.map(function (sn) {
@@ -2092,39 +2475,151 @@
       return '<button class="snack' + (on ? ' is-on' : '') + '" data-snack="' + sn.id + '" data-snackday="' + day + '">' +
         sn.emo + ' ' + sn.label + '</button>';
     }).join('');
-
-    return '<section class="day">' +
-      '<div class="day-head">' +
-        '<div class="day-left">' +
-          '<span class="day-tag' + (day === 'tomorrow' ? ' tomorrow' : '') + '">' + (day === 'today' ? '오늘' : '내일') + '</span>' +
-          '<span class="day-date">' + dayLabel(offset) + '</span>' +
-        '</div>' +
-        '<span class="day-count' + (eatenCount ? '' : ' zero') + '">' + eatenCount + '/2 끼</span>' +
-      '</div>' +
-      '<div class="snacks"><span class="snacks-label">간식</span>' + snackHtml + '</div>' +
-      mealCard(day, 'lunch') +
-      mealCard(day, 'dinner') +
-    '</section>';
+    return '<div class="snacks"><span class="snacks-label">간식</span>' + snackHtml +
+      '<span class="day-count' + (eatenCount ? '' : ' zero') + '">' + eatenCount + '/2 끼</span></div>';
   }
 
   function renderMeals() {
+    var day = ui.day === 'tomorrow' ? 'tomorrow' : 'today';
     var urgentLeft = state.ingredients.filter(function (i) { return !i.done && i.urg === 'urgent'; }).length;
+
     mealsEl.innerHTML =
       '<div class="meals-head">' +
         '<div>' +
-          '<h2>오늘·내일 네 끼</h2>' +
+          '<h2>오늘 뭐 먹지</h2>' +
           '<p>' + (urgentLeft
-            ? '🚨 급한 재료 ' + urgentLeft + '개를 먼저 쓰는 순서로 배치했어요'
+            ? '🚨 급한 재료 ' + urgentLeft + '개를 먼저 쓰는 순서로 짰어요'
             : '급한 재료는 다 정리됐어요 · 여유 재료로 골랐어요') + '</p>' +
         '</div>' +
         '<button class="mini-btn" id="replanBtn">🔄 다시 짜기</button>' +
       '</div>' +
-      dayBlock('today', 0) +
-      dayBlock('tomorrow', 1) +
-      '<div class="section-note">🍽️ 점심·저녁 두 끼만 제안해요. 취향에 안 맞으면 <b>🔄 다른 메뉴</b>로 바로 교체하고, ' +
-      '먹은 뒤 <b>✅ 먹었음</b>을 누르면 그 레시피 재료가 한 번에 정리돼요. ' +
-      '재료 칩의 <b>✕</b>를 누르면 그 재료가 소진됐는지 물어보고, 소진 처리하면 이 재료를 쓰는 다른 끼니도 소진된 재료 없이 만들 수 있는 메뉴로 바뀌어요. ' +
-      '<b>＋ 재료</b>로 그 끼니에 쓸 재료를 더 넣을 수 있어요.</div>';
+      dayTabs() +
+      snackRow(day) +
+      mealCard(day, 'lunch') +
+      urgentCallout(day) +
+      mealCard(day, 'dinner') +
+      '<div class="section-note">🍽️ 하루 점심·저녁 두 끼만 제안해요. <b>📖 레시피 보기</b>를 누르면 조리 순서와 냉장고에 있는 재료·사와야 할 재료를 나눠서 보여줘요. ' +
+      '취향에 안 맞으면 <b>🔄 다른 메뉴</b>, 먹은 뒤 <b>✅ 먹었음</b>을 누르면 그 레시피 재료가 한 번에 정리돼요.</div>';
+  }
+
+  /* =========================================================
+     레시피 팝업(바텀시트)
+     ========================================================= */
+  function ingStateOf(it) {
+    if (!it) return { text: '냉장고에 없음', cls: 'none' };
+    if (isDepleted(it)) return { text: '소진됨 · 다시 사야 해요', cls: 'none' };
+    if (isSharing(it)) return { text: '소량 남음', cls: 'warn' };
+    if (isCountable(it)) return { text: it.count + unitOf(it) + ' 남음', cls: 'ok' };
+    if (it.qty) return { text: it.qty, cls: 'ok' };
+    return { text: '있음', cls: 'ok' };
+  }
+
+  function ingRow(it) {
+    var st = ingStateOf(it);
+    return '<div class="rs-ing">' +
+      '<span class="emo">' + emojiOf(it) + '</span>' +
+      '<span class="rs-ing-name">' + esc(it.name) + '</span>' +
+      '<span class="rs-ing-state ' + st.cls + '">' + esc(st.text) + '</span>' +
+    '</div>';
+  }
+
+  function buyRow(name) {
+    return '<div class="rs-ing buy">' +
+      '<span class="emo">' + emojiFor(name) + '</span>' +
+      '<span class="rs-ing-name">' + esc(name) + '</span>' +
+      '<span class="rs-ing-state warn">사와야 해요</span>' +
+    '</div>';
+  }
+
+  function openRecipe(day, meal) {
+    var r = mealRecipe(day, meal);
+    if (!r) return;
+    var mine = !!r.custom;
+    var mealName = meal === 'lunch' ? '점심' : '저녁';
+    var dayName = day === 'today' ? '오늘' : '내일';
+    var base = mine ? null : recipeById(state.plan[day] && state.plan[day][meal]);
+
+    var have = [], buy = [];
+    (r.uses || []).forEach(function (id) {
+      var it = byId(id);
+      if (!it) return;
+      if (isDepleted(it)) buy.push({ name: it.name, it: it });
+      else have.push(it);
+    });
+    if (base && base.extra) {
+      base.extra.forEach(function (n) {
+        var dup = false;
+        buy.forEach(function (b) { if (b.name === n) dup = true; });
+        if (!dup) buy.push({ name: n, it: null });
+      });
+    }
+
+    var html = '<p class="rs-kicker">' + dayName + ' ' + mealName + ' · ' + shortDate(day === 'tomorrow' ? 1 : 0) + '</p>' +
+      '<h2 class="rs-title" id="recipeTitle">' + esc(r.name) + '</h2>';
+
+    var metaBits = [];
+    if (mine) {
+      metaBits.push('✏️ 직접 등록한 메뉴');
+    } else {
+      if (r.time) metaBits.push('⏱ ' + r.time);
+      if (r.method || r.tag) metaBits.push('🍳 ' + (r.method || r.tag));
+      if (r.level) metaBits.push('난이도 ' + r.level);
+    }
+    if (metaBits.length) {
+      html += '<div class="rs-meta">' + metaBits.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>';
+    }
+
+    /* ① 재료: 냉장고에 있는 것 / 사와야 하는 것 */
+    html += '<section class="rs-block"><h3>필요한 재료</h3>';
+    if (!have.length && !buy.length) {
+      html += '<div class="rs-empty" style="margin-top:14px">연결된 재료가 없어요. 카드의 ＋ 재료로 이 끼니에 쓸 재료를 골라둘 수 있어요.</div>';
+    } else {
+      if (have.length) {
+        html += '<p class="rs-sublabel">✓ 냉장고에 있어요 <span>· ' + have.length + '개</span></p>' +
+          have.map(ingRow).join('');
+      }
+      if (buy.length) {
+        html += '<p class="rs-sublabel buy">🛒 사와야 해요 <span>· ' + buy.length + '개</span></p>' +
+          buy.map(function (b) {
+            return b.it ? ingRow(b.it) : buyRow(b.name);
+          }).join('');
+      }
+    }
+    html += '</section>';
+
+    /* ② 조리 순서 */
+    if (mine) {
+      html += '<section class="rs-block"><h3>내가 적어둔 메모</h3>' +
+        (r.steps
+          ? '<div class="rs-note" style="margin-top:14px">' + esc(r.steps) + '</div>'
+          : '<div class="rs-empty" style="margin-top:14px">메모가 비어 있어요. 카드의 <b>✏️ 수정</b>에서 조리법을 적어두면 여기 나와요.</div>') +
+        '</section>';
+    } else {
+      var detail = (base && base.detail && base.detail.length)
+        ? base.detail
+        : (r.steps ? [r.steps] : []);
+      html += '<section class="rs-block"><h3>조리 순서</h3>' +
+        (detail.length
+          ? '<ol class="rs-steps">' + detail.map(function (t, i) {
+              return '<li><b>STEP ' + (i + 1) + '</b><p>' + esc(t) + '</p></li>';
+            }).join('') + '</ol>'
+          : '<div class="rs-empty" style="margin-top:14px">조리법이 등록되지 않았어요.</div>') +
+        '</section>';
+    }
+
+    /* ③ 팁 */
+    var tip = mine
+      ? '직접 등록한 메뉴라 조리법은 메모에 적어둔 내용이 중심이에요. 카드의 ✏️ 수정에서 재료와 메모를 다듬을 수 있어요.'
+      : (base && base.tip ? base.tip : '');
+    if (tip) {
+      html += '<div class="rs-tip">💡 <b>이렇게 하면 더 좋아요</b><br>' + esc(tip) + '</div>';
+    }
+
+    html += '<div class="rs-actions"><button class="btn ghost" data-rclose="1">닫기</button></div>';
+
+    recipeBody.innerHTML = html;
+    openSheet(recipeSheet);
+    recipeSheet.scrollTop = 0;
   }
 
   /* =========================================================
@@ -2159,7 +2654,7 @@
   }
 
   function closeSheets(keepScrim) {
-    [ingSheet, eatSheet, customSheet, pickSheet, menuSheet].forEach(function (el) { el.classList.remove('is-open'); });
+    [ingSheet, eatSheet, customSheet, pickSheet, menuSheet, recipeSheet].forEach(function (el) { el.classList.remove('is-open'); });
     if (!keepScrim) scrim.classList.remove('is-open');
     resetArmed = false;
   }
@@ -2909,6 +3404,29 @@
   mealsEl.addEventListener('click', function (e) {
     if (e.target.closest('#replanBtn')) { replanAll(); return; }
 
+    var dt = e.target.closest('[data-daytab]');
+    if (dt) {
+      ui.day = dt.getAttribute('data-daytab') === 'tomorrow' ? 'tomorrow' : 'today';
+      renderMeals();
+      return;
+    }
+
+    var uc = e.target.closest('[data-uc]');
+    if (uc) {
+      ui.filter = 'urgent';
+      ui.hideDone = false;
+      setTab('pantry');
+      renderFilters();
+      renderList();
+      var urow = listEl.querySelector('[data-row="' + uc.getAttribute('data-uc') + '"]');
+      if (urow) {
+        urow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        urow.classList.add('flash');
+        setTimeout(function () { urow.classList.remove('flash'); }, 1200);
+      }
+      return;
+    }
+
     var snack = e.target.closest('[data-snack]');
     if (snack) {
       var day = snack.getAttribute('data-snackday');
@@ -2943,6 +3461,7 @@
       if (customMeal(d, m)) delete state.customMeals[k];
       swapMeal(d, m);
     }
+    else if (act === 'recipe') openRecipe(d, m);
     else if (act === 'addIng') openPick(d, m);
     else if (act === 'trimGone') trimGoneFrom(d, m);
     else if (act === 'fixGone') {
@@ -3109,6 +3628,10 @@
   });
 
   scrim.addEventListener('click', function () { closeSheets(); });
+
+  recipeBody.addEventListener('click', function (e) {
+    if (e.target.closest('[data-rclose]')) closeSheets();
+  });
 
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') { closeSheets(); closeDeplete(); }
