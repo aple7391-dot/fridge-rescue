@@ -11,5 +11,18 @@
 </head>
 <body>
 <iframe src="./index.html" title="냉장고 구조대 390px 미리보기"></iframe>
+<script>
+  /* 미리보기 harness — ?y=360 처럼 스크롤 위치만 맞춰 캡처하기 위한 것 */
+  (function () {
+    var y = parseInt((new URLSearchParams(location.search)).get('y') || '0', 10) || 0;
+    if (!y) return;
+    var f = document.querySelector('iframe');
+    f.addEventListener('load', function () {
+      setTimeout(function () {
+        try { f.contentWindow.scrollTo(0, y); } catch (e) {}
+      }, 120);
+    });
+  })();
+</script>
 </body>
 </html>
