@@ -222,6 +222,19 @@
   }
   .item-meta .warn{color:#C2410C;font-weight:700}
   .item-meta .dot{width:3px;height:3px;border-radius:50%;background:#C9D0CB}
+  .share-pill{
+    display:inline-flex;align-items:center;gap:3px;
+    font-size:10.5px;font-weight:800;letter-spacing:-.015em;
+    color:var(--mint-deep);background:var(--mint-soft);
+    border:1px solid #CDEDDE;padding:1.5px 6px;border-radius:6px;
+  }
+  .finish-btn{
+    flex:0 0 auto;font-size:10.5px;font-weight:800;letter-spacing:-.015em;
+    padding:7px 9px;border-radius:9px;white-space:nowrap;
+    background:var(--mint-soft);color:var(--mint-deep);border:1px solid #BDE9D7;
+    transition:background .15s,transform .12s;
+  }
+  .finish-btn:active{background:#D5F2E6;transform:scale(.96)}
   .mine{
     font-size:9.5px;font-weight:800;color:var(--mint-deep);
     background:var(--mint-soft);padding:1.5px 5px;border-radius:5px;letter-spacing:.02em;
@@ -308,6 +321,30 @@
 
   .eat-sub{font-size:10.5px;font-weight:700;color:var(--sub);white-space:nowrap}
   .eat-row .step{margin-left:auto}
+
+  /* 먹음 방식 선택 — 조금 먹음(남음) / 다 먹음(소진) */
+  .eat-row.eat-bulk{display:block;padding:11px 2px}
+  .eat-bulk .eat-top{display:flex;align-items:center;gap:8px}
+  .eat-bulk .eat-name{flex:1;min-width:0}
+  .eat-bulk .eat-sub{flex:0 1 auto;max-width:56%;overflow:hidden;text-overflow:ellipsis;padding-top:1px}
+  .eat-modes{display:flex;gap:5px;margin-top:8px}
+  .emode{
+    flex:1;padding:8px 4px;border-radius:10px;
+    background:#F5F7F4;border:1px solid #E8ECE7;
+    font-size:11.5px;font-weight:700;color:#68746D;white-space:nowrap;
+    transition:background .15s,color .15s,border-color .15s;
+  }
+  .emode em{font-style:normal;font-size:10px;font-weight:700;opacity:.66;margin-left:1px}
+  .emode.is-on{background:var(--mint-soft);border-color:#8FD9BE;color:var(--mint-deep);font-weight:800}
+  .emode.all.is-on{background:#1D2F27;border-color:#1D2F27;color:#fff}
+  .emode.all.is-on em{opacity:.68}
+  .emode.none{flex:0 0 34px;font-size:12px;font-weight:800;color:#AEB6AF}
+  .emode.none.is-on{background:#F1F3F1;border-color:#DDE3DD;color:#7D8984}
+  .emode:active{transform:scale(.97)}
+  .eat-row .emode.finish-all{flex:0 0 auto;padding:7px 8px;font-size:10px;border-radius:8px;border-color:#E1E7E1;color:#68746D}
+  .eat-row .emode.finish-all.is-on{background:#1D2F27;border-color:#1D2F27;color:#fff}
+  .eat-row.eat-bulk.is-none{opacity:.5}
+  .eat-row.is-done .eat-sub{color:#B4BDB6}
 
   /* ── 이모지 선택 ── */
   .emopick{display:flex;gap:6px;flex-wrap:wrap}
@@ -487,6 +524,14 @@
     font-size:8px;font-weight:800;letter-spacing:-.01em;
     padding:1px 3px;border-radius:4px;background:#F1EDE5;color:#A07B3C;
   }
+  .ichip .state{
+    font-size:8px;font-weight:800;letter-spacing:-.01em;
+    padding:1px 3px;border-radius:4px;background:var(--mint-soft);color:#0A7A54;
+  }
+  .ichip.is-sharing{background:#F0FAF5;border-color:#CFEBDD;color:#0B7A57}
+  .ichip.is-finished{background:#F4F5F2;border-color:#E9EBE7;color:#9BA49C}
+  .ichip.is-finished .state{background:#EDEFEA;color:#8B948D}
+  .ichip.is-finished .x{background:#EDEEEA;color:#C0C6C1}
   .ichip.add{
     padding:3px 9px;background:#fff;border:1px dashed #CBDCCF;
     color:#0A7A54;font-weight:800;
@@ -1114,6 +1159,18 @@
     return !!it && typeof it.count === 'number';
   }
 
+  /* 덜어 쓰는 통 재료 — 개수 없는 재료, 또는 남은 개수가 1개·1팩인 재료 */
+  function isBulk(it) {
+    if (!it) return false;
+    if (!isCountable(it)) return true;
+    return it.count === 1;
+  }
+
+  /* 아직 소진 전인데 한 번 이상 먹은 '나눠 먹는 중' 재료 */
+  function isSharing(it) {
+    return !!it && isBulk(it) && !isDepleted(it) && (it.used || 0) >= 1;
+  }
+
   function unitOf(it) {
     return (it && it.unit) || '개';
   }
@@ -1183,6 +1240,7 @@
   var editor = { mode: 'add', id: null, loc: 'fridge', urg: 'normal', emoji: null, origQty: '' };
   var eatTarget = null;
   var eatQty = {};
+  var eatMode = {};
   var customTarget = null;
   var customSel = {};
   var pickTarget = null;
@@ -1687,6 +1745,7 @@
     var pct = total ? Math.round((done / total) * 100) : 0;
     var urgentLeft = state.ingredients.filter(function (i) { return !i.done && i.urg === 'urgent'; });
     var soonLeft = state.ingredients.filter(function (i) { return !i.done && i.urg === 'soon'; }).length;
+    var sharingLeft = state.ingredients.filter(isSharing).length;
     var circumference = 2 * Math.PI * 26;
 
     var chips = urgentLeft.slice(0, 5).map(function (it) {
@@ -1718,6 +1777,7 @@
           ? '<span class="alert-pill hot">🚨 급하게 처리할 재료 <b>&nbsp;' + urgentLeft.length + '개</b></span>'
           : '<span class="alert-pill cool">🎉 급하게 처리할 재료 없음</span>') +
         (soonLeft ? '<span class="alert-pill">⏳ 곧 소진 ' + soonLeft + '개</span>' : '') +
+        (sharingLeft ? '<span class="alert-pill cool">🥛 나눠 먹는 중 ' + sharingLeft + '개</span>' : '') +
       '</div>' +
       (chips ? '<div class="urgent-chips">' + chips + '</div>' : '');
   }
@@ -1741,7 +1801,10 @@
     } else if (it.qty) {
       meta.push('<span>' + esc(it.qty) + '</span>');
     }
-    if (!isCountable(it) && it.used) {
+    if (isSharing(it)) {
+      if (meta.length) meta.push('<span class="dot"></span>');
+      meta.push('<span class="share-pill">' + emojiOf(it) + ' 나눠 먹는 중 · ' + (it.used || 0) + '회</span>');
+    } else if (!isCountable(it) && it.used) {
       if (meta.length) meta.push('<span class="dot"></span>');
       meta.push('<span>🍽️ ' + it.used + '번 먹음</span>');
     }
@@ -1765,6 +1828,11 @@
         'aria-label="' + esc(it.name) + ' 처리 완료" data-act="toggle" data-id="' + esc(it.id) + '"><span></span></button>';
     }
 
+    var finish = isSharing(it)
+      ? '<button class="finish-btn" data-act="finish" data-id="' + esc(it.id) + '" aria-label="' +
+        esc(it.name) + ' 다 먹음 처리">다 먹음</button>'
+      : '';
+
     return '<div class="item' + (it.done ? ' is-done' : '') + '" data-row="' + esc(it.id) + '">' +
       '<button class="item-main" data-act="edit" data-id="' + esc(it.id) + '">' +
         '<span class="item-name"><span class="emo">' + emojiOf(it) + '</span>' + esc(it.name) +
@@ -1772,6 +1840,7 @@
         '</span>' +
         (meta.length ? '<span class="item-meta">' + meta.join('') + '</span>' : '') +
       '</button>' +
+      finish +
       control +
     '</div>';
   }
@@ -1889,18 +1958,28 @@
 
   /* 끼니 재료 칩 − 소진된 재료는 흐리게·취소선 + `소진됨`, 끝에 ＋ 재료 */
   function ingChips(r, day, meal) {
+    var eaten = !!state.eaten[slotKey(day, meal)];
     var html = (r.uses || []).map(function (id) {
       var it = byId(id);
       if (!it) return '';
       var gone = isDepleted(it);
       var cls = 'ichip';
-      if (gone) cls += ' is-depleted';
-      else if (it.urg === 'urgent') cls += ' urgent';
+      var tag = '';
+      if (gone && eaten) {
+        cls += ' is-finished';
+        tag = '<span class="state">다 먹음</span>';
+      } else if (gone) {
+        cls += ' is-depleted';
+        tag = '<span class="gone">소진됨</span>';
+      } else if (isBulk(it) && (it.used || 0) >= 1) {
+        cls += ' is-sharing';
+        tag = '<span class="state">나눔 ' + it.used + '회</span>';
+      } else if (it.urg === 'urgent') cls += ' urgent';
       else if (it.urg === 'soon') cls += ' soon';
       return '<button type="button" class="' + cls + '" data-chipdel="' + esc(id) + '"' +
         ' aria-label="' + esc(it.name) + ' 빼기">' +
         '<span class="nm">' + emojiOf(it) + ' ' + esc(it.name) + '</span>' +
-        (gone ? '<span class="gone">소진됨</span>' : '') +
+        tag +
         '<span class="x">✕</span>' +
       '</button>';
     }).join('');
@@ -2506,12 +2585,24 @@
   }
 
   /* ── 먹음 시트 ── */
+  /* 먹음 방식을 고른 재료의 현재 상태 문구 */
+  function eatStateText(it, mode) {
+    if (mode === 'none') return '이 끼니엔 안 씀';
+    if (mode === 'all') return '소진 처리';
+    var bits = [];
+    if (isCountable(it)) bits.push(it.count + unitOf(it) + ' 남음');
+    else if (it.qty) bits.push(String(it.qty));
+    if ((it.used || 0) > 0) bits.push(it.used + '회 먹음');
+    return bits.join(' · ') || '남음';
+  }
+
   function openEat(day, meal) {
     var k = slotKey(day, meal);
     var r = mealRecipe(day, meal);
     if (!r) return;
     eatTarget = { day: day, meal: meal, key: k, recipe: r };
     eatQty = {};
+    eatMode = {};
 
     var rows = r.uses.map(function (id) { return byId(id); }).filter(Boolean);
     rows.sort(function (a, b) {
@@ -2519,10 +2610,9 @@
       return URG[a.urg].order - URG[b.urg].order;
     });
 
-    eatSub.textContent = r.name + ' — 개수가 있는 재료는 −/+로 몇 개 먹었는지 정하고, 나머지는 먹음 횟수만 가볍게 남겨요.';
+    eatSub.textContent = r.name + ' — 먹은 만큼만 남겨요. 아직 남았으면 [조금 먹음], 통째로 다 먹었으면 [다 먹음]을 골라요.';
 
     eatList.innerHTML = rows.map(function (it) {
-      var auto = !it.done && (it.urg === 'urgent' || it.urg === 'soon');
       if (it.done) {
         return '<div class="eat-row is-done">' +
           '<span class="eat-check">✓</span>' +
@@ -2530,23 +2620,31 @@
           '<span class="badge ' + URG[it.urg].cls + '">이미 처리</span>' +
         '</div>';
       }
-      if (isCountable(it)) {
-        eatQty[it.id] = 1;
-        return '<div class="eat-row" data-eatrow="' + esc(it.id) + '">' +
-          '<span class="eat-name"><span class="emo">' + emojiOf(it) + '</span>' + esc(it.name) + '</span>' +
-          '<span class="eat-sub">' + it.count + esc(unitOf(it)) + ' 남음</span>' +
-          '<div class="step">' +
-            '<button data-eat="dec" data-id="' + esc(it.id) + '" aria-label="한 개 적게">−</button>' +
-            '<span class="step-num" data-eatnum="' + esc(it.id) + '">1</span>' +
-            '<button data-eat="inc" data-id="' + esc(it.id) + '" aria-label="한 개 많게">+</button>' +
+      if (isBulk(it)) {
+        eatMode[it.id] = 'some';
+        return '<div class="eat-row eat-bulk" data-eatrow="' + esc(it.id) + '">' +
+          '<div class="eat-top">' +
+            '<span class="eat-name"><span class="emo">' + emojiOf(it) + '</span>' + esc(it.name) + '</span>' +
+            '<span class="eat-sub" data-eatstate="' + esc(it.id) + '">' + esc(eatStateText(it, 'some')) + '</span>' +
+          '</div>' +
+          '<div class="eat-modes">' +
+            '<button type="button" class="emode some is-on" data-emode="some" data-id="' + esc(it.id) + '">조금 먹음 <em>남음</em></button>' +
+            '<button type="button" class="emode all" data-emode="all" data-id="' + esc(it.id) + '">다 먹음 <em>소진</em></button>' +
+            '<button type="button" class="emode none" data-emode="none" data-id="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 이 끼니에 안 씀">✕</button>' +
           '</div>' +
         '</div>';
       }
-      return '<label class="eat-row">' +
-        '<input type="checkbox" value="' + esc(it.id) + '"' + (auto ? ' checked' : '') + '>' +
+      eatQty[it.id] = 1;
+      return '<div class="eat-row" data-eatrow="' + esc(it.id) + '">' +
         '<span class="eat-name"><span class="emo">' + emojiOf(it) + '</span>' + esc(it.name) + '</span>' +
-        '<span class="eat-sub">먹음 +1</span>' +
-      '</label>';
+        '<span class="eat-sub">' + it.count + esc(unitOf(it)) + ' 남음</span>' +
+        '<div class="step">' +
+          '<button data-eat="dec" data-id="' + esc(it.id) + '" aria-label="한 개 적게">−</button>' +
+          '<span class="step-num" data-eatnum="' + esc(it.id) + '">1</span>' +
+          '<button data-eat="inc" data-id="' + esc(it.id) + '" aria-label="한 개 많게">+</button>' +
+        '</div>' +
+        '<button type="button" class="emode all finish-all" data-eat="all" data-id="' + esc(it.id) + '">다 먹음</button>' +
+      '</div>';
     }).join('');
 
     if (!rows.length) {
@@ -2556,23 +2654,51 @@
     openSheet(eatSheet);
   }
 
+  /* 조금 먹음 / 다 먹음 / 안 씀 전환 */
+  function setEatMode(id, mode) {
+    var it = byId(id);
+    if (!it) return;
+    eatMode[id] = mode;
+    var row = eatList.querySelector('[data-eatrow="' + id + '"]');
+    if (!row) return;
+    var btns = row.querySelectorAll('[data-emode]');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('is-on', btns[i].getAttribute('data-emode') === mode);
+    }
+    row.classList.toggle('is-none', mode === 'none');
+    var st = row.querySelector('[data-eatstate="' + id + '"]');
+    if (st) st.textContent = eatStateText(it, mode);
+  }
+
   function confirmEat() {
     if (!eatTarget) return;
     var parts = [];
     var usedIds = [];
+    var finished = [];
+    var shareCount = 0;
 
-    /* 개수 없는 재료: 체크한 만큼 먹음 횟수 +1 */
-    var boxes = eatList.querySelectorAll('input[type="checkbox"]');
-    for (var i = 0; i < boxes.length; i++) {
-      if (!boxes[i].checked) continue;
-      var it = byId(boxes[i].value);
-      if (!it || it.done || isCountable(it)) continue;
+    /* 덜어 쓰는 재료: 조금 먹음 = 먹음 횟수 +1, 다 먹음 = 즉시 소진 */
+    Object.keys(eatMode).forEach(function (id) {
+      var it = byId(id);
+      if (!it || it.done) return;
+      var mode = eatMode[id];
+      if (!mode || mode === 'none') return;
+      if (mode === 'all') {
+        it.done = true;
+        it.used = 0;
+        if (isCountable(it)) it.count = 0;
+        finished.push(it);
+        usedIds.push(it.id);
+        parts.push(emojiOf(it) + ' ' + it.name + ' 다 먹음');
+        return;
+      }
       it.used = (it.used || 0) + 1;
+      shareCount++;
       usedIds.push(it.id);
-      parts.push(emojiOf(it) + ' ' + it.name + ' +1회');
-    }
+      parts.push(emojiOf(it) + ' ' + it.name + ' +1회(남음)');
+    });
 
-    /* 소분·개수 재료: −/+로 정한 개수만큼 차감, 0이면 처리 완료 */
+    /* 개수 재료: −/+로 정한 개수만큼 차감, 0이면 처리 완료 */
     Object.keys(eatQty).forEach(function (id) {
       var item = byId(id);
       if (!item || item.done || !isCountable(item)) return;
@@ -2588,12 +2714,25 @@
 
     state.eaten[eatTarget.key] = true;
     delete state.skips[eatTarget.key];
+
+    /* 이 끼니에서 소진 처리한 재료 → 아직 안 먹은 다른 끼니는 대체 레시피로 자동 교체 */
+    var swapped = 0;
+    finished.forEach(function (it) { swapped += swapOutIngredient(it.id).swapped; });
+
     save();
     closeSheets();
     eatTarget = null;
     eatQty = {};
+    eatMode = {};
     renderAll();
-    toast(parts.length ? parts.join(' · ') + ' 기록했어요' : '먹은 기록만 남겼어요');
+
+    var msg = parts.length ? parts.join(' · ') + ' 기록했어요' : '먹은 기록만 남겼어요';
+    if (finished.length) {
+      var names = finished.map(function (it) { return emojiOf(it) + ' ' + it.name; }).join(' · ');
+      msg = names + ' 소진 완료' + (swapped ? ' · 안 먹은 끼니 ' + swapped + '개 자동 교체' : '');
+      if (shareCount) msg += ' · 나눔 ' + shareCount + '개 기록';
+    }
+    toast(msg);
   }
 
   /* =========================================================
@@ -2673,6 +2812,22 @@
       return;
     }
 
+    if (act === 'finish') {
+      /* 나눠 먹는 중 → 다 먹음(소진) */
+      var fit = byId(id);
+      if (!fit) return;
+      var fem = emojiOf(fit), fnm = fit.name;
+      fit.done = true;
+      fit.used = 0;
+      if (isCountable(fit)) fit.count = 0;
+      var fres = swapOutIngredient(fit.id);
+      save();
+      renderAll();
+      if (fres.swapped) toast(fem + ' ' + fnm + ' 소진 완료! 안 먹은 끼니 ' + fres.swapped + '개를 다른 메뉴로 바꿨어요');
+      else toast(fem + ' ' + fnm + ' 소진 완료로 옮겼어요');
+      return;
+    }
+
     if (act === 'toggle') {
       var it = byId(id);
       if (!it) return;
@@ -2687,13 +2842,32 @@
     if (act === 'edit') openEditor('edit', id);
   });
 
-  /* 먹음 시트의 개수 스테퍼 */
+  /* 먹음 시트 안의 조금 먹음/다 먹음/안 씀 선택과 개수 스테퍼 */
   eatList.addEventListener('click', function (e) {
+    var m = e.target.closest('[data-emode]');
+    if (m) {
+      setEatMode(m.getAttribute('data-id'), m.getAttribute('data-emode'));
+      return;
+    }
+
     var b = e.target.closest('[data-eat]');
     if (!b) return;
     var id = b.getAttribute('data-id');
     var it = byId(id);
     if (!it || !isCountable(it)) return;
+
+    /* 다 먹음 → 남은 개수 전부 소진 */
+    if (b.getAttribute('data-eat') === 'all') {
+      eatQty[id] = it.count;
+      var numAll = eatList.querySelector('[data-eatnum="' + id + '"]');
+      if (numAll) numAll.textContent = String(it.count);
+      var rowAll = eatList.querySelector('[data-eatrow="' + id + '"]');
+      if (rowAll) rowAll.classList.add('is-done');
+      b.classList.add('is-on');
+      toast(emojiOf(it) + ' ' + it.name + ' ' + it.count + unitOf(it) + ' 전부 소진으로 잡았어요');
+      return;
+    }
+
     var cur = eatQty[id] == null ? 1 : eatQty[id];
     var next = b.getAttribute('data-eat') === 'inc' ? cur + 1 : cur - 1;
     next = Math.max(0, Math.min(next, it.count));
@@ -2701,7 +2875,11 @@
     var num = eatList.querySelector('[data-eatnum="' + id + '"]');
     if (num) num.textContent = String(next);
     var row = eatList.querySelector('[data-eatrow="' + id + '"]');
-    if (row) row.classList.toggle('is-done', next === 0);
+    if (row) {
+      row.classList.toggle('is-done', next === 0);
+      var fa = row.querySelector('[data-eat="all"]');
+      if (fa) fa.classList.toggle('is-on', next >= it.count);
+    }
   });
 
   /* 아직 많이 남았나요? 카드 */
