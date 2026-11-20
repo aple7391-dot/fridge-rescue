@@ -436,10 +436,10 @@
   }
   .meal-card.is-skip .meal-name{color:#8B958F;text-decoration:line-through;text-decoration-thickness:1.5px;font-size:13.5px}
   .mc-edit{
-    flex:0 0 auto;margin-top:1px;
-    font-size:10.5px;font-weight:800;letter-spacing:-.015em;
+    flex:0 0 auto;margin-top:0;
+    font-size:10.5px;font-weight:800;letter-spacing:-.015em;line-height:1.35;
     color:#0A7A54;background:#EDF8F2;border:1px solid #D2EBE0;
-    padding:4px 8px;border-radius:8px;white-space:nowrap;
+    padding:3px 8px;border-radius:8px;white-space:nowrap;
     transition:background .15s;
   }
   .mc-edit:active{background:#DCF1E7}
@@ -1665,7 +1665,7 @@
     save();
     closeDeplete();
     renderAll();
-    toast('이 끼니에서만 ' + emojiOf(it) + ' ' + it.name + '을(를) 뺐어요 · 소진 체크는 그대로예요');
+    toast('이 끼니에서만 ' + emojiOf(it) + ' ' + it.name + ' 뺐어요 · 소진 체크는 그대로예요');
   }
 
   /* 그 끼니에서 소진된 재료만 덜어내기 (직접 입력 메뉴) */
