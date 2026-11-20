@@ -2436,6 +2436,7 @@
      ========================================================= */
   function freshState() {
     return {
+      v: 2,
       ingredients: DEFAULT_ITEMS.map(function (it) {
         return {
           id: it.id, name: it.name, qty: it.qty, loc: it.loc, urg: it.urg, note: it.note,
@@ -2475,6 +2476,8 @@
   function normalize(s) {
     var byId0 = {};
     DEFAULT_ITEMS.forEach(function (d) { byId0[d.id] = d; });
+    /* 저장 형식 2 = 반 개(0.5) 단위. 예전 형식만 '소량' 플래그를 0.5로 옮긴다 */
+    var legacy = !s.v;
 
     s.ingredients = s.ingredients.map(function (it) {
       var def = byId0[String(it.id)] || null;
@@ -2498,7 +2501,7 @@
       o.used = typeof it.used === 'number' ? Math.max(0, Math.round(it.used)) : 0;
 
       /* 예전 저장값의 '소량'(1개에서 조금 먹음, partial) → 0.5개로 옮긴다 */
-      if (o.count === 1 && it.partial === true) o.count = 0.5;
+      if (legacy && o.count === 1 && it.partial === true) o.count = 0.5;
       if (o.count !== null) o.count = Math.max(0, Math.round(o.count * 2) / 2);
       o.partial = o.count !== null && Math.abs(o.count - Math.round(o.count)) > 0.001;
 
@@ -2510,6 +2513,7 @@
       return o;
     });
 
+    s.v = 2;
     s.skips = s.skips || {};
     s.eaten = s.eaten || {};
     s.coOccurrence = s.coOccurrence && typeof s.coOccurrence === 'object' ? s.coOccurrence : {};
