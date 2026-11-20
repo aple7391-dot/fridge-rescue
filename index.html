@@ -252,6 +252,14 @@
     letter-spacing:-.04em;color:var(--ink);white-space:nowrap;
   }
   .step-num small{font-size:11px;font-weight:600;color:var(--sub);margin-left:1px}
+  /* 1개에서 −를 누른 '소량' 단계 — 스테퍼를 주황으로 바꿔 한눈에 구분 */
+  .step.is-partial{background:#FFF1E3}
+  .step.is-partial button{background:#fff}
+  .step-num.is-partial{
+    font-size:12.5px;font-weight:800;color:#E8590C;letter-spacing:-.02em;
+  }
+  .step-num[data-act]{cursor:pointer;border-radius:8px}
+  .step-num[data-act]:active{background:rgba(232,89,12,.12)}
 
   /* ── 아직 많이 남았나요? ── */
   .leftover{
@@ -2020,6 +2028,11 @@
     return !!it && typeof it.count === 'number';
   }
 
+  /* 개수 재료가 1개에서 −를 눌러 '소량'만 남은 상태 */
+  function hasPartial(it) {
+    return !!it && it.partial === true;
+  }
+
   /* 덜어 쓰는 통 재료 — 개수 없는 재료, 또는 남은 개수가 1개·1팩인 재료 */
   function isBulk(it) {
     if (!it) return false;
@@ -2027,9 +2040,11 @@
     return it.count === 1;
   }
 
-  /* 아직 소진 전인데 한 번 이상 먹은 '소량' 재료 */
+  /* 아직 소진 전인데 '소량'만 남은 재료 (개수 재료는 1개에서 조금 먹은 상태) */
   function isSharing(it) {
-    return !!it && isBulk(it) && !isDepleted(it) && (it.used || 0) >= 1;
+    if (!it || isDepleted(it)) return false;
+    if (isCountable(it)) return hasPartial(it) || (it.count === 1 && (it.used || 0) >= 1);
+    return (it.used || 0) >= 1;
   }
 
   function unitOf(it) {
@@ -2125,7 +2140,8 @@
           emoji: it.emoji || emojiFor(it.name),
           count: typeof it.count === 'number' ? it.count : null,
           unit: it.unit || '개',
-          used: 0
+          used: 0,
+          partial: false
         };
       }),
       plan: null,
@@ -2178,7 +2194,14 @@
       o.unit = it.unit ? String(it.unit) : (def && def.unit) || '개';
       o.used = typeof it.used === 'number' ? Math.max(0, Math.round(it.used)) : 0;
 
-      if (o.count !== null && o.count <= 0) o.done = true;
+      /* '소량' 단계 — 1개 남은 재료를 조금 먹은 상태. 예전 저장값(1개 + 먹음 횟수)도 소량으로 이어진다 */
+      o.partial = it.partial === true || (o.count === 1 && o.used >= 1);
+      if (o.count === null || o.count > 1) o.partial = false;
+
+      if (o.count !== null && o.count <= 0) {
+        o.done = true;
+        o.partial = false;
+      }
       return o;
     });
 
@@ -2563,7 +2586,7 @@
 
     it.done = true;
     it.used = 0;
-    if (isCountable(it)) it.count = 0;
+    if (isCountable(it)) { it.count = 0; it.partial = false; }
 
     var res = swapOutIngredient(t.id);
     save();
@@ -2640,7 +2663,7 @@
           ? '<span class="alert-pill hot">🚨 급하게 처리할 재료 <b>&nbsp;' + urgentLeft.length + '개</b></span>'
           : '<span class="alert-pill cool">🎉 급하게 처리할 재료 없음</span>') +
         (soonLeft ? '<span class="alert-pill">⏳ 곧 소진 ' + soonLeft + '개</span>' : '') +
-        (sharingLeft ? '<span class="alert-pill cool">🥛 소량 남음 ' + sharingLeft + '개</span>' : '') +
+        (sharingLeft ? '<span class="alert-pill cool">💧 소량 남음 ' + sharingLeft + '개</span>' : '') +
       '</div>' +
       (chips ? '<div class="urgent-chips">' + chips + '</div>' : '');
   }
@@ -2659,15 +2682,17 @@
 
   function itemRow(it) {
     var meta = [];
+    var part = isCountable(it) && hasPartial(it) && !it.done;
     if (isCountable(it)) {
-      if (!it.done) meta.push('<span>' + it.count + esc(unitOf(it)) + ' 남음</span>');
+      if (!it.done && !part) meta.push('<span>' + it.count + esc(unitOf(it)) + ' 남음</span>');
     } else if (it.qty && !(isSharing(it) && String(it.qty).indexOf('소량') === 0)) {
       /* 뱃지가 이미 '소량'을 말하니 수량 '소량'은 겹쳐 쓰지 않는다 */
       meta.push('<span>' + esc(it.qty) + '</span>');
     }
     if (isSharing(it)) {
       if (meta.length) meta.push('<span class="dot"></span>');
-      meta.push('<span class="share-pill">' + emojiOf(it) + ' 소량 · ' + (it.used || 0) + '회</span>');
+      meta.push('<span class="share-pill">' + emojiOf(it) + ' 소량' +
+        ((it.used || 0) > 0 ? ' · ' + it.used + '회' : ' 남음') + '</span>');
     } else if (!isCountable(it) && it.used) {
       if (meta.length) meta.push('<span class="dot"></span>');
       meta.push('<span>🍽️ ' + it.used + '번 먹음</span>');
@@ -2681,11 +2706,19 @@
 
     var control;
     if (isCountable(it)) {
-      control = '<div class="step">' +
-        '<button data-act="dec" data-id="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 하나 차감"' +
-          (it.count <= 0 ? ' disabled' : '') + '>−</button>' +
-        '<span class="step-num">' + it.count + '<small>' + esc(unitOf(it)) + '</small></span>' +
-        '<button data-act="inc" data-id="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 하나 더">+</button>' +
+      var canPart = !it.done && !part && it.count === 1;
+      var numAttr = (canPart || part)
+        ? ' data-act="part" role="button" tabindex="0" aria-label="' + esc(it.name) +
+          (part ? ' 1' + esc(unitOf(it)) + '로 되돌리기' : ' 소량으로 바꾸기') + '"'
+        : '';
+      var numBody = part ? '소량' : it.count + '<small>' + esc(unitOf(it)) + '</small>';
+      var decLabel = esc(it.name) + (part ? ' 다 씀' : (it.count === 1 ? ' 조금 먹어 소량으로' : ' 하나 차감'));
+      var incLabel = esc(it.name) + (part ? ' 1' + esc(unitOf(it)) + '로 되돌리기' : ' 하나 더');
+      control = '<div class="step' + (part ? ' is-partial' : '') + '">' +
+        '<button data-act="dec" data-id="' + esc(it.id) + '" aria-label="' + decLabel + '"' +
+          (it.done || it.count <= 0 ? ' disabled' : '') + '>−</button>' +
+        '<span class="step-num' + (part ? ' is-partial' : '') + '"' + numAttr + '>' + numBody + '</span>' +
+        '<button data-act="inc" data-id="' + esc(it.id) + '" aria-label="' + incLabel + '">+</button>' +
       '</div>';
     } else {
       control = '<button class="switch' + (it.done ? ' on' : '') + '" role="switch" aria-checked="' + it.done + '" ' +
@@ -2758,7 +2791,9 @@
     }
 
     html += '<div class="section-note">💡 급해요 → 곧 소진 순으로 식단에 먼저 배치돼요. ' +
-      '<b>계란·모닝빵</b>처럼 개수가 있는 재료는 <b>−/+</b>로 하나씩 차감하고 0이 되면 자동으로 처리 완료돼요. ' +
+      '<b>계란·모닝빵</b>처럼 개수가 있는 재료는 <b>−/+</b>로 하나씩 차감하고, ' +
+      '<b>1개일 때 −</b>를 누르면 <b>소량</b>으로 바뀌어요. 소량에서 한 번 더 − 하면 처리 완료되고, ' +
+      '가운데 숫자를 눌러 <b>1개 ↔ 소량</b>을 바로 오갈 수도 있어요. ' +
       '개수 없는 재료(버터·파스타면 등)는 오른쪽 스위치로 직접 처리해요.</div>';
 
     listEl.innerHTML = html;
@@ -2835,7 +2870,7 @@
       } else if (gone) {
         cls += ' is-depleted';
         tag = '<span class="gone">소진됨</span>';
-      } else if (isBulk(it) && (it.used || 0) >= 1) {
+      } else if (isSharing(it)) {
         cls += ' is-sharing';
         tag = '<span class="state">소량</span>';
       } else if (it.urg === 'urgent') cls += ' urgent';
@@ -2990,7 +3025,7 @@
     var lines = shown.map(function (it) {
       var note = it.note;
       if (!note) {
-        if (isCountable(it)) note = it.count + unitOf(it) + ' 남음';
+        if (isCountable(it)) note = hasPartial(it) ? '소량 남음' : it.count + unitOf(it) + ' 남음';
         else if (it.qty) note = it.qty;
         else note = URG[it.urg].label;
       }
@@ -3312,8 +3347,10 @@
           it.count = parsedEdit.count;
           it.unit = parsedEdit.unit;
           it.done = it.count <= 0;
+          it.partial = false;
         } else if (it.count !== null && it.count !== undefined && !qty) {
           it.count = null;
+          it.partial = false;
         }
       }
       save();
@@ -3329,7 +3366,8 @@
         emoji: emoji,
         count: parsedNew ? parsedNew.count : null,
         unit: parsedNew ? parsedNew.unit : '개',
-        used: 0
+        used: 0,
+        partial: false
       });
       save();
       closeSheets();
@@ -3653,9 +3691,12 @@
   function eatStateText(it, mode) {
     if (mode === 'none') return '이 끼니엔 안 씀';
     if (mode === 'all') return '소진 처리';
+    if (isCountable(it)) {
+      if (hasPartial(it)) return '소량 남음';
+      return it.count + unitOf(it) + ' 남음 → 소량';
+    }
     var bits = [];
-    if (isCountable(it)) bits.push(it.count + unitOf(it) + ' 남음');
-    else if (it.qty) bits.push(String(it.qty));
+    if (it.qty) bits.push(String(it.qty));
     if ((it.used || 0) > 0) bits.push(it.used + '회 먹음');
     return bits.join(' · ') || '남음';
   }
@@ -3692,7 +3733,7 @@
             '<span class="eat-sub" data-eatstate="' + esc(it.id) + '">' + esc(eatStateText(it, 'some')) + '</span>' +
           '</div>' +
           '<div class="eat-modes">' +
-            '<button type="button" class="emode some is-on" data-emode="some" data-id="' + esc(it.id) + '">조금 먹음 <em>남음</em></button>' +
+            '<button type="button" class="emode some is-on" data-emode="some" data-id="' + esc(it.id) + '">조금 먹음 <em>' + (isCountable(it) ? '소량' : '남음') + '</em></button>' +
             '<button type="button" class="emode all" data-emode="all" data-id="' + esc(it.id) + '">다 먹음 <em>소진</em></button>' +
             '<button type="button" class="emode none" data-emode="none" data-id="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 이 끼니에 안 씀">✕</button>' +
           '</div>' +
@@ -3750,12 +3791,14 @@
       if (mode === 'all') {
         it.done = true;
         it.used = 0;
-        if (isCountable(it)) it.count = 0;
+        if (isCountable(it)) { it.count = 0; it.partial = false; }
         finished.push(it);
         usedIds.push(it.id);
         parts.push(emojiOf(it) + ' ' + it.name + ' 다 먹음');
         return;
       }
+      /* 조금 먹음: 개수 재료는 1개를 조금 쓰고 '소량'으로, 나머지는 먹음 횟수 +1 */
+      if (isCountable(it)) it.partial = true;
       it.used = (it.used || 0) + 1;
       shareCount++;
       usedIds.push(it.id);
@@ -3771,7 +3814,7 @@
       item.count -= n;
       usedIds.push(item.id);
       parts.push(emojiOf(item) + ' ' + item.name + ' ' + n + unitOf(item));
-      if (item.count <= 0) { item.count = 0; item.done = true; }
+      if (item.count <= 0) { item.count = 0; item.done = true; item.partial = false; }
     });
 
     if (usedIds.length >= 2) recordHistory(usedIds);
@@ -3845,27 +3888,46 @@
     var id = btn.getAttribute('data-id');
     var act = btn.getAttribute('data-act');
 
-    if (act === 'dec' || act === 'inc') {
+    /* 개수 스테퍼: N → 1 → 소량 → 다 씀(소진), 숫자를 눌러 1개 ↔ 소량 토글 */
+    if (act === 'dec' || act === 'inc' || act === 'part') {
       var cit = byId(id);
       if (!cit || !isCountable(cit)) return;
-      if (act === 'dec') {
-        if (cit.count <= 0) return;
-        cit.count -= 1;
-        if (cit.count <= 0) {
+      var cem = emojiOf(cit), cnm = cit.name, cun = unitOf(cit);
+
+      if (act === 'part') {
+        if (cit.done) return;
+        if (cit.partial) {
+          cit.partial = false;
+          toast(cem + ' ' + cnm + ' 1' + cun + '로 되돌렸어요');
+        } else if (cit.count === 1) {
+          cit.partial = true;
+          toast(cem + ' ' + cnm + ' 소량으로 바꿨어요 · 한 번 더 − 하면 다 씀');
+        } else return;
+      } else if (act === 'dec') {
+        if (cit.done || cit.count <= 0) return;
+        if (cit.partial) {
+          cit.partial = false;
           cit.count = 0;
           cit.done = true;
-          toast(emojiOf(cit) + ' ' + cit.name + ' 다 씀 · 처리 완료');
+          toast(cem + ' ' + cnm + ' 다 씀 · 처리 완료');
+        } else if (cit.count === 1) {
+          cit.partial = true;
+          toast(cem + ' ' + cnm + ' 소량 남음 · 한 번 더 − 하면 다 씀');
         } else {
-          toast(emojiOf(cit) + ' ' + cit.name + ' 1' + unitOf(cit) + ' 차감 · ' + cit.count + unitOf(cit) + ' 남음');
+          cit.count -= 1;
+          toast(cem + ' ' + cnm + ' 1' + cun + ' 차감 · ' + cit.count + cun + ' 남음');
         }
       } else {
-        if (cit.count <= 0) {
+        if (cit.partial) {
+          cit.partial = false;
+          toast(cem + ' ' + cnm + ' 다시 1' + cun + ' 남았어요');
+        } else if (cit.done || cit.count <= 0) {
           cit.count = 1;
           cit.done = false;
-          toast(emojiOf(cit) + ' ' + cit.name + ' 다시 ' + cit.count + unitOf(cit) + ' 남았어요');
+          toast(cem + ' ' + cnm + ' 다시 ' + cit.count + cun + ' 남았어요');
         } else {
           cit.count += 1;
-          toast(emojiOf(cit) + ' ' + cit.name + ' +1 · ' + cit.count + unitOf(cit) + ' 남음');
+          toast(cem + ' ' + cnm + ' +1 · ' + cit.count + cun + ' 남음');
         }
       }
       save();
@@ -3883,7 +3945,7 @@
       var fem = emojiOf(fit), fnm = fit.name;
       fit.done = true;
       fit.used = 0;
-      if (isCountable(fit)) fit.count = 0;
+      if (isCountable(fit)) { fit.count = 0; fit.partial = false; }
       var fres = swapOutIngredient(fit.id);
       save();
       renderAll();
@@ -3960,7 +4022,7 @@
     } else {
       it.done = true;
       it.used = 0;
-      if (isCountable(it)) it.count = 0;
+      if (isCountable(it)) { it.count = 0; it.partial = false; }
       save();
       renderAll();
       toast(emojiOf(it) + ' ' + it.name + ' 소진 완료로 옮겼어요');
