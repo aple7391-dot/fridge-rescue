@@ -760,6 +760,9 @@
   }
   .act.solid:active{background:var(--blue-deep)}
   .act.undo{grid-column:1 / -1;background:#F5F7F9;color:var(--ink2);font-weight:600}
+  .act.edit{background:var(--blue-soft);color:var(--blue-deep)}
+  .act.revert{background:#F5F7F9;color:var(--ink2);font-weight:600}
+  .mc-actions.edit-only{grid-template-columns:1fr 1fr}
 
   .skip-note{
     margin-top:18px;display:flex;align-items:center;gap:8px;
@@ -1351,8 +1354,11 @@
   }
   .out-q:active{background:var(--blue-soft);color:var(--blue-deep)}
   .out-list{margin-top:6px}
-  .out-item{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid var(--line);min-height:58px}
+  .out-item{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid var(--line);min-height:58px;cursor:pointer}
   .out-item:last-child{border-bottom:0}
+  .out-item.is-sel{background:var(--blue-soft);border-bottom-color:transparent;border-radius:14px;padding:11px 10px;margin:2px 0}
+  .out-item.is-sel .out-name b{color:var(--blue-deep)}
+  .out-item.is-sel .out-name em{color:#4E7CB8}
   .out-name{flex:1;min-width:0}
   .out-name b{display:block;font-size:14.5px;font-weight:700;letter-spacing:-.02em;color:var(--ink);line-height:1.35}
   .out-name em{display:block;margin-top:3px;font-style:normal;font-size:11.5px;font-weight:600;color:var(--sub)}
@@ -1396,7 +1402,6 @@
   .pchip.is-on{background:var(--blue-soft);border-color:#BFD9FB}
   .pchip.is-on b{color:var(--blue-deep);font-weight:800}
   .pchip.is-on em{color:#4E7CB8}
-  .portion-slider{margin-top:8px}
   .portion-hint{margin-top:8px;font-size:11.5px;font-weight:500;color:var(--sub);line-height:1.55;letter-spacing:-.01em}
   .portion-hint b{font-weight:700;color:var(--ink2)}
 
@@ -1651,27 +1656,23 @@
   <div class="out-quick" id="outQuick"></div>
   <div class="out-list" id="outList"></div>
 
-  <div class="portion" id="outPortionBox">
+  <div class="portion" id="outPortionBox" hidden>
     <div class="portion-head">
-      <span>얼마나 드셨어요?</span>
-      <b id="outPortionVal">보통 · 1×</b>
+      <span id="outPortionWho">얼마나 드셨어요?</span>
+      <b id="outPortionVal">한 그릇 · 0kcal</b>
     </div>
     <div class="portion-body">
-      <div class="plate-wrap is-empty" id="outPlateWrap">
+      <div class="plate-wrap" id="outPlateWrap">
         <svg class="plate-svg" viewBox="0 0 120 120" aria-hidden="true"></svg>
       </div>
       <div class="pchips" id="outPortionChips">
-        <button type="button" class="pchip" data-portion="0.5"><b>조금</b><em>0.5×</em></button>
-        <button type="button" class="pchip is-on" data-portion="1"><b>보통</b><em>1×</em></button>
-        <button type="button" class="pchip" data-portion="1.5"><b>넉넉히</b><em>1.5×</em></button>
-        <button type="button" class="pchip" data-portion="2"><b>많이</b><em>2×</em></button>
+        <button type="button" class="pchip" data-portion="0.5"><b>반</b><em>0kcal</em></button>
+        <button type="button" class="pchip is-on" data-portion="1"><b>한</b><em>0kcal</em></button>
+        <button type="button" class="pchip" data-portion="1.5"><b>1.5</b><em>0kcal</em></button>
+        <button type="button" class="pchip" data-portion="2"><b>두</b><em>0kcal</em></button>
       </div>
     </div>
-    <div class="pctrow portion-slider">
-      <input type="range" id="outPortion" min="0.25" max="2.5" step="0.25" value="1" aria-label="먹은 양 배율">
-      <span class="pctval" id="outPortionPct">1×<small>보통</small></span>
-    </div>
-    <p class="portion-hint" id="outPortionHint">메뉴를 적으면 그 음식의 1인분 모양이 여기 떠요. 그림에서 먹은 만큼을 고르면 칼로리도 함께 줄어요.</p>
+    <p class="portion-hint" id="outPortionHint">고른 메뉴 하나만 바뀌어요. 다른 메뉴는 위에서 따로 조절해요.</p>
   </div>
 
   <input type="file" id="outPhotoFile" accept="image/*" hidden>
@@ -2953,8 +2954,9 @@
   var outSheet = $('outSheet'), outSub = $('outSub'), outText = $('outText');
   var outQuick = $('outQuick'), outList = $('outList'), outTotal = $('outTotal');
   var outKcal = $('outKcal'), outMacro = $('outMacro'), outGap = $('outGap'), outSave = $('outSave');
-  var outPortionChips = $('outPortionChips'), outPortionRange = $('outPortion');
-  var outPortionVal = $('outPortionVal'), outPortionPct = $('outPortionPct');
+  var outPortionBox = $('outPortionBox'), outPortionChips = $('outPortionChips');
+  var outPortionVal = $('outPortionVal'), outPortionWho = $('outPortionWho');
+  var outTitle = $('outTitle');
   var outPlateWrap = $('outPlateWrap');
   var outPortionHint = $('outPortionHint');
   var outPhotoFile = $('outPhotoFile'), outPhotoPick = $('outPhotoPick'), outPhotoPickTxt = $('outPhotoPickTxt');
@@ -2974,7 +2976,7 @@
   var eatPct = {};
   var outTarget = null;
   var outItems = [];
-  var outPortion = 1;
+  var outSel = 0;
   var outPhotoData = '';
   var toastActFn = null;
   var goalRatio = { c: 50, p: 20, f: 30 };
@@ -3219,23 +3221,37 @@
       if (!/^\d{4}-\d{2}-\d{2}-(lunch|dinner)$/.test(k) || !o || typeof o !== 'object') { delete s.outside[k]; return; }
       o.name = String(o.name || '외식');
       o.items = Array.isArray(o.items) ? o.items.map(function (x) {
+        var q = Number(x.qty) || 1;
+        var kcal = Math.round(Number(x.kcal) || 0);
         return {
           label: String(x.label || ''),
-          qty: Number(x.qty) || 1,
+          title: String(x.title || ''),
+          qty: q,
+          baseQty: (Number(x.baseQty) > 0 ? Number(x.baseQty) : q),
           unit: String(x.unit || ''),
-          kcal: Math.round(Number(x.kcal) || 0),
-          c: Math.round((Number(x.c) || 0) * 10) / 10,
-          p: Math.round((Number(x.p) || 0) * 10) / 10,
-          f: Math.round((Number(x.f) || 0) * 10) / 10
+          /* 1단위당 영양 — 예전 기록은 총값을 qty로 나눠 채운다 */
+          uk: (typeof x.uk === 'number' && isFinite(x.uk)) ? x.uk : Math.round((kcal / q) * 100) / 100,
+          uc: (typeof x.uc === 'number' && isFinite(x.uc)) ? x.uc : Math.round(((Number(x.c) || 0) / q) * 100) / 100,
+          up: (typeof x.up === 'number' && isFinite(x.up)) ? x.up : Math.round(((Number(x.p) || 0) / q) * 100) / 100,
+          uf: (typeof x.uf === 'number' && isFinite(x.uf)) ? x.uf : Math.round(((Number(x.f) || 0) / q) * 100) / 100
         };
       }).filter(function (x) { return x.label; }) : [];
       o.kcal = Math.round(Number(o.kcal) || 0);
       o.c = Math.round((Number(o.c) || 0) * 10) / 10;
       o.p = Math.round((Number(o.p) || 0) * 10) / 10;
       o.f = Math.round((Number(o.f) || 0) * 10) / 10;
-      /* 먹은 양 배율(0.25~2.5)과 사진 — 예전 기록은 1×·사진 없음 */
-      o.portion = (typeof o.portion === 'number' && isFinite(o.portion))
+      /* 먹은 양은 이제 항목마다 따로 움직인다.
+         예전 기록의 전체 배율은 그 항목의 실제 양으로 옮겨 적는다 */
+      var legP = (typeof o.portion === 'number' && isFinite(o.portion))
         ? Math.max(0.25, Math.min(2.5, Math.round(o.portion * 4) / 4)) : 1;
+      if (legP !== 1) {
+        o.items.forEach(function (x) {
+          x.qty = Math.round(x.qty * legP * 100) / 100;
+          x.baseQty = x.qty;
+        });
+      }
+      o.portion = 1;
+      o.rawText = (typeof o.rawText === 'string') ? o.rawText.slice(0, 140) : '';
       if (!(typeof o.photo === 'string' && /^data:image\//i.test(o.photo))) delete o.photo;
     });
     if (!validKey.test(String(s.dayAnchor || ''))) s.dayAnchor = today;
@@ -4061,13 +4077,10 @@
     if (out) {
       outDetail = '<div class="out-detail">' +
         (out.photo ? '<button type="button" class="out-detail-photo" data-photo="' + esc(k) + '" aria-label="외식 사진 크게 보기"><img src="' + out.photo + '" alt="외식 사진"></button>' : '') +
-        (out.portion && Math.abs(out.portion - 1) > 0.01
-          ? '<div class="od"><b>먹은 양</b><span>' + outX(out.portion) + ' · ' + outPortionName(out.portion) + '</span></div>'
-          : '') +
         (out.items || []).map(function (x) {
-          var q = x.qty ? String(x.qty).replace(/\.0$/, '') + (x.unit || '') : '';
+          var q = outQtyText(outQty(x), x.unit);
           return '<div class="od"><b>' + esc(x.label) + '</b>' +
-            '<span>' + esc((q ? q + ' · ' : '') + Math.round((x.kcal || 0) * (out.portion || 1)) + 'kcal') + '</span></div>';
+            '<span>' + esc((q ? q + ' · ' : '') + fmtN(Math.round((x.uk || 0) * outQty(x))) + 'kcal') + '</span></div>';
         }).join('') +
       '</div>';
     }
@@ -4088,8 +4101,10 @@
 
     var skipNote = (skipped && !out) ? '<div class="skip-note">🍗 이 끼니는 외식으로 비웠어요</div>' : '';
 
-    var actions = '<div class="mc-actions">';
+    var actions = '<div class="mc-actions' + (out ? ' edit-only' : '') + '">';
     if (eaten) actions += '<button class="act undo" data-act="uneat">↩︎ 먹은 기록 되돌리기</button>';
+    else if (skipped && out) actions += '<button class="act edit" data-act="editOut">✏️ 수정</button>' +
+      '<button class="act revert" data-act="unskip" aria-label="외식 기록 되돌리기">↩︎ 되돌리기</button>';
     else if (skipped) actions += '<button class="act undo" data-act="unskip">↩︎ 외식 기록 되돌리기</button>';
     else actions += '<button class="act out" data-act="skip">🍗 외식</button>' +
       '<button class="act solid" data-act="eat">✅ 먹었음</button>';
@@ -5198,6 +5213,16 @@
   var OUT_UNIT_ALT = OUT_UNITS.slice().sort(function (a, b) { return b.length - a.length; }).join('|');
   var OUT_UNIT_RE = new RegExp('(\\d+(?:[.,]\\d+)?)\\s*(' + OUT_UNIT_ALT + ')', 'i');
 
+  /* "반 줄"·"한 줄"·"두 그릇"처럼 수를 말로 적어도 알아본다 */
+  var OUT_KOR_NUM = { '한': 1, '두': 2, '세': 3, '네': 4, '다섯': 5 };
+  function outNormQty(seg) {
+    var U = OUT_UNIT_ALT;
+    return String(seg || '')
+      .replace(new RegExp('(한|두|세|네|다섯)\\s*(' + U + ')\\s*반', 'g'), function (m, n, u) { return (OUT_KOR_NUM[n] + 0.5) + u; })
+      .replace(new RegExp('(한|두|세|네|다섯)\\s*(' + U + ')', 'g'), function (m, n, u) { return OUT_KOR_NUM[n] + u; })
+      .replace(new RegExp('반\\s*(' + U + ')', 'g'), function (m, u) { return '0.5' + u; });
+  }
+
   /* 한 끼에 한 조각씩 작게 찍는 단위 (개·인분은 제외) */
   var OUT_SMALL_UNIT = { '점': 1, '쪽': 1, '줄': 1, '장': 1, '스푼': 1, '줌': 1, '줄기': 1, '모': 1, '알': 1 };
 
@@ -5206,7 +5231,7 @@
 
   /* 그 음식의 기준 단위(unit)로 환산하는 배수 — 점·쪽·덩이도 인분에 비례해 계산한다 */
   var OUT_UNIT_PER = {
-    '인분': { '인분': 1, '그릇': 1, '접시': 1, '사발': 1, '세트': 1, '덩이': 0.7, '점': 0.125, '쪽': 0.125, '조각': 0.125, '모': 0.25, '줌': 0.25, '줄기': 0.1, '개': 0.5 },
+    '인분': { '인분': 1, '그릇': 1, '접시': 1, '사발': 1, '세트': 1, '줄': 1, '덩이': 0.7, '점': 0.125, '쪽': 0.125, '조각': 0.125, '모': 0.25, '줌': 0.25, '줄기': 0.1, '개': 0.5 },
     '접시': { '접시': 1, '그릇': 1, '인분': 1, '점': 0.125, '쪽': 0.125, '조각': 0.125, '줌': 0.25, '줄기': 0.1, '개': 0.5 },
     '점': { '점': 1, '조각': 1, '쪽': 1, '개': 1, '인분': 8, '접시': 6, '그릇': 6, '덩이': 6, '줌': 4 },
     '조각': { '조각': 1, '점': 1, '쪽': 1, '개': 1, '인분': 4, '접시': 4, '마리': 8 },
@@ -5242,14 +5267,15 @@
 
     var items = [];
     segs.forEach(function (seg) {
-      var um = seg.match(OUT_UNIT_RE);
+      var pseg = outNormQty(seg);
+      var um = pseg.match(OUT_UNIT_RE);
       var qty = 1, unit = '';
       if (um) {
         qty = parseFloat(String(um[1]).replace(',', '.'));
         unit = um[2];
         if (unit === '그램') unit = 'g';
       } else {
-        var nm = seg.match(/(\d+(?:[.,]\d+)?)/);
+        var nm = pseg.match(/(\d+(?:[.,]\d+)?)/);
         if (nm) qty = parseFloat(String(nm[1]).replace(',', '.'));
       }
       if (!isFinite(qty) || qty <= 0) qty = 1;
@@ -5263,21 +5289,24 @@
         var factor = outUnitFactor(hit, unit);
         if (hit.alt && unit && hit.alt[unit]) factor = hit.alt[unit];
         var k = (hit.kcal != null ? hit.kcal : (hit.c * 4 + hit.p * 4 + hit.f * 9)) * qty * factor;
+        var q1 = Math.round(qty * 100) / 100;
         items.push({
           label: hit.label,
-          qty: qty,
+          title: pseg.replace(OUT_UNIT_RE, '').replace(/(\d+(?:[.,]\d+)?)\s*$/, '').trim() || hit.label,
+          qty: q1,
+          baseQty: q1,
           unit: unit || hit.unit,
-          kcal: Math.round(k),
-          c: outRound(hit.c * qty * factor),
-          p: outRound(hit.p * qty * factor),
-          f: outRound(hit.f * qty * factor),
+          uk: Math.round((k / qty) * 100) / 100,
+          uc: outRound(hit.c * factor),
+          up: outRound(hit.p * factor),
+          uf: outRound(hit.f * factor),
           guess: false
         });
         return;
       }
 
       /* 사전에 없는 메뉴: 이름에서 영양을 추정한다 */
-      var name = seg.replace(OUT_UNIT_RE, '').replace(/(\d+(?:[.,]\d+)?)\s*$/, '').trim();
+      var name = pseg.replace(OUT_UNIT_RE, '').replace(/(\d+(?:[.,]\d+)?)\s*$/, '').trim();
       if (!name) return;
       var g0 = estimateNutri(name);
       var est = (g0.c + g0.p + g0.f) < 20 ? { c: 40, p: 14, f: 12 } : g0;
@@ -5291,15 +5320,18 @@
         est = { c: outRound(est.c * sc), p: outRound(est.p * sc), f: outRound(est.f * sc) };
       }
 
-      var kc = (est.c * 4 + est.p * 4 + est.f * 9) * qty;
+      var kc = est.c * 4 + est.p * 4 + est.f * 9;
+      var q2 = Math.round(qty * 100) / 100;
       items.push({
         label: name,
-        qty: qty,
+        title: name,
+        qty: q2,
+        baseQty: q2,
         unit: unit || '인분',
-        kcal: Math.round(kc),
-        c: outRound(est.c * qty),
-        p: outRound(est.p * qty),
-        f: outRound(est.f * qty),
+        uk: Math.round(kc * 100) / 100,
+        uc: outRound(est.c),
+        up: outRound(est.p),
+        uf: outRound(est.f),
         guess: true
       });
     });
@@ -5398,20 +5430,32 @@
     return /맥주|소주|막걸리|와인|하이볼|위스키|콜라|사이다|음료|주스|에이드|커피|라떼|아메리카노|쉐이크|모히또|칵테일/.test(label || '');
   }
 
-  function outMainItem() {
+  function outMainIndex() {
     var list = outItems || [];
-    var i, pool = [], drinks = [];
+    var i, drinks = -1;
     for (i = 0; i < list.length; i++) {
-      if ((list[i].kcal || 0) >= 80 && !outIsDrink(list[i].label)) pool.push(list[i]);
-      else if ((list[i].kcal || 0) >= 80) drinks.push(list[i]);
+      var k = (list[i].uk || 0) * outQty(list[i]);
+      if (k >= 80 && !outIsDrink(list[i].label)) return i;
+      if (k >= 80 && drinks < 0) drinks = i;
     }
-    if (pool.length) return pool[0];
-    if (drinks.length) return drinks[0];
-    return list.length ? list[0] : null;
+    if (drinks >= 0) return drinks;
+    return list.length ? 0 : -1;
   }
 
-  function outFoodCategory() {
-    var item = outMainItem();
+  /* 그림·칩이 붙는 항목 — 지금 고른 메뉴 하나 */
+  function outSelItem() {
+    if (!outItems.length) return null;
+    if (!(outSel >= 0 && outSel < outItems.length)) outSel = Math.max(0, outMainIndex());
+    return outItems[outSel] || outItems[0];
+  }
+
+  function outMainItem() {
+    var i = outMainIndex();
+    return i >= 0 ? outItems[i] : null;
+  }
+
+  function outFoodCategory(item) {
+    item = item || outMainItem();
     var label = (item && item.label) || '';
     var cat = 'bowl', sub = '', i;
     for (i = 0; i < FOOD_CATS.length; i++) {
@@ -5797,75 +5841,94 @@
     outPlateWrap.innerHTML = '<svg class="plate-svg" viewBox="0 0 120 120" role="img" aria-label="' + esc(name) + '"><g class="plate-food">' + art + '</g></svg>';
   }
 
-  /* ── 먹은 양 배율 — 접시 그림과 칼로리 계산을 함께 움직인다 ── */
-  var OUT_PORTION_MIN = 0.25, OUT_PORTION_MAX = 2.5;
-
-  function outPortionName(v) {
-    v = Number(v) || 1;
-    if (v <= 0.4) return '아주 조금';
-    if (v < 0.9) return '조금';
-    if (v <= 1.1) return '보통';
-    if (v < 1.9) return '넉넉히';
-    return '많이';
-  }
-
-  function outFx(v) {
-    var n = Math.round((Number(v) || 1) * 4) / 4;
-    return Math.max(OUT_PORTION_MIN, Math.min(OUT_PORTION_MAX, n));
-  }
+  /* ── 먹은 양 — 항목마다 따로 움직인다 ──
+     항목은 1단위당 영양(uk·uc·up·uf)을 들고 있고 qty만 그 항목 안에서 바뀝니다.
+     그림과 칩은 지금 고른 항목 하나에만 붙습니다. */
+  var OUT_QTY_MAX = 30;
 
   function outX(v) { return String(Number(v).toFixed(2)).replace(/\.?0+$/, '') + '×'; }
 
-  /* 항목을 지금 배율로 환산한다 (저장은 1× 기준값으로 하고, 보여줄 때만 곱한다) */
-  function outScaled(list) {
-    var f = outPortion;
-    return (list || []).map(function (x) {
-      return {
-        label: x.label, qty: x.qty, unit: x.unit,
-        kcal: Math.round((x.kcal || 0) * f),
-        c: outRound((x.c || 0) * f),
-        p: outRound((x.p || 0) * f),
-        f: outRound((x.f || 0) * f)
-      };
-    });
+  function outQty(x) {
+    var q = Number(x && x.qty);
+    return (isFinite(q) && q > 0) ? Math.round(q * 100) / 100 : 0;
   }
 
-  function paintPortion() {
-    var v = outPortion;
-    var info = outFoodCategory();
-    var guide = FOOD_GUIDE[info.cat] || FOOD_GUIDE.bowl;
-    var meta = info.item ? outFoodMeta(info.item.label) : null;
-    var words = outItems.length ? guide.words : ['조금', '보통', '넉넉히', '많이'];
-    var steps = [0.5, 1, 1.5, 2];
-    var si = steps.indexOf(v);
-    var word = si >= 0 && outItems.length ? words[si] : outPortionName(v);
-    if (outPortionVal) outPortionVal.textContent = word + ' · ' + outX(v);
-    if (outPortionRange) {
-      outPortionRange.value = v;
-      var p = Math.round((v - OUT_PORTION_MIN) / (OUT_PORTION_MAX - OUT_PORTION_MIN) * 100);
-      outPortionRange.style.setProperty('--p', p + '%');
-    }
-    if (outPortionPct) outPortionPct.innerHTML = outX(v) + '<small>' + outPortionName(v) + '</small>';
+  /* 입력한 양(baseQty) 대비 지금 양 — 그림을 얼마나 채울지 */
+  function outRatio(x) {
+    var b = Number(x && x.baseQty);
+    if (!isFinite(b) || b <= 0) b = outQty(x) || 1;
+    return Math.max(0.05, Math.min(2.5, outQty(x) / b));
+  }
+
+  /* 0.5줄은 '반 줄', 나머지는 '2점'처럼 읽는다 */
+  function outQtyText(q, unit) {
+    q = Math.round((Number(q) || 0) * 100) / 100;
+    if (q <= 0) return '';
+    if (q === 0.5) return unit ? '반 ' + unit : '절반';
+    return String(q).replace(/\.0+$/, '') + (unit || '');
+  }
+
+  /* 항목 하나를 지금 먹은 양으로 환산한다 */
+  function outShown(x) {
+    var q = outQty(x);
+    return {
+      label: x.label, unit: x.unit, qty: q,
+      kcal: Math.round((x.uk || 0) * q),
+      c: outRound((x.uc || 0) * q),
+      p: outRound((x.up || 0) * q),
+      f: outRound((x.uf || 0) * q)
+    };
+  }
+
+  function outScaled(list) { return (list || []).map(outShown); }
+
+  function outStepOf(unit) {
+    return /줄|인분|그릇|접시|판|세트|사발|덩이/.test(unit || '') ? 0.5 : 1;
+  }
+
+  function outSetQty(item, q) {
+    var step = outStepOf(item.unit);
+    q = Math.round((Number(q) || 0) * 100) / 100;
+    if (q < step) q = step;
+    if (q > OUT_QTY_MAX) q = OUT_QTY_MAX;
+    item.qty = q;
+  }
+
+  /* 지금 고른 항목의 그림·칩 — 그 항목만 바뀐다 */
+  function paintOutAmount() {
+    var item = outSelItem();
+    if (!outPortionBox) return;
+    if (!item) { outPortionBox.hidden = true; return; }
+    outPortionBox.hidden = false;
+
+    var info = outFoodCategory(item);
+    var q = outQty(item);
+    var base = Number(item.baseQty) > 0 ? Number(item.baseQty) : q;
+    var uk = item.uk || 0;
+
+    if (outPortionWho) outPortionWho.textContent = item.label + ' 얼마나 드셨어요?';
+    if (outPortionVal) outPortionVal.textContent = outQtyText(q, item.unit) + ' · ' + fmtN(Math.round(uk * q)) + 'kcal';
+
     if (outPortionChips) {
       var btns = outPortionChips.querySelectorAll('[data-portion]');
       for (var i = 0; i < btns.length; i++) {
-        btns[i].classList.toggle('is-on', Math.abs(+btns[i].getAttribute('data-portion') - v) < 0.01);
+        var f = +btns[i].getAttribute('data-portion');
+        var cq = Math.round(base * f * 100) / 100;
+        btns[i].classList.toggle('is-on', Math.abs(cq - q) < 0.01);
         var wb = btns[i].querySelector('b'), we = btns[i].querySelector('em');
-        if (wb && words[i]) wb.textContent = words[i];
-        if (we) we.textContent = outX(steps[i]);
+        if (wb) wb.textContent = outQtyText(cq, item.unit);
+        if (we) we.textContent = fmtN(Math.round(uk * cq)) + 'kcal';
       }
     }
-    if (outPortionHint) {
-      outPortionHint.innerHTML = outItems.length
-        ? '보통 1인분(<b>' + esc(guide.one(info.label, meta)) + '</b>) 기준이에요. 그림에서 진하게 칠한 만큼이 드신 양이에요.'
-        : '메뉴를 적으면 그 음식의 1인분 모양이 여기 떠요. 그림에서 먹은 만큼을 고르면 칼로리도 함께 줄어요.';
-    }
-    if (outPlateWrap) outPlateWrap.classList.toggle('is-empty', !outItems.length);
-    paintFoodArt(info, v);
+
+    paintFoodArt(info, outRatio(item));
   }
 
-  function setPortion(v) {
-    outPortion = outFx(v);
+  function setOutChip(f) {
+    var it = outSelItem();
+    if (!it) return;
+    var base = Number(it.baseQty) > 0 ? Number(it.baseQty) : outQty(it);
+    outSetQty(it, base * f);
     renderOut();
   }
 
@@ -5874,19 +5937,23 @@
       outList.innerHTML = '<p class="out-none">메뉴를 적으면 항목별 칼로리·탄단지를 바로 계산해요.</p>';
       outTotal.hidden = true;
       outSave.disabled = true;
-      paintPortion();
+      paintOutAmount();
       return;
     }
+    if (!(outSel >= 0 && outSel < outItems.length)) outSel = Math.max(0, outMainIndex());
+
     var view = outScaled(outItems);
     outList.innerHTML = view.map(function (x, i) {
-      return '<div class="out-item">' +
+      var qtxt = outQtyText(x.qty, x.unit);
+      return '<div class="out-item' + (i === outSel ? ' is-sel' : '') + '" data-oisel="' + i + '"' +
+          (i === outSel ? ' aria-current="true"' : '') + '>' +
         '<div class="out-name"><b>' + esc(x.label) + '</b>' +
-          '<em>' + esc(String(x.qty).replace(/\.0$/, '') + x.unit) + ' · ' + x.kcal + 'kcal · 단 ' + g1(x.p) + 'g</em>' +
+          '<em>' + esc(qtxt + ' · ' + fmtN(x.kcal) + 'kcal · 단 ' + g1(x.p) + 'g') + '</em>' +
         '</div>' +
         '<div class="step">' +
-          '<button type="button" data-outq="-1" data-oi="' + i + '" aria-label="한 단위 줄이기">−</button>' +
-          '<span class="step-num">' + esc(String(x.qty).replace(/\.0$/, '')) + '</span>' +
-          '<button type="button" data-outq="1" data-oi="' + i + '" aria-label="한 단위 늘리기">+</button>' +
+          '<button type="button" data-outq="-1" data-oi="' + i + '" aria-label="' + esc(x.label) + ' 한 단위 줄이기">−</button>' +
+          '<span class="step-num">' + esc(String(x.qty).replace(/\.0+$/, '')) + '</span>' +
+          '<button type="button" data-outq="1" data-oi="' + i + '" aria-label="' + esc(x.label) + ' 한 단위 늘리기">+</button>' +
         '</div>' +
         '<button type="button" class="out-x" data-outdel="' + i + '" aria-label="' + esc(x.label) + ' 빼기">✕</button>' +
       '</div>';
@@ -5906,20 +5973,60 @@
       ? '이 끼니까지 넣으면 단백질 ' + leftP + 'g 더 필요해요'
       : '이 끼니까지 넣으면 ' + fmtN(leftC) + 'kcal · 단백질은 다 채워요';
     outSave.disabled = false;
-    paintPortion();
+    paintOutAmount();
+  }
+
+  /* 저장된 기록의 항목을 편집용으로 되살린다 (항목마다 먹은 양 유지) */
+  function outItemsFromRecord(rec) {
+    return (rec && rec.items ? rec.items : []).map(function (x) {
+      var q = outQty(x) || 1;
+      return {
+        label: x.label, title: x.title || x.label, qty: q, unit: x.unit,
+        baseQty: (Number(x.baseQty) > 0 ? Number(x.baseQty) : q),
+        uk: (typeof x.uk === 'number' && isFinite(x.uk)) ? x.uk : (Number(x.kcal) || 0) / q,
+        uc: (typeof x.uc === 'number' && isFinite(x.uc)) ? x.uc : (Number(x.c) || 0) / q,
+        up: (typeof x.up === 'number' && isFinite(x.up)) ? x.up : (Number(x.p) || 0) / q,
+        uf: (typeof x.uf === 'number' && isFinite(x.uf)) ? x.uf : (Number(x.f) || 0) / q,
+        guess: false
+      };
+    });
+  }
+
+  function outTextFromItems(list) {
+    return (list || []).map(function (x) {
+      return (x.title || x.label) + ' ' + outQtyText(outQty(x), x.unit);
+    }).join(', ');
   }
 
   function openOutside(day, meal) {
-    outTarget = { day: day, meal: meal, key: slotKey(day, meal) };
+    outTarget = { day: day, meal: meal, key: slotKey(day, meal), edit: false };
     var ex = outsideOf(day, meal);
-    outSub.textContent = (meal === 'lunch' ? '점심' : '저녁') + '에 먹은 외식을 적으면 메뉴별 칼로리·탄단지를 계산해서 오늘 목표에 더해요.';
+    outSub.textContent = '먹은 메뉴를 적고, 메뉴마다 먹은 양을 따로 맞춰요.';
+    if (outTitle) outTitle.textContent = '외식 기록';
+    outSave.textContent = '기록하기';
     outText.value = '';
-    outPortion = ex && ex.portion ? outFx(ex.portion) : 1;
     outPhotoData = ex && ex.photo ? String(ex.photo) : '';
+    outItems = outItemsFromRecord(ex);
+    outSel = Math.max(0, outMainIndex());
     paintPhoto();
-    outItems = ex && ex.items ? ex.items.map(function (x) {
-      return { label: x.label, qty: x.qty, unit: x.unit, kcal: x.kcal, c: x.c, p: x.p, f: x.f, guess: false };
-    }) : [];
+    renderOut();
+    openSheet(outSheet);
+    setTimeout(function () { if (outText && outText.focus) outText.focus(); }, 320);
+  }
+
+  /* 저장된 외식 카드의 ✏️ 수정 — 적어 둔 메뉴·양·사진을 그대로 불러온다 */
+  function openOutsideEdit(day, meal) {
+    var ex = outsideOf(day, meal);
+    if (!ex) return;
+    outTarget = { day: day, meal: meal, key: slotKey(day, meal), edit: true };
+    outSub.textContent = '적어 둔 메뉴·먹은 양·사진이 그대로 불러왔어요. 고처서 수정 완료를 누르면 바로 바뀝니다.';
+    if (outTitle) outTitle.textContent = '외식 기록 수정';
+    outSave.textContent = '수정 완료';
+    outItems = outItemsFromRecord(ex);
+    outText.value = ex.rawText || outTextFromItems(outItems);
+    outPhotoData = ex.photo ? String(ex.photo) : '';
+    outSel = Math.max(0, outMainIndex());
+    paintPhoto();
     renderOut();
     openSheet(outSheet);
     setTimeout(function () { if (outText && outText.focus) outText.focus(); }, 320);
@@ -5928,15 +6035,19 @@
   function saveOutside() {
     if (!outTarget || !outItems.length) return;
     var key = outTarget.key;
+    var edited = !!outTarget.edit;
     var t = outTotals(outScaled(outItems));
     var names = outItems.map(function (x) { return x.label; });
     var name = names.slice(0, 2).join(' · ') + (names.length > 2 ? ' 외 ' + (names.length - 2) : '');
     if (!state.outside) state.outside = {};
     state.outside[key] = {
       name: name,
-      items: outItems.map(function (x) { return { label: x.label, qty: x.qty, unit: x.unit, kcal: x.kcal, c: x.c, p: x.p, f: x.f }; }),
+      rawText: outTextFromItems(outItems),
+      items: outItems.map(function (x) {
+        return { label: x.label, title: x.title || x.label, qty: x.qty, unit: x.unit, baseQty: x.baseQty, uk: x.uk, uc: x.uc, up: x.up, uf: x.uf };
+      }),
       kcal: t.kcal, c: t.c, p: t.p, f: t.f,
-      portion: outPortion
+      portion: 1
     };
     if (outPhotoData) state.outside[key].photo = outPhotoData;
     state.skips[key] = true;
@@ -5946,9 +6057,10 @@
     closeSheets();
     outTarget = null;
     outItems = [];
+    outSel = 0;
     outPhotoData = '';
     renderAll();
-    toast('외식 ' + fmtN(t.kcal) + 'kcal · 단 ' + g1(t.p) + 'g 기록했어요');
+    toast((edited ? '외식 기록을 수정했어요 · ' : '외식 ') + fmtN(t.kcal) + 'kcal · 단 ' + g1(t.p) + 'g');
     if (!kept) setTimeout(function () { toast('사진은 저장 공간이 부족해 남기지 못했어요'); }, 1900);
   }
 
@@ -6665,6 +6777,8 @@
       if (state.outside) delete state.outside[k];
       save(); renderAll();
       toast('외식 기록을 되돌렸어요');
+    } else if (act === 'editOut') {
+      openOutsideEdit(d, m);
     } else if (act === 'eat') {
       openEat(d, m);
     } else if (act === 'uneat') {
@@ -6772,6 +6886,7 @@
     var del = e.target.closest('[data-outdel]');
     if (del) {
       outItems.splice(+del.getAttribute('data-outdel'), 1);
+      if (!(outSel >= 0 && outSel < outItems.length)) outSel = Math.max(0, outMainIndex());
       renderOut();
       return;
     }
@@ -6780,31 +6895,27 @@
       var i = +st.getAttribute('data-oi');
       var x = outItems[i];
       if (!x) return;
+      outSel = i;
       var dir = +st.getAttribute('data-outq');
-      var nq = Math.round((x.qty + dir * 0.5) * 2) / 2;
-      if (nq < 0.5) nq = 0.5;
-      if (nq > 20) nq = 20;
-      var ratio = nq / (x.qty || 1);
-      x.kcal = Math.round(x.kcal * ratio);
-      x.c = outRound(x.c * ratio);
-      x.p = outRound(x.p * ratio);
-      x.f = outRound(x.f * ratio);
-      x.qty = nq;
+      outSetQty(x, outQty(x) + dir * outStepOf(x.unit));
+      renderOut();
+      return;
+    }
+    var row = e.target.closest('[data-oisel]');
+    if (row) {
+      outSel = +row.getAttribute('data-oisel');
       renderOut();
     }
   });
   outSave.addEventListener('click', saveOutside);
 
-  /* 먹은 양: 프리셋 칩 + 슬라이더 */
+  /* 먹은 양: 고른 항목 하나의 칩 — 그 메뉴만 바뀐다 */
   if (outPortionChips) {
     outPortionChips.addEventListener('click', function (e) {
       var b = e.target.closest('[data-portion]');
       if (!b) return;
-      setPortion(+b.getAttribute('data-portion'));
+      setOutChip(+b.getAttribute('data-portion'));
     });
-  }
-  if (outPortionRange) {
-    outPortionRange.addEventListener('input', function () { setPortion(+outPortionRange.value); });
   }
 
   /* 외식 사진 */
