@@ -5386,36 +5386,6 @@
     { key: 'salad', re: /샐러드|포케|파워볼/ }
   ];
 
-  /* 그림마다 1인분을 부르는 말과 프리셋 버튼 글자 */
-  var FOOD_GUIDE = {
-    meat: {
-      words: ['반 줄', '한 줄', '한 줄 반', '두 줄'],
-      one: function (l, m) {
-        return /삼겹|목살|항정|가브리|갈매기|토시|살치|차돌/.test(l)
-          ? l + ' 한 줄 · 약 ' + ((m && m.servingG) || 180) + 'g'
-          : l + ' 한 접시';
-      }
-    },
-    soup: { words: ['반 그릇', '한 그릇', '한 그릇 반', '두 그릇'], one: function (l) { return l + ' 한 그릇'; } },
-    noodle: { words: ['반 그릇', '한 그릇', '곱빼기', '두 그릇'], one: function (l) { return l + ' 한 그릇'; } },
-    pieces: {
-      words: ['반 접시', '한 접시', '한 접시 반', '두 접시'],
-      one: function (l) { return /치킨/.test(l) ? l + ' 4조각' : l + ' 한 접시'; }
-    },
-    round: {
-      words: ['반 판', '한 판', '한 판 반', '두 판'],
-      one: function (l) { return /케이크|케익|타르트/.test(l) ? l + ' 한 조각' : l + ' 한 판 · 8조각'; }
-    },
-    bread: { words: ['반 개', '한 개', '한 개 반', '두 개'], one: function (l) { return l + ' 한 개'; } },
-    drink: {
-      words: ['반 잔', '한 잔', '한 잔 반', '두 잔'],
-      one: function (l, m) {
-        return l + ' 한 잔' + (m && m.servingG && !/커피|아메리카노|라떼/.test(l) ? ' · ' + m.servingG + 'ml' : '');
-      }
-    },
-    salad: { words: ['반 접시', '한 접시', '한 접시 반', '두 접시'], one: function (l) { return l + ' 한 접시'; } },
-    bowl: { words: ['반 그릇', '한 그릇', '한 그릇 반', '두 그릇'], one: function (l) { return (l || '한 끼') + ' 한 그릇'; } }
-  };
 
   function outFoodMeta(label) {
     for (var i = 0; i < FOOD_DB.length; i++) {
