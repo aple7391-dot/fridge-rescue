@@ -883,7 +883,7 @@ function parseSentence(raw, base){
   }
 
   /* ── 미정 여부 ────────────────────────────────────────── */
-  var unc = take(/(시간\s*미정|시간미정|미정|틈틈이|틈틈히|비는\s*시간|남는\s*시간|자투리)/);
+  var unc = take(/(시간\s*미정|시간미정|미정|틈틈이|틈틈히|비는\s*시간\s*(?:동안|에는|에)?|남는\s*시간\s*(?:동안|에는|에)?|자투리)/);
   var uncertain = !!unc || start == null || vague;
   if (unc && /틈틈/.test(unc[1])) whenLabel = '틈틈이';
 
@@ -900,7 +900,7 @@ function parseSentence(raw, base){
   if (!cat) cat = 'errand';
 
   /* ── 제목 정리 ────────────────────────────────────────── */
-  var sents = rest.split(/\s*[.。!?]\s*|\s{2,}/).map(function(s){ return s.trim(); }).filter(Boolean);
+  var sents = rest.replace(/\s+/g, ' ').trim().split(/\s*[.。!?]\s*|\s{2,}/).map(function(s){ return s.trim(); }).filter(Boolean);
   var title = '';
   for (var si = 0; si < sents.length; si++){
     var s = sents[si]
@@ -908,6 +908,7 @@ function parseSentence(raw, base){
       .replace(/정도/g, ' ')
       .replace(/(^|\s)약\s/g, ' ')
       .replace(/^(에|에는|쯤|부터|까지)\s*/,'')
+      .replace(/^(소요|예정|진행|걸릴)\s*[,.]?\s*/,'')
       .replace(/\s+/g, ' ')
       .trim();
     for (var t = 0; t < 3; t++) s = s.replace(META_TAIL, '').replace(/\s+/g,' ').trim();
