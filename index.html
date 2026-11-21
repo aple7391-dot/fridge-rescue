@@ -5538,14 +5538,29 @@
     var lab = listEl.querySelector('[data-pctv="' + it.id + '"]');
     if (lab) lab.innerHTML = p + '%<small>' + pctLabel(p) + '</small>';
     var row = s.closest('.item');
-    if (row) row.classList.toggle('is-done', it.done);
+    if (row) {
+      row.classList.toggle('is-done', it.done);
+      /* 일부만 남았을 때만 '다 먹음' 버튼을 붙인다 (행을 다시 그리지 않아 드래그가 끊기지 않게) */
+      var fin = row.querySelector('.finish-btn');
+      var need = !it.done && p > 0 && p < 100;
+      if (need && !fin) {
+        var btn = document.createElement('button');
+        btn.className = 'finish-btn';
+        btn.setAttribute('data-act', 'finish');
+        btn.setAttribute('data-id', it.id);
+        btn.setAttribute('aria-label', it.name + ' 다 먹음 처리');
+        btn.textContent = '다 먹음';
+        var top = row.querySelector('.item-top');
+        if (top) top.appendChild(btn);
+      } else if (!need && fin) {
+        fin.parentNode.removeChild(fin);
+      }
+    }
+    var lab2 = listEl.querySelector('[data-pctv="' + it.id + '"]');
+    if (lab2) lab2.classList.toggle('dim', p === 0);
     renderDash();
     renderMeals();
-  });
-  listEl.addEventListener('change', function (e) {
-    if (!e.target.closest('[data-pct]')) return;
     renderLeftover();
-    renderList();
   });
 
   listEl.addEventListener('click', function (e) {
