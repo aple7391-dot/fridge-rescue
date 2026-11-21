@@ -90,6 +90,17 @@
     font-size:18px;font-weight:700;line-height:1;display:grid;place-items:center;
   }
   .ghost-btn:active{transform:scale(.95)}
+  .topbar-act{display:flex;align-items:center;gap:8px}
+  /* 상단 헤더의 임박 요약 — 식단·기록 탭에서만 아주 작게 한 줄 */
+  .hd-chip{
+    display:none;align-items:center;gap:3px;height:28px;padding:0 10px;
+    border-radius:999px;background:var(--red-soft);color:#C2323E;
+    font-size:11.5px;font-weight:700;letter-spacing:-.02em;white-space:nowrap;
+  }
+  .hd-chip.is-on{display:inline-flex}
+  .hd-chip b{font-weight:800}
+  .hd-chip i{font-style:normal;font-size:13px;font-weight:700;color:#D9A6AA;line-height:1}
+  .hd-chip:active{background:#FFE3E3}
 
   /* ── 대시보드 ── */
   .dash{
@@ -714,22 +725,6 @@
   }
   .gadd:active{background:#EFF3F6;transform:scale(.97)}
 
-  /* ── 급한 재료 사인: 한 줄 띠 ── */
-  .uc-strip{
-    display:flex;align-items:center;gap:8px;width:100%;
-    margin:0 0 14px;padding:10px 12px;min-height:50px;
-    border-radius:16px;background:#FFF6F6;border:1px solid #FBDCDC;
-  }
-  .uc-strip:active{background:#FFEFEF}
-  .uc-strip-head{flex:0 0 auto;font-size:12px;font-weight:800;color:#C2323E;letter-spacing:-.02em;white-space:nowrap}
-  .uc-strip-chips{flex:1;min-width:0;display:flex;gap:5px;overflow-x:auto;scrollbar-width:none}
-  .uc-strip-chips::-webkit-scrollbar{display:none}
-  .uc-chip{
-    flex:0 0 auto;font-size:11.5px;font-weight:600;color:#8A4A50;
-    background:#fff;padding:5px 8px;border-radius:8px;white-space:nowrap;
-  }
-  .uc-chip.more{color:#B4696E}
-  .uc-strip-go{flex:0 0 auto;font-size:16px;font-weight:700;color:#D9A6AA;line-height:1}
   .rs-h3sub{font-size:11.5px;font-weight:600;color:var(--sub);margin-left:5px;letter-spacing:-.01em}
 
   /* 레시피 보기 버튼 */
@@ -1088,6 +1083,11 @@
   .goalbox .gap-pick{margin-top:7px}
   .goal-pick{margin-top:13px}
   .goal-pick-label{display:block;font-size:11px;font-weight:700;color:var(--sub);letter-spacing:-.01em;margin-bottom:7px}
+  /* 목표 카드 안에 남는 건 내가 이미 담은 추가 섭취뿐 */
+  .goal-added{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+  .goal-added-head{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;color:var(--ink2);letter-spacing:-.03em}
+  .goal-added-head span{margin-left:auto;font-size:11.5px;font-weight:600;color:var(--sub);letter-spacing:-.01em}
+  .goal-added .extra-chips{margin-top:9px}
   .goal-ok{margin-top:13px;font-size:12.5px;font-weight:700;color:#0A8A5F;background:var(--green-soft);border-radius:11px;padding:10px 12px;line-height:1.5}
   .goalbox-foot{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line2);font-size:11.5px;color:var(--sub);font-weight:500;line-height:1.5}
   .macro-gram em{
@@ -1241,10 +1241,7 @@
   .wline.is-open .caret{transform:rotate(180deg)}
   .wsum-detail[hidden]{display:none}
 
-  /* ══ 추가 섭취 ══ */
-  .extra{margin:0 0 14px;padding:16px 16px 14px;border-radius:20px;background:#fff;box-shadow:var(--shadow)}
-  .extra-head{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;letter-spacing:-.03em;color:var(--ink)}
-  .extra-head span{margin-left:auto;font-size:12px;font-weight:600;color:var(--sub);letter-spacing:-.01em}
+  /* ══ 추가 섭취 (목표 카드 안) ══ */
   .extra-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
   .exchip{
     display:inline-flex;align-items:center;gap:6px;min-height:38px;
@@ -1256,7 +1253,22 @@
     font-size:10px;font-weight:800;color:#7FA9E0;background:#E3EFFE;line-height:1;
   }
   .exchip:active{background:#EAF3FF}
-  .extra-empty{margin-top:10px;font-size:12.5px;color:var(--sub);font-weight:500;line-height:1.5}
+  /* 부족 영양 보충 — 기본은 접힌 한 줄, 누를 때만 추천 칩을 편다 */
+  .gap-foot{display:flex;align-items:center;gap:10px;margin-top:13px;padding-top:12px;border-top:1px solid var(--line)}
+  .gap-note{flex:1;min-width:0;font-size:12px;font-weight:600;color:var(--sub);letter-spacing:-.01em;line-height:1.45}
+  .gap-note.ok{color:#0A8A5F;font-weight:700}
+  .gap-toggle{
+    flex:0 0 auto;font-size:12px;font-weight:700;color:var(--ink2);
+    padding:7px 10px;border-radius:9px;background:#F2F4F6;white-space:nowrap;min-height:34px;
+  }
+  .gap-toggle i{font-style:normal;font-size:10.5px;margin-left:3px;color:var(--sub);display:inline-block;transition:transform .16s}
+  .gap-toggle[aria-expanded="true"] i{transform:rotate(180deg)}
+  .gap-toggle:active{background:#E5E8EB}
+  .gap-panel{margin-top:11px}
+  .gap-panel .gap-pick{margin-top:0}
+  .gap-cap{font-size:11px;font-weight:700;color:var(--sub);letter-spacing:-.01em;margin-bottom:7px}
+  .gap-cap-sub{margin-top:11px}
+  .gap-panel .extra-quick{margin-top:9px}
   .extra-quick{display:flex;gap:6px;overflow-x:auto;margin-top:11px;padding-bottom:2px;scrollbar-width:none}
   .extra-quick::-webkit-scrollbar{display:none}
   .exq{
@@ -1347,12 +1359,6 @@
   }
   .out-area:focus{border-color:var(--blue);background:#fff}
   .out-area::placeholder{color:var(--sub2);font-weight:400}
-  .out-quick{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
-  .out-q{
-    min-height:40px;padding:9px 12px;border-radius:11px;background:#F5F7F9;
-    font-size:12.5px;font-weight:600;color:var(--ink2);letter-spacing:-.01em;white-space:nowrap;
-  }
-  .out-q:active{background:var(--blue-soft);color:var(--blue-deep)}
   .out-list{margin-top:6px}
   .out-item{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid var(--line);min-height:58px;cursor:pointer}
   .out-item:last-child{border-bottom:0}
@@ -1454,7 +1460,10 @@
         <p>한 달 소진 프로젝트</p>
       </div>
     </div>
-    <button class="ghost-btn" id="menuBtn" aria-label="더보기">⋯</button>
+    <div class="topbar-act">
+      <button type="button" class="hd-chip" id="hdChip" aria-label="임박 재료 보기"></button>
+      <button class="ghost-btn" id="menuBtn" aria-label="더보기">⋯</button>
+    </div>
   </header>
 
   <section class="dash" id="dash"></section>
@@ -1650,10 +1659,9 @@
 
   <div class="field">
     <label for="outText">먹은 메뉴 <span class="hint-inline">쉼표로 나눠 적어요</span></label>
-    <textarea id="outText" class="out-area" maxlength="140" placeholder="예: 청년치킨 후라이드 4조각, 소스 2팩, 맥주 1잔"></textarea>
+    <textarea id="outText" class="out-area" maxlength="140" placeholder="예: 삼겹살 1줄, 껍데기 4점, 구운김치"></textarea>
   </div>
 
-  <div class="out-quick" id="outQuick"></div>
   <div class="out-list" id="outList"></div>
 
   <div class="portion" id="outPortionBox" hidden>
@@ -2700,18 +2708,54 @@
     else if (kind === 'c') gapMsg = '탄수화물이 ' + g1(Math.round(g.c - t.c)) + 'g 모자라요';
     else if (kind === 'v') gapMsg = '채소·식이섬유를 조금 더';
 
-    return '<section class="goalbox">' +
+    /* 이미 담은 추가 섭취만 목표 카드에 그대로 두고, 추천 칩은 접어 둔다 */
+    var ids = (state.snacks[dateKey(day)] || []).filter(function (id) { return !!byId(id); });
+    var addKcal = 0, addP = 0;
+    var addChips = ids.map(function (id) {
+      var it = byId(id);
+      if (!it) return '';
+      var n = nutriOf(it);
+      addKcal += n.c * 4 + n.p * 4 + n.f * 9;
+      addP += n.p;
+      return '<button type="button" class="exchip" data-extradel="' + esc(id) + '" aria-label="' + esc(it.name) + ' 빼기">' +
+        '<span>' + emojiOf(it) + ' ' + esc(it.name) + '</span><span class="x">✕</span></button>';
+    }).join('');
+
+    var addRow = ids.length
+      ? '<div class="goal-added">' +
+          '<div class="goal-added-head">🍪 추가 섭취<span>' + ids.length + '개 · ' + Math.round(addKcal) + 'kcal · 단 ' + Math.round(addP) + 'g</span></div>' +
+          '<div class="extra-chips">' + addChips + '</div>' +
+        '</div>'
+      : '';
+
+    var open = !!ui.gapOpen;
+
+    var snackChips = SNACKS.map(function (sn) {
+      var on = ids.indexOf(sn.id) !== -1;
+      return '<button type="button" class="exq' + (on ? ' is-on' : '') + '" data-snack="' + sn.id + '" data-snackday="' + day + '">' +
+        sn.emo + ' ' + sn.label + '</button>';
+    }).join('');
+
+    var panel = open
+      ? '<div class="gap-panel">' +
+          (pickHtml ? '<p class="gap-cap">남은 재료로 채우기</p><div class="gap-pick">' + pickHtml + '</div>' : '') +
+          '<p class="gap-cap' + (pickHtml ? ' gap-cap-sub' : '') + '">간식으로 채우기</p>' +
+          '<div class="extra-quick">' + snackChips + '</div>' +
+        '</div>'
+      : '';
+
+    return '<section class="goalbox" data-extraday="' + day + '">' +
       '<div class="goalbox-head">' +
         '<span class="goalbox-title">🎯 ' + (day === 'today' ? '오늘' : '내일') + ' 목표 대비</span>' +
         '<button type="button" class="goal-edit" data-act="goalopen">목표 수정</button>' +
       '</div>' +
       '<div class="goalrows">' + rows + '</div>' +
-      (pickHtml
-        ? '<div class="goal-pick">' +
-            '<span class="goal-pick-label">' + esc(gapMsg) + '</span>' +
-            '<div class="gap-pick">' + pickHtml + '</div>' +
-          '</div>'
-        : '<p class="goal-ok">🎉 오늘 목표를 거의 채웠어요</p>') +
+      addRow +
+      '<div class="gap-foot">' +
+        '<span class="gap-note' + (gapMsg ? '' : ' ok') + '">' + (gapMsg ? esc(gapMsg) : '🎉 오늘 목표를 거의 채웠어요') + '</span>' +
+        '<button type="button" class="gap-toggle" data-gaptop="1" aria-expanded="' + (open ? 'true' : 'false') + '">부족 영양 보충 <i>▾</i></button>' +
+      '</div>' +
+      panel +
     '</section>';
   }
 
@@ -2952,7 +2996,8 @@
   var gCalc = $('gCalc'), gPresets = $('gPresets'), gAcc = $('gAcc');
 
   var outSheet = $('outSheet'), outSub = $('outSub'), outText = $('outText');
-  var outQuick = $('outQuick'), outList = $('outList'), outTotal = $('outTotal');
+  var hdChip = $('hdChip');
+  var outList = $('outList'), outTotal = $('outTotal');
   var outKcal = $('outKcal'), outMacro = $('outMacro'), outGap = $('outGap'), outSave = $('outSave');
   var outPortionBox = $('outPortionBox'), outPortionChips = $('outPortionChips');
   var outPortionVal = $('outPortionVal'), outPortionWho = $('outPortionWho');
@@ -2967,7 +3012,7 @@
   var depYes = $('depYes'), depNo = $('depNo');
 
   /* ── 상태 ── */
-  var ui = { tab: 'pantry', filter: 'all', hideDone: false, day: 'today', warnOpen: {}, openMeal: {} };
+  var ui = { tab: 'pantry', filter: 'all', hideDone: false, day: 'today', gapOpen: false, warnOpen: {}, openMeal: {} };
   var histUI = { view: 'calendar', month: null, day: null };
   var editor = { mode: 'add', id: null, loc: 'fridge', urg: 'normal', emoji: null, origQty: '' };
   var eatTarget = null;
@@ -4121,43 +4166,6 @@
     '</article>';
   }
 
-  /* ── 보고 있는 날의 레시피에 안 쓰인 급한 재료 사인 ── */
-  function urgentCallout(day) {
-    var used = {};
-    ['lunch', 'dinner'].forEach(function (m) {
-      if (state.skips[slotKey(day, m)]) return;
-      var r = mealRecipe(day, m);
-      if (r) (r.uses || []).forEach(function (id) { used[id] = true; });
-    });
-
-    var list = state.ingredients.filter(function (it) {
-      if (isDepleted(it)) return false;
-      if (it.urg !== 'urgent' && it.urg !== 'soon') return false;
-      return !used[it.id];
-    });
-    list.sort(function (a, b) {
-      var d = URG[a.urg].order - URG[b.urg].order;
-      if (d !== 0) return d;
-      return LOCS[a.loc].order - LOCS[b.loc].order;
-    });
-    if (!list.length) return '';
-
-    var shown = list.slice(0, 4);
-    var rest = list.length - shown.length;
-
-    /* 카드 사이를 차지하지 않게 한 줄 띠로 접는다 */
-    var chips = shown.map(function (it) {
-      return '<span class="uc-chip">' + emojiOf(it) + ' ' + esc(it.name) + '</span>';
-    }).join('') +
-      (rest > 0 ? '<span class="uc-chip more">+' + rest + '</span>' : '');
-
-    return '<button type="button" class="uc-strip" data-uc="' + esc(shown[0].id) + '" aria-label="급한 재료 정리하러 가기">' +
-      '<span class="uc-strip-head">🚨 ' + (day === 'today' ? '오늘' : '내일') + ' 안에 정리</span>' +
-      '<span class="uc-strip-chips">' + chips + '</span>' +
-      '<span class="uc-strip-go">›</span>' +
-    '</button>';
-  }
-
   /* ── 오늘 / 내일 세그먼트 ── */
   function dayTabs() {
     var day = ui.day === 'tomorrow' ? 'tomorrow' : 'today';
@@ -4166,37 +4174,6 @@
         label + '<em>' + shortDate(offset) + '</em></button>';
     }
     return '<div class="daytabs" role="tablist">' + tab('today', '오늘', 0) + tab('tomorrow', '내일', 1) + '</div>';
-  }
-
-  /* ── 추가 섭취: 보충 음식·간식을 칩으로 담고 ✕로 바로 빼는 영역 ── */
-  function extrasBox(day) {
-    var dk = dateKey(day);
-    var ids = (state.snacks[dk] || []).filter(function (id) { return !!byId(id); });
-    var kcal = 0, p = 0;
-    var chips = ids.map(function (id) {
-      var it = byId(id);
-      if (!it) return '';
-      var n = nutriOf(it);
-      kcal += n.c * 4 + n.p * 4 + n.f * 9;
-      p += n.p;
-      return '<button type="button" class="exchip" data-extradel="' + esc(id) + '" aria-label="' + esc(it.name) + ' 빼기">' +
-        '<span>' + emojiOf(it) + ' ' + esc(it.name) + '</span><span class="x">✕</span></button>';
-    }).join('');
-
-    var quick = SNACKS.map(function (sn) {
-      var on = ids.indexOf(sn.id) !== -1;
-      return '<button type="button" class="exq' + (on ? ' is-on' : '') + '" data-snack="' + sn.id + '" data-snackday="' + day + '">' +
-        sn.emo + ' ' + sn.label + '</button>';
-    }).join('');
-
-    return '<section class="extra" data-extraday="' + day + '">' +
-      '<div class="extra-head">🍪 추가 섭취' +
-        '<span>' + (ids.length ? ids.length + '개 · ' + Math.round(kcal) + 'kcal · 단 ' + Math.round(p) + 'g' : '') + '</span>' +
-      '</div>' +
-      (chips ? '<div class="extra-chips">' + chips + '</div>'
-             : '<p class="extra-empty">간식이나 모자란 영양을 여기에 담으면 오늘 목표에 바로 더해져요.</p>') +
-      '<div class="extra-quick">' + quick + '</div>' +
-    '</section>';
   }
 
   function addExtra(day, id) {
@@ -4252,9 +4229,7 @@
       '</div>' +
       dayTabs() +
       goalBox(day) +
-      extrasBox(day) +
       mealCard(day, 'lunch') +
-      urgentCallout(day) +
       mealCard(day, 'dinner');
   }
 
@@ -4657,8 +4632,18 @@
   /* =========================================================
      렌더
      ========================================================= */
+  /* 상단 헤더의 임박 요약 칩 — 소진 체크 탭에서는 대시보드가 이미 보여줘서 숨긴다 */
+  function renderHdChip() {
+    if (!hdChip) return;
+    var n = state.ingredients.filter(function (i) { return !i.done && (i.urg === 'urgent' || i.urg === 'soon'); }).length;
+    hdChip.classList.toggle('is-on', n > 0 && ui.tab !== 'pantry');
+    hdChip.innerHTML = '임박 <b>' + n + '</b><i>›</i>';
+    hdChip.setAttribute('aria-label', '임박 재료 ' + n + '개 보기');
+  }
+
   function renderAll() {
     renderDash();
+    renderHdChip();
     renderFilters();
     renderLeftover();
     renderList();
@@ -4676,6 +4661,7 @@
     $('view-meals').classList.toggle('is-hidden', tab !== 'meals');
     $('view-history').classList.toggle('is-hidden', tab !== 'history');
     $('fabAdd').classList.toggle('is-hidden-tab', tab !== 'pantry');
+    renderHdChip();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -5205,9 +5191,6 @@
 
   var OUT_UNITS = ['조각', '그릇', '인분', '팩', '잔', '캔', '병', '봉지', '봉', '줄', '마리', '접시', '세트', '장', '알', '컵', '사발', '스푼', '점', '쪽', '줄기', '줌', '모', '덩이', '개', '판', '사리', '그램', 'ml', 'g'];
 
-  var OUT_QUICK = [
-    '치킨 4조각', '삼겹살 5점', '돼지껍데기 4점', '순대국밥 1그릇', '파스타 1인분', '맥주 1잔'
-  ];
 
   /* 긴 단위부터 매칭해야 '봉지'가 '봉'으로, '줄기'가 '줄'로 잘리지 않는다 */
   var OUT_UNIT_ALT = OUT_UNITS.slice().sort(function (a, b) { return b.length - a.length; }).join('|');
@@ -5347,12 +5330,6 @@
     t.c = outRound(t.c); t.p = outRound(t.p); t.f = outRound(t.f);
     t.kcal = Math.round(t.kcal);
     return t;
-  }
-
-  function paintOutQuick() {
-    outQuick.innerHTML = OUT_QUICK.map(function (q) {
-      return '<button type="button" class="out-q" data-outq="' + esc(q) + '">' + esc(q) + '</button>';
-    }).join('');
   }
 
   /* ══════════════════════════════════════════════════════════
@@ -6359,13 +6336,20 @@
 
   dashEl.addEventListener('click', function (e) {
     if (e.target.closest('[data-jumpurgent]')) {
-      ui.filter = 'urgent';
-      ui.hideDone = false;
-      setTab('pantry');
-      renderFilters();
-      renderList();
+      jumpUrgent();
     }
   });
+
+  /* 임박 재료로 바로 가기 — 소진 체크 탭의 급한 순 목록 */
+  function jumpUrgent() {
+    ui.filter = 'urgent';
+    ui.hideDone = false;
+    setTab('pantry');
+    renderFilters();
+    renderList();
+  }
+
+  if (hdChip) hdChip.addEventListener('click', jumpUrgent);
 
   filtersEl.addEventListener('click', function (e) {
     var f = e.target.closest('[data-filter]');
@@ -6649,9 +6633,16 @@
     /* 추가 섭취 칩 ✕ → 바로 빼기 (토스트에서 되돌리기) */
     var exDel = e.target.closest('[data-extradel]');
     if (exDel) {
-      var exCard = exDel.closest('.extra');
+      var exCard = exDel.closest('[data-extraday]');
       var exDay = exCard && exCard.getAttribute('data-extraday') ? exCard.getAttribute('data-extraday') : ui.day;
       removeExtra(exDay, exDel.getAttribute('data-extradel'));
+      return;
+    }
+
+    /* 부족 영양 보충 → 기본은 접힌 한 줄, 누를 때만 추천 칩 펼침 */
+    if (e.target.closest('[data-gaptop]')) {
+      ui.gapOpen = !ui.gapOpen;
+      renderMeals();
       return;
     }
 
@@ -6659,22 +6650,6 @@
     if (dt) {
       ui.day = dt.getAttribute('data-daytab') === 'tomorrow' ? 'tomorrow' : 'today';
       renderMeals();
-      return;
-    }
-
-    var uc = e.target.closest('[data-uc]');
-    if (uc) {
-      ui.filter = 'urgent';
-      ui.hideDone = false;
-      setTab('pantry');
-      renderFilters();
-      renderList();
-      var urow = listEl.querySelector('[data-row="' + uc.getAttribute('data-uc') + '"]');
-      if (urow) {
-        urow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        urow.classList.add('flash');
-        setTimeout(function () { urow.classList.remove('flash'); }, 1200);
-      }
       return;
     }
 
@@ -6838,17 +6813,7 @@
   }
 
   /* ── 외식 기록 시트 ── */
-  paintOutQuick();
   outText.addEventListener('input', function () {
-    outItems = parseOutsideText(outText.value);
-    renderOut();
-  });
-  outQuick.addEventListener('click', function (e) {
-    var b = e.target.closest('[data-outq]');
-    if (!b) return;
-    var q = b.getAttribute('data-outq');
-    var cur = outText.value.trim();
-    outText.value = cur ? cur + ', ' + q : q;
     outItems = parseOutsideText(outText.value);
     renderOut();
   });
