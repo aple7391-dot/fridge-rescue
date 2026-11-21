@@ -275,7 +275,7 @@ h1,h2,h3,p{margin:0}
   border-radius:var(--r-full);padding:4px 9px;font-variant-numeric:tabular-nums;
 }
 
-.timeline{position:relative;height:calc(15 * var(--hour-h));margin-top:6px}
+.timeline{position:relative;height:calc(15 * var(--hour-h));margin-top:16px}
 .tl-hour{position:absolute;left:0;right:0;height:0;border-top:1px solid #F1F2F4}
 .tl-hour:first-child{border-top-color:transparent}
 .tl-hour>i{
@@ -288,8 +288,8 @@ h1,h2,h3,p{margin:0}
 
 .tl-block{
   position:absolute;left:var(--tl-gutter);right:0;
-  border-radius:10px;padding:5px 4px 5px 6px;
-  display:flex;align-items:stretch;gap:2px;
+  border-radius:10px;padding:4px 3px 4px 5px;
+  display:flex;align-items:center;gap:2px;
   background:var(--w);
   box-shadow:inset 3px 0 0 var(--c);
   overflow:hidden;isolation:isolate;
@@ -305,21 +305,17 @@ h1,h2,h3,p{margin:0}
 .tl-block.is-done{opacity:.55}
 .tl-block.is-done .tl-title{text-decoration:line-through}
 .tl-block.is-tiny .tl-meta{display:none}
-.tl-block.is-tiny{padding-top:3px;padding-bottom:3px}
-.tl-body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:1px}
+.tl-block.is-tiny{padding-top:2px;padding-bottom:2px;align-items:center}
+.tl-body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:0}
 .tl-title{
   font-size:12px;font-weight:var(--fw-m);line-height:1.25;color:var(--text-1);
   letter-spacing:-.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 .tl-meta{
-  font-size:10px;color:var(--text-3);line-height:1.2;
+  font-size:9.5px;color:var(--text-3);line-height:1.25;
   font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
-.tl-tag{
-  font-size:8.5px;line-height:10px;padding:1px 3px;border-radius:3px;
-  background:rgba(255,255,255,.75);color:var(--c);border:.5px solid rgba(19,20,21,.08);
-  align-self:flex-start;letter-spacing:-.02em;
-}
+.tl-flex-label{color:var(--brand-strong)}
 .grip{
   width:15px;flex:none;border-radius:5px;cursor:grab;touch-action:none;
   display:grid;place-items:center;opacity:.30;
@@ -947,7 +943,7 @@ function placementsFor(dateStr){
     .sort(function(a,b){ return (b.dur || 60) - (a.dur || 60); });
 
   flex.forEach(function(it){
-    var d = it.dur || 60, s = null, t = 18*60;
+    var d = it.dur || 60, s = null, t = 19*60;
     while (t + d <= END_HOUR*60){
       var clash = occ.some(function(o){ return t < o.e && t + d > o.s; });
       if (!clash){ s = t; break; }
@@ -1131,9 +1127,10 @@ function renderDay(){
       var leftPct = (p.lane / p.lanes) * 100;
       var widthPct = (1 / p.lanes) * 100;
       var flex = it.uncertain && !it.confirmed;
-      var cls = 'tl-block' + (flex ? ' is-flex' : '') + (it.done ? ' is-done' : '') + (height < 36 ? ' is-tiny' : '');
-      var meta = toHHMM(p.s) + '–' + toHHMM(p.e) + ' · ' + fmtDurChip(it.dur);
-      var tag = flex ? '<span class="tl-tag">' + (it.whenLabel && it.whenLabel.indexOf('틈틈') >= 0 ? '틈틈이' : '어림') + '</span>' : '';
+      var tiny = height < 34;
+      var cls = 'tl-block' + (flex ? ' is-flex' : '') + (it.done ? ' is-done' : '') + (tiny ? ' is-tiny' : '');
+      var meta = toHHMM(p.s) + '–' + toHHMM(p.e) + ' · ' + fmtDurChip(it.dur) +
+        (flex ? '<span class="tl-flex-label"> · ' + (it.whenLabel && it.whenLabel.indexOf('틈틈') >= 0 ? '틈틈이' : '어림') + '</span>' : '');
       var leftStyle = leftPct === 0 ? 'var(--tl-gutter)'
         : 'calc(var(--tl-gutter) + (100% - var(--tl-gutter)) * ' + (leftPct/100).toFixed(4) + ')';
       var widthStyle = 'calc((100% - var(--tl-gutter)) * ' + (widthPct/100).toFixed(4) + ' - 2px)';
@@ -1145,7 +1142,6 @@ function renderDay(){
           '<div class="tl-body">' +
             '<span class="tl-title">' + esc(it.title) + '</span>' +
             '<span class="tl-meta">' + meta + '</span>' +
-            tag +
           '</div>' +
           '<div class="nudge">' +
             '<button data-act="nudge" data-id="' + it.id + '" data-dir="-1" aria-label="30분 앞으로">▲</button>' +
@@ -1844,7 +1840,7 @@ function addFromComposer(){
   renderAll();
 
   var when = it.start ? (mdLabel(it.date) + ' ' + it.start) : (mdLabel(it.date) + ' · 어림 배치');
-  toast(when + ' · ' + fmtDurChip(it.dur) + '로 담았어요', '되돌리기', function(){
+  toast(when + ' · ' + fmtDurChip(it.dur) + '으로 담았어요', '되돌리기', function(){
     state.items = state.items.filter(function(x){ return x.id !== it.id; });
     save(); renderAll();
   });
