@@ -80,6 +80,8 @@
 
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
+html{scrollbar-width:none}
+body::-webkit-scrollbar,.tl::-webkit-scrollbar,.chips::-webkit-scrollbar,.sh-body::-webkit-scrollbar{display:none}
 body{
   margin:0;background:var(--bg);color:var(--text-1);
   font-family:var(--font-sans);font-size:var(--fs-16);line-height:1.5;
@@ -367,7 +369,9 @@ h1,h2,h3,p{margin:0}
 /* ── All tasks ───────────────────────────────────────────── */
 .list-title{font-size:var(--fs-13);font-weight:var(--fw-b);letter-spacing:var(--tr-tighter)}
 .panel-note{font-size:var(--fs-10);color:var(--text-3);font-variant-numeric:tabular-nums;white-space:nowrap}
-.chips{display:flex;flex-wrap:nowrap;gap:5px;overflow-x:auto;scrollbar-width:none;padding-bottom:1px}
+.chips{display:flex;flex-wrap:nowrap;gap:5px;overflow-x:auto;scrollbar-width:none;padding-bottom:1px;
+  -webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 18px),transparent 100%);
+  mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 18px),transparent 100%);}
 .chips::-webkit-scrollbar{display:none}
 .chips + .chips{margin-top:5px}
 .chip{
