@@ -2692,7 +2692,8 @@
   function goalBox(day) {
     var t = dayMacros(day);
     var g = goals();
-    if (t.kcal <= 0) return '';
+    /* 먹은 기록이 하나도 없으면 목표 줄도 숨기지만, 담아 둔 추가 섭취는 남겨 둔다 */
+    if (t.kcal <= 0 && !(state.snacks[dateKey(day)] || []).length) return '';
 
     var rows = goalRowHtml('kcal', t.kcal) + goalRowHtml('c', t.c) + goalRowHtml('p', t.p) + goalRowHtml('f', t.f);
 
