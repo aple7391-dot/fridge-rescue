@@ -273,7 +273,7 @@ h1,h2,h3,p{margin:0}
 .day-title{font-size:var(--fs-14);font-weight:var(--fw-b);letter-spacing:var(--tr-tighter);line-height:1.3}
 .day-sub{font-size:var(--fs-11);color:var(--text-3);margin-top:1px;font-variant-numeric:tabular-nums}
 
-.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px;margin-top:7px}
+.split{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(0,1fr);gap:8px;margin-top:7px}
 .split-l{min-width:0}
 .split-r{min-width:0;border-left:1px solid var(--border-hair);padding-left:9px}
 
@@ -1257,10 +1257,14 @@ function tlLayout(placed, fullDay){
   rows.forEach(function(r){ if (r.t === 'h') byHour[r.h] = r; });
 
   function yFor(min){
-    var hh = clamp(Math.floor(min/60), lo, hi-1);
-    var r = byHour[hh];
-    if (!r) return null;
-    return r.y + ((min - hh*60)/60) * r.hgt;
+    if (min <= lo*60) return 0;
+    for (var i = 0; i < rows.length; i++){
+      var r = rows[i];
+      var t0 = (r.t === 'h' ? r.h : r.a) * 60;
+      var t1 = (r.t === 'h' ? r.h + 1 : r.b) * 60;
+      if (min >= t0 && min < t1) return r.y + ((min - t0)/(t1 - t0)) * r.hgt;
+    }
+    return y;
   }
   function minForY(py){
     for (var i = 0; i < rows.length; i++){
