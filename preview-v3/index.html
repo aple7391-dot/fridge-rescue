@@ -1141,7 +1141,7 @@
   .dot.eat{background:var(--blue)}
   .dot.out{background:#B0B8C1}
   .dot.none{background:#E5E8EB}
-  .dot.snack{background:#FFC64D}
+  .dot.snk{background:#FFC64D}
   .cal-cell.is-sel .dot.none{background:#4E5968}
   .cal-legend{display:flex;gap:10px;flex-wrap:wrap;padding:10px 4px 2px;font-size:11px;font-weight:600;color:var(--sub)}
   .cal-legend i{width:5px;height:5px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
@@ -2368,13 +2368,13 @@
     var unit = key === 'kcal' ? 'kcal' : 'g';
     var pct = goalPct(val, goal);
     var w = Math.max(0, Math.min(100, pct));
-    var diff = Math.round((goal - val) * 10) / 10;
+    var diff = Math.round(goal - val);
     var cls = '', note;
-    if (diff > 0.5) { note = g1(diff) + unit + ' 더 필요'; }
-    else if (diff < -0.5) { note = g1(-diff) + unit + ' 초과'; cls = ' over'; }
+    if (diff > 0) { note = (key === 'kcal' ? fmtN(diff) + 'kcal' : diff + 'g') + ' 더 필요'; }
+    else if (diff < 0) { note = (key === 'kcal' ? fmtN(-diff) + 'kcal' : (-diff) + 'g') + ' 초과'; cls = ' over'; }
     else { note = '목표 딱 맞음'; cls = ' done'; }
     var label = key === 'kcal' ? '칼로리' : MACRO_LABEL[key];
-    var vTxt = key === 'kcal' ? fmtN(val) : g1(Math.round((val || 0) * 10) / 10);
+    var vTxt = key === 'kcal' ? fmtN(val) : String(Math.round(val || 0));
     var gTxt = key === 'kcal' ? fmtN(goal) : g1(goal);
     return '<div class="growseg' + cls + '">' +
       '<div class="gline">' +
@@ -3302,7 +3302,7 @@
           : '<span class="alert-pill cool">🎉 급하게 처리할 재료 없음</span>') +
         (soonLeft ? '<span class="alert-pill">⏳ 곧 소진 ' + soonLeft + '개</span>' : '') +
         (sharingLeft ? '<span class="alert-pill cool">💧 소량 남음 ' + sharingLeft + '개</span>' : '') +
-        '<button type="button" class="alert-pill nutri" data-gotomeals="1">🍽️ 두 끼 ' + dm.kcal + 'kcal · 단 ' + g1(dm.p) + '/' + g1(goals().p) + 'g</button>' +
+        '<button type="button" class="alert-pill nutri" data-gotomeals="1">🍽️ 두 끼 ' + dm.kcal + 'kcal · 단 ' + Math.round(dm.p) + '/' + g1(goals().p) + 'g</button>' +
       '</div>' +
       (chips ? '<div class="urgent-chips">' + chips + '</div>' : '');
   }
@@ -3916,7 +3916,7 @@
           else if (mm.skip) dots += '<i class="dot out"></i>';
           else dots += '<i class="dot none"></i>';
         });
-        if (rec.snacks.length) dots += '<i class="dot snack"></i>';
+        if (rec.snacks.length) dots += '<i class="dot snk"></i>';
       }
       var cls = 'cal-cell';
       if (key === t) cls += ' is-today';
@@ -3944,7 +3944,7 @@
         '<span><i class="dot eat"></i>먹음</span>' +
         '<span><i class="dot out"></i>외식</span>' +
         '<span><i class="dot none"></i>미기록</span>' +
-        '<span><i class="dot snack"></i>간식</span>' +
+        '<span><i class="dot snk"></i>간식</span>' +
       '</div>' +
     '</div>';
   }
