@@ -130,6 +130,7 @@
   }
   .alert-pill.hot{background:var(--red-soft);color:var(--red)}
   .alert-pill.cool{background:var(--green-soft);color:#059669}
+  .alert-pill.nutri{background:#fff;color:var(--ink2);border:1px solid var(--line2)}
   .urgent-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
   .urgent-chip{
     font-size:13.5px;font-weight:600;padding:9px 13px;border-radius:12px;min-height:40px;
@@ -146,8 +147,9 @@
     padding:5px;border-radius:16px;
   }
   .tab{
-    flex:1;padding:12px 6px;border-radius:12px;min-height:46px;
-    font-size:15px;font-weight:700;letter-spacing:-.03em;color:var(--ink2);
+    flex:1;padding:12px 4px;border-radius:12px;min-height:46px;
+    font-size:13.5px;font-weight:700;letter-spacing:-.03em;color:var(--ink2);
+    white-space:nowrap;
     transition:background .18s,color .18s,box-shadow .18s;
   }
   .tab.is-active{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(17,24,39,.08)}
@@ -1049,6 +1051,138 @@
   .rs-actions{display:flex;gap:9px;margin-top:28px}
   .rs-actions .btn{min-height:54px;font-size:15.5px}
 
+  /* ══ 하루 영양 목표 (탄단지 g) ══ */
+  .goalbox{
+    margin:0 0 14px;padding:16px 16px 14px;border-radius:20px;
+    background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);
+  }
+  .goalbox-head{display:flex;align-items:center;gap:8px}
+  .goalbox-title{flex:1;min-width:0;font-size:14px;font-weight:800;color:var(--ink);letter-spacing:-.03em}
+  .goal-edit{
+    flex:0 0 auto;font-size:12px;font-weight:700;color:var(--ink2);
+    background:#F2F4F6;padding:8px 11px;border-radius:10px;min-height:36px;white-space:nowrap;
+  }
+  .goal-edit:active{background:#E5E8EB}
+  .goalbox-sub{font-size:12px;color:var(--sub);font-weight:500;margin-top:6px;letter-spacing:-.01em;line-height:1.5}
+  .goalrows{margin-top:13px;display:flex;flex-direction:column;gap:10px}
+  .gline{display:flex;align-items:baseline;gap:7px}
+  .glabel{font-size:12.5px;font-weight:700;color:var(--ink2);white-space:nowrap}
+  .glabel.c{color:#B77900}
+  .glabel.p{color:var(--blue-deep)}
+  .glabel.f{color:#C9623F}
+  .gnum{margin-left:auto;font-size:12px;color:var(--sub);font-weight:600;white-space:nowrap}
+  .gnum b{font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.03em}
+  .gnote{flex:0 0 auto;font-size:11px;font-weight:700;color:var(--blue-deep);background:var(--blue-soft);padding:3px 7px;border-radius:7px;white-space:nowrap}
+  .growseg.over .gnote{color:var(--red);background:var(--red-soft)}
+  .growseg.done .gnote{color:#0A8A5F;background:var(--green-soft)}
+  .gbar2{height:7px;border-radius:99px;background:#EDF1F4;overflow:hidden;margin-top:6px}
+  .gbar2 i{display:block;height:100%;border-radius:99px;transition:width .35s ease}
+  .gbar2 .c{background:#FFC64D}
+  .gbar2 .p{background:#4C93F7}
+  .gbar2 .f{background:#FFA07A}
+  .gbar2 .k{background:var(--blue)}
+  .goalbox .gap-pick{margin-top:7px}
+  .goal-pick{margin-top:13px}
+  .goal-pick-label{display:block;font-size:11px;font-weight:700;color:var(--sub);letter-spacing:-.01em;margin-bottom:7px}
+  .goal-ok{margin-top:13px;font-size:12.5px;font-weight:700;color:#0A8A5F;background:var(--green-soft);border-radius:11px;padding:10px 12px;line-height:1.5}
+  .goalbox-foot{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line2);font-size:11.5px;color:var(--sub);font-weight:500;line-height:1.5}
+  .macro-gram em{
+    font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:-.01em;
+    padding:2px 5px;border-radius:6px;margin-left:4px;
+    background:#F1F3F5;color:var(--ink2);
+  }
+  .macro-gram em.c{background:#FFF4DC;color:#B77900}
+  .macro-gram em.p{background:#E8F1FE;color:var(--blue-deep)}
+  .macro-gram em.f{background:#FFEFE8;color:#C9623F}
+
+  /* ══ 지난 기록 ══ */
+  .hist-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:2px 2px 14px}
+  .hist-head h2{font-size:22px;font-weight:800;letter-spacing:-.05em;line-height:1.3}
+  .hist-head p{font-size:13.5px;color:var(--sub);margin-top:6px;line-height:1.5}
+  .views-toggle{display:flex;gap:6px;background:#E7EAEE;padding:5px;border-radius:14px;margin-bottom:14px}
+  .views-toggle button{
+    flex:1;padding:10px 6px;border-radius:10px;min-height:42px;
+    font-size:13.5px;font-weight:700;color:var(--ink2);letter-spacing:-.02em;white-space:nowrap;
+  }
+  .views-toggle button.is-on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(17,24,39,.08)}
+  .views-toggle button:active{transform:scale(.985)}
+  .hist-stat{
+    font-size:12.5px;font-weight:600;color:var(--ink2);
+    background:#EEF1F4;border-radius:12px;padding:11px 13px;margin-bottom:14px;line-height:1.5;
+  }
+  .calbox{background:#fff;border-radius:20px;padding:14px 12px 12px;box-shadow:var(--shadow);margin-bottom:14px}
+  .cal-head{display:flex;align-items:center;justify-content:space-between;padding:0 4px 10px;gap:8px}
+  .cal-head span{font-size:15px;font-weight:800;letter-spacing:-.03em}
+  .cal-nav{
+    width:38px;height:38px;border-radius:11px;background:#F2F4F6;
+    font-size:16px;font-weight:700;color:var(--ink2);display:grid;place-items:center;line-height:1;
+  }
+  .cal-nav:disabled{opacity:.3}
+  .cal-nav:active{background:#E5E8EB}
+  .cal-dow,.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+  .cal-dow span{text-align:center;font-size:11px;font-weight:700;color:var(--sub);padding:4px 0}
+  .cal-dow span:first-child{color:#E06C6C}
+  .cal-cell{
+    position:relative;min-height:44px;border-radius:11px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  }
+  .cal-cell.is-blank{pointer-events:none}
+  .cal-num{font-size:13px;font-weight:700;color:var(--ink2);line-height:1}
+  .cal-cell.is-today{background:var(--blue-soft);box-shadow:inset 0 0 0 1.5px #BFD9FB}
+  .cal-cell.is-today .cal-num{color:var(--blue-deep);font-weight:800}
+  .cal-cell.is-future .cal-num{color:var(--sub2);opacity:.5}
+  .cal-cell.is-good::after{content:"";position:absolute;inset:2px;border-radius:9px;border:1.5px solid #A7E3C8;pointer-events:none}
+  .cal-cell.is-sel{background:#191F28}
+  .cal-cell.is-sel .cal-num{color:#fff}
+  .cal-cell.is-sel.is-good::after{border-color:rgba(255,255,255,.4)}
+  .cal-cell:active{background:#F2F4F6}
+  .cal-dots{display:flex;gap:2px;height:5px;align-items:center}
+  .cal-dots .dot{width:5px;height:5px;border-radius:50%;display:block}
+  .dot.eat{background:var(--blue)}
+  .dot.out{background:#B0B8C1}
+  .dot.none{background:#E5E8EB}
+  .dot.snk{background:#FFC64D}
+  .cal-cell.is-sel .dot.none{background:#4E5968}
+  .cal-legend{display:flex;gap:10px;flex-wrap:wrap;padding:10px 4px 2px;font-size:11px;font-weight:600;color:var(--sub)}
+  .cal-legend i{width:5px;height:5px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
+  .hd{background:#fff;border-radius:20px;padding:16px;box-shadow:var(--shadow);margin-bottom:12px}
+  .hd-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .hd-date{font-size:15px;font-weight:800;letter-spacing:-.03em}
+  .hd-pct{margin-left:auto;font-size:11px;font-weight:800;color:var(--blue-deep);background:var(--blue-soft);padding:4px 8px;border-radius:8px;white-space:nowrap}
+  .hd-pct.good{color:#0A8A5F;background:var(--green-soft)}
+  .hd-pct.none{color:var(--sub);background:#F2F4F6}
+  .hd-sum{margin-top:9px;font-size:12.5px;color:var(--ink2);font-weight:600;letter-spacing:-.01em}
+  .hd-sum b{font-size:15px;font-weight:800;color:var(--ink);letter-spacing:-.03em}
+  .hd-bars{display:flex;gap:4px;margin-top:9px}
+  .hb{flex:1;height:6px;border-radius:99px;background:#EDF1F4;overflow:hidden;display:block}
+  .hb i{display:block;height:100%;border-radius:99px}
+  .hb i.c{background:#FFC64D}
+  .hb i.p{background:#4C93F7}
+  .hb i.f{background:#FFA07A}
+  .hd-meals{margin-top:13px;border-top:1px solid var(--line)}
+  .hd-meal{padding:12px 0;border-bottom:1px solid var(--line)}
+  .hd-meal:last-child{border-bottom:0;padding-bottom:0}
+  .hd-mrow{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .hd-mlabel{flex:0 0 auto;font-size:11px;font-weight:700;color:var(--sub);background:#F2F4F6;padding:3px 7px;border-radius:7px}
+  .hd-mname{flex:1;min-width:0;font-size:13.5px;font-weight:700;color:var(--ink);letter-spacing:-.02em;line-height:1.4}
+  .htag{flex:0 0 auto;font-size:10.5px;font-weight:700;padding:3px 7px;border-radius:7px;white-space:nowrap}
+  .htag.eat{background:var(--green-soft);color:#0A8A5F}
+  .htag.out{background:#EDF0F3;color:var(--sub)}
+  .htag.none{background:var(--amber-soft);color:var(--amber)}
+  .hd-meal.is-off .hd-mname{color:var(--sub);text-decoration:line-through;text-decoration-thickness:1.5px}
+  .hd-meal.is-none .hd-mname{color:var(--sub);font-weight:600}
+  .hd-mnum{margin-top:6px;font-size:11.5px;color:var(--sub);font-weight:600;letter-spacing:-.01em}
+  .hd-retro{display:flex;gap:6px;margin-top:9px}
+  .hd-retro button{
+    flex:1;min-height:40px;border-radius:11px;background:#F5F7F9;color:var(--ink2);
+    font-size:12.5px;font-weight:700;letter-spacing:-.02em;
+  }
+  .hd-retro button:active{background:#E9EDF1}
+  .hd-snacks,.hd-uses{margin-top:10px;font-size:11.5px;color:var(--sub);line-height:1.65;font-weight:500}
+  .hd-uses-label{margin-right:5px;font-weight:700;color:var(--ink2)}
+  .hist-card{margin-bottom:12px}
+  .hist-card .hd{margin-bottom:0}
+
   .flash{animation:flash 1.1s ease}
   @keyframes flash{
     0%{box-shadow:0 0 0 0 rgba(49,130,246,.4)}
@@ -1092,6 +1226,7 @@
   <nav class="tabs" role="tablist">
     <button class="tab is-active" data-tab="pantry" role="tab">🧺 소진 체크</button>
     <button class="tab" data-tab="meals" role="tab">🍽️ 오늘·내일</button>
+    <button class="tab" data-tab="history" role="tab">📅 지난 기록</button>
   </nav>
 
   <main class="main">
@@ -1103,6 +1238,9 @@
     <section class="view is-hidden" id="view-meals">
       <div id="leftoverCardMeals"></div>
       <div id="mealsWrap"></div>
+    </section>
+    <section class="view is-hidden" id="view-history">
+      <div id="historyWrap"></div>
     </section>
   </main>
 
@@ -1227,6 +1365,41 @@
   <div class="sheet-actions">
     <button class="btn ghost" id="pickCancel">취소</button>
     <button class="btn primary" id="pickSave">재료 넣기</button>
+  </div>
+</div>
+
+<div class="sheet" id="goalSheet" role="dialog" aria-modal="true" aria-labelledby="goalTitle">
+  <div class="sheet-grip"></div>
+  <h2 id="goalTitle">하루 영양 목표</h2>
+  <p class="sheet-sub">20대 후반 성인 여성 · 활동량 보통 기준 권장치는 <b>1,800kcal · 탄수화물 225g · 단백질 90g · 지방 60g</b>이에요. 하루 두 끼를 먹는 앱이라 한 끼 목표는 하루의 1/3로 잡아요.</p>
+  <div class="field">
+    <label for="gKcal">하루 칼로리 <span class="hint-inline">kcal</span></label>
+    <input id="gKcal" type="number" inputmode="numeric" min="1000" max="4000" step="50" autocomplete="off">
+  </div>
+  <div class="field-row">
+    <div class="field">
+      <label for="gC">탄수화물 <span class="hint-inline">g</span></label>
+      <input id="gC" type="number" inputmode="numeric" min="50" max="500" step="5" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="gP">단백질 <span class="hint-inline">g</span></label>
+      <input id="gP" type="number" inputmode="numeric" min="30" max="250" step="5" autocomplete="off">
+    </div>
+  </div>
+  <div class="field">
+    <label for="gF">지방 <span class="hint-inline">g</span></label>
+    <input id="gF" type="number" inputmode="numeric" min="20" max="150" step="5" autocomplete="off">
+  </div>
+  <p class="sheet-sub" id="gCalc" style="margin-top:14px"></p>
+  <div class="quick" id="gPreset">
+    <span class="quick-label">빠른 선택</span>
+    <button type="button" data-preset="1800,225,90,60">균형 1,800kcal</button>
+    <button type="button" data-preset="1600,200,80,53">조금 가볍게 1,600</button>
+    <button type="button" data-preset="2000,250,100,67">활동 많음 2,000</button>
+  </div>
+  <div class="sheet-actions">
+    <button class="btn ghost" id="goalCancel">취소</button>
+    <button class="btn primary" id="goalSave">저장</button>
   </div>
 </div>
 
@@ -2011,10 +2184,10 @@
         '<i class="f" style="width:' + fP + '%"></i>' +
       '</div>' +
       '<div class="macro-gram">' +
-        '<span>탄 <b>' + g1(n.c) + 'g</b></span>' +
-        '<span>단 <b>' + g1(n.p) + 'g</b></span>' +
-        '<span>지 <b>' + g1(n.f) + 'g</b></span>' +
-        '<span class="base">성인 여성 한 끼 기준</span>' +
+        '<span>탄 <b>' + g1(n.c) + 'g</b><em class="c">' + goalPct(n.c, goals().c) + '%</em></span>' +
+        '<span>단 <b>' + g1(n.p) + 'g</b><em class="p">' + goalPct(n.p, goals().p) + '%</em></span>' +
+        '<span>지 <b>' + g1(n.f) + 'g</b><em class="f">' + goalPct(n.f, goals().f) + '%</em></span>' +
+        '<span class="base">하루 목표 대비</span>' +
       '</div>' +
     '</div>';
   }
@@ -2114,10 +2287,21 @@
     return { macro: macroBarHtml(ck.macro), warns: detail, compact: compact, data: ck.macro };
   }
 
-  /* ── 하루 두 끼 합산 탄단지와 목표 비율의 차이 ── */
-  var DAY_TARGET = { c: 50, p: 25, f: 25 };
+  /* ── 하루 두 끼 합산 탄단지와 목표(g)의 차이 ──
+     20대 후반 성인 여성 · 활동량 보통 기준 권장치 (일반적인 값이며 개인차가 있어요) */
+  var GOAL_DEFAULT = { kcal: 1800, c: 225, p: 90, f: 60 };
+  var MACRO_LABEL = { c: '탄수화물', p: '단백질', f: '지방' };
   var VEG_PICK_RE = /샐러드|상추|양배추|오이|토마토|당근|시금치|나물|채소|야채|버섯|브로콜리|깻잎|파프리카|양파|대파/;
 
+  function goals() { return state.goals || GOAL_DEFAULT; }
+  function mealGoal(k) { return Math.round(goals()[k] / 3); }
+  function goalPct(val, goal) { return goal > 0 ? Math.round((val || 0) / goal * 100) : 0; }
+  function fmtN(n) {
+    var s = String(Math.round(n || 0));
+    return s.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  /* 그 날 두 끼(+간식)의 탄단지 합계 */
   function dayMacros(day) {
     var t = { c: 0, p: 0, f: 0, kcal: 0, pct: { c: 0, p: 0, f: 0 }, openMeals: [], veg: 0 };
     ['lunch', 'dinner'].forEach(function (m) {
@@ -2134,6 +2318,13 @@
       });
       if (!state.eaten[k]) t.openMeals.push(m);
     });
+    /* 간식도 그 날 섭취량에 들어간다 */
+    (state.snacks[dateKey(day)] || []).forEach(function (sid) {
+      var it = byId(sid);
+      if (!it) return;
+      var n = nutriOf(it);
+      t.c += n.c; t.p += n.p; t.f += n.f;
+    });
     var kcal = t.c * 4 + t.p * 4 + t.f * 9;
     t.kcal = Math.round(kcal);
     if (kcal > 0) {
@@ -2143,34 +2334,6 @@
       t.pct = { c: cP, p: pP, f: Math.max(0, 100 - cP - pP) };
     }
     return t;
-  }
-
-  /* 그 영양소만 더 먹었을 때 목표 비중(%)이 되는 그램 수 */
-  function needGrams(t, key, targetPct) {
-    var kk = key === 'f' ? 9 : 4;
-    var kcal = t.c * 4 + t.p * 4 + t.f * 9;
-    var target = targetPct / 100;
-    if (target >= 1) return 0;
-    var x = (target * kcal - kk * t[key]) / (kk * (1 - target));
-    return x > 0 ? Math.round(x) : 0;
-  }
-
-  /* 더 챙기면 좋은 비율 — 최대 2가지 */
-  function dayGaps(t) {
-    var out = [];
-    if (!t || t.kcal <= 0) return out;
-    var pg = needGrams(t, 'p', DAY_TARGET.p);
-    var cg = needGrams(t, 'c', DAY_TARGET.c);
-    if (t.pct.p < DAY_TARGET.p - 3 && pg >= 4) {
-      out.push({ key: 'p', dir: 1, diff: DAY_TARGET.p - t.pct.p, g: pg, label: '단백질' });
-    }
-    if (t.pct.c < DAY_TARGET.c - 8 && cg >= 10) {
-      out.push({ key: 'c', dir: 1, diff: DAY_TARGET.c - t.pct.c, g: cg, label: '탄수화물' });
-    }
-    if (t.pct.f > DAY_TARGET.f + 7) {
-      out.push({ key: 'f', dir: -1, diff: t.pct.f - DAY_TARGET.f, g: 0, label: '지방' });
-    }
-    return out.slice(0, 2);
   }
 
   /* 지금 남아 있는 재료 중 부족한 비율을 보태 줄 재료 */
@@ -2198,27 +2361,44 @@
     return cands.slice(0, limit || 4);
   }
 
-  /* 주제: 오늘(내일) 더 챙기면 좋은 비율 + 지금 있는 재료 추천 */
-  function dayGapHtml(day) {
-    var t = dayMacros(day);
-    if (t.kcal <= 0) return '';
-    var gaps = dayGaps(t);
-    var chips = [];
-    var kind = null;
+  /* 목표 대비 한 줄 — 진행 바 + 남은 g / 초과 g */
+  function goalRowHtml(key, val) {
+    var g = goals();
+    var goal = key === 'kcal' ? g.kcal : g[key];
+    var unit = key === 'kcal' ? 'kcal' : 'g';
+    var pct = goalPct(val, goal);
+    var w = Math.max(0, Math.min(100, pct));
+    var diff = Math.round(goal - val);
+    var cls = '', note;
+    if (diff > 0) { note = (key === 'kcal' ? fmtN(diff) + 'kcal' : diff + 'g') + ' 더 필요'; }
+    else if (diff < 0) { note = (key === 'kcal' ? fmtN(-diff) + 'kcal' : (-diff) + 'g') + ' 초과'; cls = ' over'; }
+    else { note = '목표 딱 맞음'; cls = ' done'; }
+    var label = key === 'kcal' ? '칼로리' : MACRO_LABEL[key];
+    var vTxt = key === 'kcal' ? fmtN(val) : String(Math.round(val || 0));
+    var gTxt = key === 'kcal' ? fmtN(goal) : g1(goal);
+    return '<div class="growseg' + cls + '">' +
+      '<div class="gline">' +
+        '<span class="glabel ' + (key === 'kcal' ? 'k' : key) + '">' + label + '</span>' +
+        '<span class="gnum"><b>' + vTxt + '</b> / ' + gTxt + unit + '</span>' +
+        '<span class="gnote">' + note + '</span>' +
+      '</div>' +
+      '<div class="gbar2"><i class="' + (key === 'kcal' ? 'k' : key) + '" style="width:' + w + '%"></i></div>' +
+    '</div>';
+  }
 
-    gaps.forEach(function (g) {
-      if (g.dir > 0) {
-        chips.push('<span class="gchip">' + g.label + ' <b>+' + g.diff + '%</b><em>약 ' + g.g + 'g</em></span>');
-        if (!kind) kind = g.key;
-      } else {
-        chips.push('<span class="gchip down">' + g.label + ' <b>−' + g.diff + '%</b><em>줄이기</em></span>');
-      }
-    });
-    if (!kind && t.veg < 2) {
-      kind = 'v';
-      chips.push('<span class="gchip">채소·식이섬유 <b>+챙기기</b></span>');
-    }
-    if (!chips.length) chips.push('<span class="gchip ok">탄단지 균형 좋아요 👍</span>');
+  /* 주제: 오늘(내일) 목표 대비 섭취량(g) + 부족분을 채울 남은 재료 */
+  function goalBox(day) {
+    var t = dayMacros(day);
+    var g = goals();
+    if (t.kcal <= 0) return '';
+
+    var rows = goalRowHtml('kcal', t.kcal) + goalRowHtml('c', t.c) + goalRowHtml('p', t.p) + goalRowHtml('f', t.f);
+
+    /* 부족분이 가장 큰 영양소 → 지금 남은 재료 추천 */
+    var kind = null;
+    if (g.p - t.p >= 5) kind = 'p';
+    else if (g.c - t.c >= 15) kind = 'c';
+    else if (t.veg < 2) kind = 'v';
 
     var picks = kind ? gapPickList(kind, day, 4) : [];
     var target = t.openMeals[0] || null;
@@ -2227,15 +2407,28 @@
         '＋ ' + emojiOf(it) + ' ' + esc(it.name) + '</button>';
     }).join('');
 
-    return '<section class="gapbox">' +
-      '<div class="gap-top">' +
-        '<span class="gap-title">🎯 ' + (day === 'today' ? '오늘' : '내일') + ' 더 챙기면 좋은 비율</span>' +
-        '<span class="gap-pct">' + t.kcal + 'kcal · 탄 ' + t.pct.c + ' · 단 ' + t.pct.p + ' · 지 ' + t.pct.f + '%</span>' +
+    var gapMsg = '';
+    if (kind === 'p') gapMsg = '단백질이 ' + g1(Math.round(g.p - t.p)) + 'g 모자라요';
+    else if (kind === 'c') gapMsg = '탄수화물이 ' + g1(Math.round(g.c - t.c)) + 'g 모자라요';
+    else if (kind === 'v') gapMsg = '채소·식이섬유를 조금 더 챙겨요';
+
+    var eatenCount = 0;
+    ['lunch', 'dinner'].forEach(function (m) { if (state.eaten[slotKey(day, m)]) eatenCount++; });
+
+    return '<section class="goalbox">' +
+      '<div class="goalbox-head">' +
+        '<span class="goalbox-title">🎯 ' + (day === 'today' ? '오늘' : '내일') + ' 목표 대비</span>' +
+        '<button type="button" class="goal-edit" data-act="goalopen">목표 수정</button>' +
       '</div>' +
-      '<div class="gap-sum">' + chips.join('') + '</div>' +
+      '<p class="goalbox-sub">두 끼 합계 · 먹은 ' + eatenCount + '/2끼 · 하루 ' + fmtN(g.kcal) + 'kcal 기준</p>' +
+      '<div class="goalrows">' + rows + '</div>' +
       (pickHtml
-        ? '<div class="gap-pick"><span class="gap-pick-label">남은 재료로</span>' + pickHtml + '</div>'
-        : '') +
+        ? '<div class="goal-pick">' +
+            '<span class="goal-pick-label">' + esc(gapMsg || '남은 재료로 보태기') + '</span>' +
+            '<div class="gap-pick">' + pickHtml + '</div>' +
+          '</div>'
+        : '<p class="goal-ok">🎉 오늘 목표를 거의 채웠어요</p>') +
+      '<p class="goalbox-foot">한 끼 목표 ' + mealGoal('kcal') + 'kcal · 탄 ' + mealGoal('c') + 'g · 단 ' + mealGoal('p') + 'g · 지 ' + mealGoal('f') + 'g (하루의 1/3)</p>' +
     '</section>';
   }
 
@@ -2388,6 +2581,7 @@
   var filtersEl = $('filters');
   var listEl = $('pantryList');
   var mealsEl = $('mealsWrap');
+  var histEl = $('historyWrap');
   var scrim = $('scrim');
   var toastEl = $('toast');
 
@@ -2413,11 +2607,15 @@
 
   var recipeSheet = $('recipeSheet'), recipeBody = $('recipeBody');
 
+  var goalSheet = $('goalSheet'), gKcal = $('gKcal'), gC = $('gC'), gP = $('gP'), gF = $('gF');
+  var gCalc = $('gCalc'), gPreset = $('gPreset');
+
   var depModal = $('depModal'), depEmo = $('depEmo'), depTitle = $('depTitle'), depSub = $('depSub');
   var depYes = $('depYes'), depNo = $('depNo');
 
   /* ── 상태 ── */
   var ui = { tab: 'pantry', filter: 'all', hideDone: false, day: 'today', warnOpen: {}, openMeal: {} };
+  var histUI = { view: 'calendar', month: null, day: null };
   var editor = { mode: 'add', id: null, loc: 'fridge', urg: 'normal', emoji: null, origQty: '' };
   var eatTarget = null;
   var eatQty = {};
@@ -2428,15 +2626,53 @@
   var pickSel = {};
   var depTarget = null;
   var resetArmed = false;
+  var goalDraft = null;
 
   var state = loadState();
+
+  /* =========================================================
+     날짜 — 모든 기록은 YYYY-MM-DD 키로 저장된다
+     · 오늘/내일 탭은 기기의 로컬 날짜를 그때그때 읽어서 그린다
+     · 날짜가 넘어가면 키가 통째로 옮겨가므로 어제 기록은
+       그 날짜 그대로 남아 '지난 기록'에 쌓인다
+     ========================================================= */
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  function dateStr(d) { return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+  function todayKey() { return dateStr(new Date()); }
+  function addDays(key, n) {
+    var p = String(key).split('-');
+    return dateStr(new Date(+p[0], +p[1] - 1, +p[2] + n));
+  }
+  function anchorKey() { return (state && state.dayAnchor) || todayKey(); }
+  function dateKey(day) { return day === 'tomorrow' ? addDays(anchorKey(), 1) : anchorKey(); }
+  function mmdd(key) {
+    var p = String(key).split('-');
+    return (+p[1]) + '/' + (+p[2]);
+  }
+  function dateParts(key) {
+    var p = String(key).split('-');
+    return { y: +p[0], m: +p[1], d: +p[2] };
+  }
+  function dowOf(key) {
+    var p = dateParts(key);
+    return new Date(p.y, p.m - 1, p.d).getDay();
+  }
+  function koDate(key, withDow) {
+    var p = dateParts(key);
+    var s = p.m + '월 ' + p.d + '일';
+    if (withDow) s += ' (' + '일월화수목금토'[dowOf(key)] + ')';
+    return s;
+  }
 
   /* =========================================================
      저장 / 복원
      ========================================================= */
   function freshState() {
-    return {
-      v: 2,
+    var t = todayKey();
+    var s = {
+      v: 3,
+      dayAnchor: t,
+      startedAt: t,
       ingredients: DEFAULT_ITEMS.map(function (it) {
         return {
           id: it.id, name: it.name, qty: it.qty, loc: it.loc, urg: it.urg, note: it.note,
@@ -2448,14 +2684,17 @@
           partial: false
         };
       }),
-      plan: null,
+      plans: {},
       skips: {},
       eaten: {},
       customMeals: {},
       mealUses: {},
-      snacks: { today: [], tomorrow: [] },
+      snacks: {},
+      goals: { kcal: 1800, c: 225, p: 90, f: 60 },
       coOccurrence: {}
     };
+    s.plans = buildPlan(s);
+    return s;
   }
 
   function loadState() {
@@ -2468,9 +2707,18 @@
         }
       }
     } catch (e) { /* 저장값이 깨졌으면 새로 시작 */ }
-    var fresh = freshState();
-    fresh.plan = buildPlan(fresh);
-    return fresh;
+    return freshState();
+  }
+
+  function normalizeGoals(g) {
+    var o = { kcal: 1800, c: 225, p: 90, f: 60 };
+    if (g && typeof g === 'object') {
+      ['kcal', 'c', 'p', 'f'].forEach(function (k) {
+        var v = Math.round(Number(g[k]));
+        if (isFinite(v) && v > 0) o[k] = v;
+      });
+    }
+    return o;
   }
 
   function normalize(s) {
@@ -2513,9 +2761,8 @@
       return o;
     });
 
-    s.v = 2;
-    s.skips = s.skips || {};
-    s.eaten = s.eaten || {};
+    s.skips = s.skips && typeof s.skips === 'object' ? s.skips : {};
+    s.eaten = s.eaten && typeof s.eaten === 'object' ? s.eaten : {};
     s.coOccurrence = s.coOccurrence && typeof s.coOccurrence === 'object' ? s.coOccurrence : {};
     s.customMeals = s.customMeals && typeof s.customMeals === 'object' ? s.customMeals : {};
     Object.keys(s.customMeals).forEach(function (k) {
@@ -2525,19 +2772,82 @@
       c.note = c.note ? String(c.note) : '';
       c.uses = Array.isArray(c.uses) ? c.uses.map(String) : [];
     });
-    s.snacks = s.snacks || { today: [], tomorrow: [] };
-    if (!Array.isArray(s.snacks.today)) s.snacks.today = [];
-    if (!Array.isArray(s.snacks.tomorrow)) s.snacks.tomorrow = [];
     s.mealUses = s.mealUses && typeof s.mealUses === 'object' && !Array.isArray(s.mealUses) ? s.mealUses : {};
     Object.keys(s.mealUses).forEach(function (k) {
       if (!Array.isArray(s.mealUses[k])) { delete s.mealUses[k]; return; }
       s.mealUses[k] = s.mealUses[k].map(String);
     });
-    if (!s.plan || !s.plan.today || !s.plan.tomorrow || !s.plan.today.lunch || !s.plan.today.dinner ||
-        !s.plan.tomorrow.lunch || !s.plan.tomorrow.dinner) {
-      s.plan = buildPlan(s);
+
+    var today = todayKey();
+    var validKey = /^\d{4}-\d{2}-\d{2}$/;
+
+    /* ── 저장 형식 2 → 3: 하루 칸(today/tomorrow)마다이던 기록을 날짜 키로 옮긴다.
+       화면에 떠 있던 '오늘' 기록은 실제로는 그 전날 것이므로 하루 앞 날짜에 두고,
+       '내일' 칸은 오늘 날짜로 가져온다. ── */
+    if (!validKey.test(String(s.dayAnchor || ''))) {
+      var y = addDays(today, -1);
+      var remap = function (obj) {
+        var out = {};
+        Object.keys(obj || {}).forEach(function (k) {
+          var m = /^(today|tomorrow)-(.+)$/.exec(k);
+          if (m) out[(m[1] === 'today' ? y : today) + '-' + m[2]] = obj[k];
+          else out[k] = obj[k];
+        });
+        return out;
+      };
+      s.skips = remap(s.skips);
+      s.eaten = remap(s.eaten);
+      s.customMeals = remap(s.customMeals);
+      s.mealUses = remap(s.mealUses);
+
+      var oldPlan = s.plan || {};
+      var oldSnacks = s.snacks || {};
+      var plans = {};
+      var snacks = {};
+      if (oldPlan.today && (oldPlan.today.lunch || oldPlan.today.dinner)) {
+        plans[y] = { lunch: oldPlan.today.lunch || null, dinner: oldPlan.today.dinner || null };
+      }
+      if (oldPlan.tomorrow && (oldPlan.tomorrow.lunch || oldPlan.tomorrow.dinner)) {
+        plans[today] = { lunch: oldPlan.tomorrow.lunch || null, dinner: oldPlan.tomorrow.dinner || null };
+      }
+      if (Array.isArray(oldSnacks.today) && oldSnacks.today.length) snacks[y] = oldSnacks.today.slice();
+      if (Array.isArray(oldSnacks.tomorrow) && oldSnacks.tomorrow.length) snacks[today] = oldSnacks.tomorrow.slice();
+      s.plans = plans;
+      s.snacks = snacks;
+      s.dayAnchor = today;
+      s.startedAt = y;
+      delete s.plan;
     }
+
+    s.plans = s.plans && typeof s.plans === 'object' && !Array.isArray(s.plans) ? s.plans : {};
+    Object.keys(s.plans).forEach(function (k) {
+      var p = s.plans[k];
+      if (!validKey.test(k) || !p || typeof p !== 'object') { delete s.plans[k]; return; }
+      s.plans[k] = { lunch: p.lunch || null, dinner: p.dinner || null };
+    });
+
+    s.snacks = s.snacks && typeof s.snacks === 'object' && !Array.isArray(s.snacks) ? s.snacks : {};
+    Object.keys(s.snacks).forEach(function (k) {
+      if (!validKey.test(k) || !Array.isArray(s.snacks[k])) { delete s.snacks[k]; return; }
+      s.snacks[k] = s.snacks[k].map(String);
+    });
+
+    s.goals = normalizeGoals(s.goals);
+    if (!validKey.test(String(s.dayAnchor || ''))) s.dayAnchor = today;
+    if (!validKey.test(String(s.startedAt || ''))) s.startedAt = s.dayAnchor;
+    s.v = 3;
     return s;
+  }
+
+  /* 날짜가 넘어갔는지 확인하고, 넘어갔으면 오늘 칸을 새로 잡는다 */
+  function syncDay() {
+    var t = todayKey();
+    if (!state) return false;
+    if (!state.dayAnchor) { state.dayAnchor = t; return false; }
+    if (state.dayAnchor === t) return false;
+    state.dayAnchor = t;
+    if (ui.day === 'tomorrow') ui.day = 'today';
+    return true;
   }
 
   function save() {
@@ -2606,7 +2916,7 @@
     var c = customMeal(day, meal);
     var base = c
       ? { id: 'custom:' + slotKey(day, meal), name: c.name, uses: c.uses || [], steps: c.note || '', custom: true }
-      : recipeById(state.plan[day] && state.plan[day][meal]);
+      : recipeById(planOf(day)[meal]);
     if (!base) return null;
 
     /* 끼니별 재료 조정값이 있으면 그 목록을 쓴다 */
@@ -2620,20 +2930,20 @@
     return base;
   }
 
-  function slotKey(day, meal) { return day + '-' + meal; }
+  function slotKey(day, meal) { return dateKey(day) + '-' + meal; }
 
-  function dayLabel(offset) {
-    var d = new Date();
-    d.setDate(d.getDate() + offset);
-    var wd = ['일', '월', '화', '수', '목', '금', '토'][d.getDay()];
-    return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + wd + ')';
+  /* 오늘/내일 칸의 식단 — 날짜별로 보관한다 */
+  function planOf(day) {
+    var k = dateKey(day);
+    if (!state.plans) state.plans = {};
+    var p = state.plans[k];
+    if (!p || typeof p !== 'object') { p = {}; state.plans[k] = p; }
+    return p;
   }
 
-  function shortDate(offset) {
-    var d = new Date();
-    d.setDate(d.getDate() + offset);
-    return (d.getMonth() + 1) + '/' + d.getDate();
-  }
+  function dayLabel(offset) { return koDate(addDays(anchorKey(), offset), true); }
+
+  function shortDate(offset) { return mmdd(addDays(anchorKey(), offset)); }
 
   var toastTimer = null;
   function toast(msg) {
@@ -2676,28 +2986,32 @@
 
   function buildPlan(src, opts) {
     var s = src || state;
+    var anchor = (s && s.dayAnchor) || todayKey();
+    var keys = [anchor, addDays(anchor, 1)];
     var avoid = (opts && opts.avoid) || null;
     var itemsById = {};
     s.ingredients.forEach(function (it) { itemsById[it.id] = it; });
 
     var used = {};
     var keyCount = {};
-    var plan = { today: {}, tomorrow: {} };
+    var plan = {};
+    plan[keys[0]] = {};
+    plan[keys[1]] = {};
     var slots = [
-      ['today', 'lunch'], ['today', 'dinner'],
-      ['tomorrow', 'lunch'], ['tomorrow', 'dinner']
+      [keys[0], 'lunch'], [keys[0], 'dinner'],
+      [keys[1], 'lunch'], [keys[1], 'dinner']
     ];
     var prevKey = null;
 
     slots.forEach(function (pair) {
-      var day = pair[0], meal = pair[1];
+      var date = pair[0], meal = pair[1];
       var pool = [];
       RECIPES.forEach(function (r) {
         if (r.slots.indexOf(meal) === -1) return;
         pool.push({ r: r, score: recipeScore(r, itemsById, used, prevKey, keyCount, avoid) });
       });
       var best = pool.length ? pickTop(pool) : RECIPES[0];
-      plan[day][meal] = best.id;
+      plan[date][meal] = best.id;
       used[best.id] = true;
       keyCount[best.key] = (keyCount[best.key] || 0) + 1;
       prevKey = best.key;
@@ -2706,31 +3020,45 @@
     return plan;
   }
 
+  /* 오늘칸·내일칸 식단이 비어 있으면 채운다 (이미 있는 날짜는 그대로 둔다) */
+  function ensurePlans() {
+    var keys = [dateKey('today'), dateKey('tomorrow')];
+    var need = keys.some(function (k) {
+      var p = state.plans && state.plans[k];
+      return !p || !p.lunch || !p.dinner;
+    });
+    if (!need) return;
+    var built = buildPlan(state);
+    keys.forEach(function (k) {
+      var p = state.plans[k];
+      if (!p || !p.lunch || !p.dinner) {
+        state.plans[k] = { lunch: built[k].lunch, dinner: built[k].dinner };
+      }
+    });
+  }
+
   function replanAll() {
     var avoid = {};
-    if (state.plan) {
-      ['today', 'tomorrow'].forEach(function (d) {
-        ['lunch', 'dinner'].forEach(function (m) {
-          if (state.plan[d] && state.plan[d][m]) avoid[state.plan[d][m]] = true;
-        });
-      });
-    }
-    /* 직접 등록한 끼니는 그대로 유지하고, 그 끼니의 스킵·먹음 기록도 살린다 */
-    var keepSkips = {}, keepEaten = {}, mineCount = 0;
-    ['today', 'tomorrow'].forEach(function (d) {
-      ['lunch', 'dinner'].forEach(function (m) {
-        var k = slotKey(d, m);
-        if (!customMeal(d, m)) return;
-        mineCount++;
-        if (state.skips[k]) keepSkips[k] = true;
-        if (state.eaten[k]) keepEaten[k] = true;
-      });
+    var keys = [dateKey('today'), dateKey('tomorrow')];
+    keys.forEach(function (k) {
+      var p = state.plans[k] || {};
+      ['lunch', 'dinner'].forEach(function (m) { if (p[m]) avoid[p[m]] = true; });
     });
 
-    state.plan = buildPlan(state, { avoid: avoid });
-    state.mealUses = {};
-    state.skips = keepSkips;
-    state.eaten = keepEaten;
+    var built = buildPlan(state, { avoid: avoid });
+    /* 직접 등록한 끼니의 계획·기록은 그대로 유지하고, 나머지 두 날짜만 새로 짜다 */
+    var mineCount = 0;
+    keys.forEach(function (k) {
+      if (!state.plans[k]) state.plans[k] = {};
+      ['lunch', 'dinner'].forEach(function (m) {
+        var sk = k + '-' + m;
+        if ((state.customMeals || {})[sk]) { mineCount++; return; }
+        state.plans[k][m] = built[k][m];
+        delete state.skips[sk];
+        delete state.eaten[sk];
+        if (state.mealUses) delete state.mealUses[sk];
+      });
+    });
     save();
     renderAll();
     toast(mineCount
@@ -2745,12 +3073,12 @@
     ['today', 'tomorrow'].forEach(function (d) {
       ['lunch', 'dinner'].forEach(function (m) {
         if (d === day && m === meal) return;
-        var id = state.plan[d] && state.plan[d][m];
+        var id = planOf(d)[m];
         if (id) others[id] = true;
       });
     });
 
-    var current = state.plan[day][meal];
+    var current = planOf(day)[meal];
     var slotRecipes = RECIPES.filter(function (r) { return r.slots.indexOf(meal) !== -1; });
     var clean = slotRecipes.filter(function (r) { return !goneUses(r.uses).length; });
     var pool = clean.length ? clean : slotRecipes;
@@ -2778,7 +3106,7 @@
     }
     if (!pick) { toast('바꿀 메뉴가 없어요'); return; }
 
-    state.plan[day][meal] = pick.id;
+    planOf(day)[meal] = pick.id;
     clearMealUses(day, meal);
     delete state.skips[k];
     delete state.eaten[k];
@@ -2793,12 +3121,12 @@
 
   /* 소진된 재료 없이, 지금 있는 재료로 만들 수 있는 다른 레시피 찾기 */
   function pickReplacement(day, meal) {
-    var current = state.plan[day] && state.plan[day][meal];
+    var current = planOf(day)[meal];
     var others = {};
     ['today', 'tomorrow'].forEach(function (d) {
       ['lunch', 'dinner'].forEach(function (m) {
         if (d === day && m === meal) return;
-        var rid = state.plan[d] && state.plan[d][m];
+        var rid = planOf(d)[m];
         if (rid) others[rid] = true;
       });
     });
@@ -2855,7 +3183,7 @@
 
         var rep = pickReplacement(day, meal);
         if (rep) {
-          state.plan[day][meal] = rep.id;
+          planOf(day)[meal] = rep.id;
           clearMealUses(day, meal);
           swapped++;
         } else {
@@ -2941,6 +3269,7 @@
     var urgentLeft = state.ingredients.filter(function (i) { return !i.done && i.urg === 'urgent'; });
     var soonLeft = state.ingredients.filter(function (i) { return !i.done && i.urg === 'soon'; }).length;
     var sharingLeft = state.ingredients.filter(isSharing).length;
+    var dm = dayMacros('today');
     var circumference = 2 * Math.PI * 26;
 
     var chips = urgentLeft.slice(0, 5).map(function (it) {
@@ -2973,6 +3302,7 @@
           : '<span class="alert-pill cool">🎉 급하게 처리할 재료 없음</span>') +
         (soonLeft ? '<span class="alert-pill">⏳ 곧 소진 ' + soonLeft + '개</span>' : '') +
         (sharingLeft ? '<span class="alert-pill cool">💧 소량 남음 ' + sharingLeft + '개</span>' : '') +
+        '<button type="button" class="alert-pill nutri" data-gotomeals="1">🍽️ 두 끼 ' + dm.kcal + 'kcal · 단 ' + Math.round(dm.p) + '/' + g1(goals().p) + 'g</button>' +
       '</div>' +
       (chips ? '<div class="urgent-chips">' + chips + '</div>' : '');
   }
@@ -3383,7 +3713,7 @@
   }
 
   function snackRow(day) {
-    var snacks = state.snacks[day] || [];
+    var snacks = state.snacks[dateKey(day)] || [];
     var eatenCount = (state.eaten[day + '-lunch'] ? 1 : 0) + (state.eaten[day + '-dinner'] ? 1 : 0);
     var snackHtml = SNACKS.map(function (sn) {
       var on = snacks.indexOf(sn.id) !== -1;
@@ -3412,12 +3742,263 @@
       '</div>' +
       dayTabs() +
       snackRow(day) +
-      dayGapHtml(day) +
+      goalBox(day) +
       mealCard(day, 'lunch') +
       urgentCallout(day) +
       mealCard(day, 'dinner') +
       '<div class="section-note">🍽️ 하루 점심·저녁 두 끼만 제안해요. <b>📖 레시피 보기</b>를 누르면 조리 순서와 냉장고에 있는 재료·사와야 할 재료를 나눠서 보여줘요. ' +
       '취향에 안 맞으면 <b>🔄 다른 메뉴</b>, 먹은 뒤 <b>✅ 먹었음</b>을 누르면 그 레시피 재료가 한 번에 정리돼요.</div>';
+  }
+
+  /* =========================================================
+     지난 기록 — 날짜별 식단·탄단지 아카이브
+     ========================================================= */
+
+  /* 그 날짜의 한 끼 기록 (메뉴·쓴 재료·먹었음/외식 여부·영양) */
+  function mealRecord(key, meal) {
+    var k = key + '-' + meal;
+    var p = (state.plans && state.plans[key]) || {};
+    var cm = (state.customMeals || {})[k];
+    var rec;
+    if (cm) {
+      rec = { name: cm.name || '직접 등록', uses: (cm.uses || []).slice(), custom: true };
+    } else {
+      var r = recipeById(p[meal]);
+      if (!r) return null;
+      rec = { name: r.name, uses: (r.uses || []).slice(), custom: false };
+    }
+    var ov = state.mealUses && state.mealUses[k];
+    if (ov && ov.length) rec.uses = ov.slice();
+    var eaten = !!state.eaten[k];
+    var skip = !!state.skips[k];
+    var nut = { c: 0, p: 0, f: 0, kcal: 0 };
+    if (eaten && !skip) nut = sumMacros(rec.uses);
+    return { meal: meal, key: k, name: rec.name, uses: rec.uses, custom: rec.custom, eaten: eaten, skip: skip, nut: nut };
+  }
+
+  function dayRecord(key) {
+    var out = { key: key, meals: [], snacks: [], c: 0, p: 0, f: 0, kcal: 0, eatenCount: 0, has: false, pct: 0 };
+    ['lunch', 'dinner'].forEach(function (m) {
+      var r = mealRecord(key, m);
+      if (!r) return;
+      out.meals.push(r);
+      if (r.eaten && !r.skip) {
+        out.eatenCount++;
+        out.c += r.nut.c; out.p += r.nut.p; out.f += r.nut.f;
+        out.has = true;
+      } else if (r.skip) {
+        out.has = true;
+      }
+    });
+    (state.snacks[key] || []).forEach(function (sid) {
+      var it = byId(sid);
+      if (!it) return;
+      var n = nutriOf(it);
+      out.snacks.push({ id: sid, name: it.name, emoji: emojiOf(it) });
+      out.c += n.c; out.p += n.p; out.f += n.f;
+      out.has = true;
+    });
+    out.kcal = Math.round(out.c * 4 + out.p * 4 + out.f * 9);
+    out.pct = goalPct(out.kcal, goals().kcal);
+    return out;
+  }
+
+  /* 기록이 있는 지난 날짜 — 오래된 순서 정리 후 최신순으로 */
+  function historyKeys() {
+    var t = todayKey();
+    var set = {};
+    function add(k) {
+      var s = String(k || '');
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return;
+      if (s < t) set[s] = true;
+    }
+    Object.keys(state.plans || {}).forEach(function (k) {
+      var p = state.plans[k];
+      if (p && (p.lunch || p.dinner)) add(k);
+    });
+    Object.keys(state.eaten || {}).forEach(function (k) { add(String(k).slice(0, 10)); });
+    Object.keys(state.skips || {}).forEach(function (k) { add(String(k).slice(0, 10)); });
+    Object.keys(state.customMeals || {}).forEach(function (k) { add(String(k).slice(0, 10)); });
+    Object.keys(state.snacks || {}).forEach(function (k) { if ((state.snacks[k] || []).length) add(k); });
+    return Object.keys(set).sort().reverse();
+  }
+
+  function histTag(mm, key) {
+    if (mm.eaten && !mm.skip) return '<span class="htag eat">✅ 먹음</span>';
+    if (mm.skip) return '<span class="htag out">🍗 외식</span>';
+    if (key < todayKey()) return '<span class="htag none">미기록</span>';
+    return '';
+  }
+
+  function histDetailHtml(key, opts) {
+    var rec = dayRecord(key);
+    var g = goals();
+    var showRetro = !(opts && opts.noRetro) && key < todayKey();
+
+    var head = '<div class="hd-head">' +
+      '<span class="hd-date">' + koDate(key, true) + '</span>' +
+      (rec.kcal > 0
+        ? '<span class="hd-pct' + (rec.pct >= 90 ? ' good' : '') + '">목표 ' + rec.pct + '%</span>'
+        : '<span class="hd-pct none">기록 없음</span>') +
+      '</div>';
+
+    var sum = '<div class="hd-sum"><b>' + rec.kcal + 'kcal</b> · 탄 ' + g1(rec.c) + ' · 단 ' + g1(rec.p) + ' · 지 ' + g1(rec.f) + 'g</div>';
+
+    var bars = '<div class="hd-bars">' + ['c', 'p', 'f'].map(function (k) {
+      var pct = Math.max(0, Math.min(100, goalPct(rec[k], goals()[k])));
+      return '<span class="hb"><i class="' + k + '" style="width:' + pct + '%"></i></span>';
+    }).join('') + '</div>';
+
+    var rows = rec.meals.map(function (mm) {
+      var cls = mm.eaten && !mm.skip ? '' : (mm.skip ? ' is-off' : ' is-none');
+      var num = mm.eaten && !mm.skip
+        ? '<div class="hd-mnum">' + mm.nut.kcal + 'kcal · 탄 ' + g1(mm.nut.c) + ' 단 ' + g1(mm.nut.p) + ' 지 ' + g1(mm.nut.f) + 'g</div>'
+        : '';
+      var retro = (showRetro && !mm.eaten && !mm.skip)
+        ? '<div class="hd-retro">' +
+            '<button type="button" data-histeat="' + mm.key + '">✅ 먹었음</button>' +
+            '<button type="button" data-histskip="' + mm.key + '">🍗 외식</button>' +
+          '</div>'
+        : '';
+      return '<div class="hd-meal' + cls + '">' +
+        '<div class="hd-mrow">' +
+          '<span class="hd-mlabel">' + (mm.meal === 'lunch' ? '점심' : '저녁') + '</span>' +
+          '<span class="hd-mname">' + esc(mm.name) + '</span>' +
+          histTag(mm, key) +
+        '</div>' + num + retro +
+      '</div>';
+    }).join('');
+
+    var snacks = rec.snacks.length
+      ? '<div class="hd-snacks"><span class="hd-uses-label">간식</span>' + rec.snacks.map(function (s) { return s.emoji + ' ' + esc(s.name); }).join(' · ') + '</div>'
+      : '';
+
+    var seen = {}, names = [];
+    rec.meals.forEach(function (mm) {
+      if (!mm.eaten || mm.skip) return;
+      (mm.uses || []).forEach(function (id) {
+        var it = byId(id);
+        if (!it || seen[id]) return;
+        seen[id] = true;
+        names.push(emojiOf(it) + ' ' + esc(it.name));
+      });
+    });
+    var uses = names.length
+      ? '<div class="hd-uses"><span class="hd-uses-label">쓴 재료</span>' + names.join(' · ') + '</div>'
+      : '';
+
+    var body = rec.meals.length || rec.snacks.length
+      ? head + sum + bars + '<div class="hd-meals">' + rows + '</div>' + snacks + uses
+      : head + '<p class="hd-sum">이 날은 남긴 기록이 없어요</p>';
+
+    return '<div class="hd">' + body + '</div>';
+  }
+
+  function calHtml() {
+    var mp = String(histUI.month).split('-');
+    var y = +mp[0], m = +mp[1];
+    var first = new Date(y, m - 1, 1).getDay();
+    var days = new Date(y, m, 0).getDate();
+    var t = todayKey();
+    var thisMonth = t.slice(0, 7);
+    var curMonth = y + '-' + pad2(m);
+
+    var cells = '';
+    for (var i = 0; i < first; i++) cells += '<span class="cal-cell is-blank"></span>';
+    for (var d = 1; d <= days; d++) {
+      var key = y + '-' + pad2(m) + '-' + pad2(d);
+      var rec = dayRecord(key);
+      var future = key > t;
+      var dots = '';
+      if (rec.has) {
+        rec.meals.forEach(function (mm) {
+          if (mm.eaten && !mm.skip) dots += '<i class="dot eat"></i>';
+          else if (mm.skip) dots += '<i class="dot out"></i>';
+          else dots += '<i class="dot none"></i>';
+        });
+        if (rec.snacks.length) dots += '<i class="dot snk"></i>';
+      }
+      var cls = 'cal-cell';
+      if (key === t) cls += ' is-today';
+      if (future) cls += ' is-future';
+      if (rec.has && rec.pct >= 90) cls += ' is-good';
+      if (histUI.day === key) cls += ' is-sel';
+      cells += '<button type="button" class="' + cls + '" data-calday="' + key + '"' +
+        (future ? ' disabled' : '') + ' aria-label="' + koDate(key, true) + (rec.has ? '' : ' 기록 없음') + '">' +
+        '<span class="cal-num">' + d + '</span>' +
+        (dots ? '<span class="cal-dots">' + dots + '</span>' : '') +
+      '</button>';
+    }
+
+    var nextDisabled = curMonth >= thisMonth ? ' disabled' : '';
+
+    return '<div class="calbox">' +
+      '<div class="cal-head">' +
+        '<button type="button" class="cal-nav" data-calnav="-1" aria-label="이전 달">‹</button>' +
+        '<span>' + y + '년 ' + m + '월</span>' +
+        '<button type="button" class="cal-nav" data-calnav="1" aria-label="다음 달"' + nextDisabled + '>›</button>' +
+      '</div>' +
+      '<div class="cal-dow"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>' +
+      '<div class="cal-grid">' + cells + '</div>' +
+      '<div class="cal-legend">' +
+        '<span><i class="dot eat"></i>먹음</span>' +
+        '<span><i class="dot out"></i>외식</span>' +
+        '<span><i class="dot none"></i>미기록</span>' +
+        '<span><i class="dot snk"></i>간식</span>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderHistory() {
+    if (!histEl) return;
+    syncDay();
+    var keys = historyKeys();
+    if (!histUI.month || !/^\d{4}-\d{2}$/.test(String(histUI.month))) {
+      histUI.month = (keys[0] || todayKey()).slice(0, 7);
+    }
+    var month = histUI.month;
+    var monthKeys = keys.filter(function (k) { return k.slice(0, 7) === month; });
+    var mp = month.split('-');
+
+    var head = '<div class="hist-head">' +
+      '<div>' +
+        '<h2>📅 지난 기록</h2>' +
+        '<p>' + (keys.length ? '지금까지 ' + keys.length + '일 기록 · 날짜를 누르면 그날 탄단지를 봐요' : '먹은 끼니가 날짜별로 쌓여요') + '</p>' +
+      '</div>' +
+      '<button type="button" class="mini-btn" data-act="goalopen">🎯 목표</button>' +
+    '</div>';
+
+    var toggle = '<div class="views-toggle">' +
+      '<button type="button" data-hview="calendar"' + (histUI.view === 'calendar' ? ' class="is-on"' : '') + '>📅 캘린더</button>' +
+      '<button type="button" data-hview="list"' + (histUI.view === 'list' ? ' class="is-on"' : '') + '>📋 리스트</button>' +
+    '</div>';
+
+    if (!keys.length) {
+      histEl.innerHTML = head + toggle +
+        '<div class="empty"><span class="emo">📭</span><p>아직 지난 기록이 없어요.<br>오늘·내일 탭에서 끼니를 먹은 뒤 <b>✅ 먹었음</b>을 누르면<br>그 날짜의 메뉴와 탄단지가 여기에 쌓여요.</p></div>';
+      return;
+    }
+
+    if (histUI.view === 'list') {
+      var avgKcal = 0, avgP = 0, n = 0;
+      monthKeys.forEach(function (k) { var r = dayRecord(k); if (r.kcal > 0) { avgKcal += r.kcal; avgP += r.p; n++; } });
+      var stat = '<div class="hist-stat">' + (+mp[0]) + '년 ' + (+mp[1]) + '월 · ' + monthKeys.length + '일 기록' +
+        (n ? ' · 하루 평균 ' + Math.round(avgKcal / n) + 'kcal · 단백질 ' + Math.round(avgP / n) + 'g' : '') + '</div>';
+      var cards = monthKeys.map(function (k) {
+        return '<article class="hist-card">' + histDetailHtml(k) + '</article>';
+      }).join('');
+      histEl.innerHTML = head + toggle + stat +
+        (monthKeys.length ? cards : '<div class="empty"><span class="emo">📭</span><p>이 달에는 기록이 없어요.<br>다른 달은 캘린더에서 넘겨 볼 수 있어요.</p></div>') +
+        '<div class="section-note">✅ <b>먹었음</b>으로 남긴 끼니의 탄단지와 쓴 재료를 그대로 모아 둬요. 예전 날짜 카드에서 <b>먹었음·외식</b>을 늦게 표시할 수도 있어요. 재료 차감은 소진 체크 탭에서 해요.</div>';
+      return;
+    }
+
+    /* 캘린더 뷰 */
+    var dayKey = histUI.day && histUI.day.slice(0, 7) === month ? histUI.day : (monthKeys[0] || null);
+    var detail = dayKey
+      ? histDetailHtml(dayKey)
+      : '<div class="empty"><span class="emo">👆</span><p>날짜를 누르면 그날 먹은 끼니와<br>탄단지 합계를 보여줘요.</p></div>';
+    histEl.innerHTML = head + toggle + calHtml() + detail;
   }
 
   /* =========================================================
@@ -3455,7 +4036,7 @@
     var mine = !!r.custom;
     var mealName = meal === 'lunch' ? '점심' : '저녁';
     var dayName = day === 'today' ? '오늘' : '내일';
-    var base = mine ? null : recipeById(state.plan[day] && state.plan[day][meal]);
+    var base = mine ? null : recipeById(planOf(day)[meal]);
 
     var have = [], buy = [];
     (r.uses || []).forEach(function (id) {
@@ -3559,6 +4140,7 @@
     renderLeftover();
     renderList();
     renderMeals();
+    renderHistory();
   }
 
   function setTab(tab) {
@@ -3569,6 +4151,7 @@
     }
     $('view-pantry').classList.toggle('is-hidden', tab !== 'pantry');
     $('view-meals').classList.toggle('is-hidden', tab !== 'meals');
+    $('view-history').classList.toggle('is-hidden', tab !== 'history');
     $('fabAdd').classList.toggle('is-hidden-tab', tab !== 'pantry');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -3583,7 +4166,7 @@
   }
 
   function closeSheets(keepScrim) {
-    [ingSheet, eatSheet, customSheet, pickSheet, menuSheet, recipeSheet].forEach(function (el) { el.classList.remove('is-open'); });
+    [ingSheet, eatSheet, customSheet, pickSheet, menuSheet, recipeSheet, goalSheet].forEach(function (el) { el.classList.remove('is-open'); });
     if (!keepScrim) scrim.classList.remove('is-open');
     resetArmed = false;
   }
@@ -4194,6 +4777,48 @@
   }
 
   /* =========================================================
+     하루 영양 목표 설정
+     ========================================================= */
+  function goalSheetCalc() {
+    if (!gCalc) return;
+    var kc = Math.round((+gC.value || 0) * 4 + (+gP.value || 0) * 4 + (+gF.value || 0) * 9);
+    var kcal = +gKcal.value || 0;
+    var msg = '';
+    if (kc > 0) {
+      var cp = Math.round((+gC.value || 0) * 4 / kc * 100);
+      var pp = Math.round((+gP.value || 0) * 4 / kc * 100);
+      var fp = Math.max(0, 100 - cp - pp);
+      msg = '탄단지 합계 <b>' + fmtN(kc) + 'kcal</b> · 탄 ' + cp + '% · 단 ' + pp + '% · 지 ' + fp + '%';
+      if (kcal > 0 && Math.abs(kc - kcal) >= 120) {
+        msg += ' · 입력한 칼로리와 ' + Math.abs(kc - kcal) + 'kcal 차이';
+      }
+    }
+    gCalc.innerHTML = msg;
+  }
+
+  function openGoal() {
+    var g = goals();
+    if (!goalSheet) return;
+    gKcal.value = g.kcal;
+    gC.value = g.c;
+    gP.value = g.p;
+    gF.value = g.f;
+    goalSheetCalc();
+    openSheet(goalSheet);
+  }
+
+  function saveGoal() {
+    var next = normalizeGoals({
+      kcal: +gKcal.value, c: +gC.value, p: +gP.value, f: +gF.value
+    });
+    state.goals = next;
+    save();
+    closeSheets();
+    renderAll();
+    toast('하루 목표를 ' + next.kcal + 'kcal · 탄 ' + next.c + ' · 단 ' + next.p + ' · 지 ' + next.f + 'g으로 저장했어요');
+  }
+
+  /* =========================================================
      이벤트
      ========================================================= */
   document.querySelector('.tabs').addEventListener('click', function (e) {
@@ -4202,6 +4827,7 @@
   });
 
   dashEl.addEventListener('click', function (e) {
+    if (e.target.closest('[data-gotomeals]')) { setTab('meals'); return; }
     var chip = e.target.closest('[data-jump]');
     if (!chip) return;
     ui.filter = 'urgent';
@@ -4425,6 +5051,8 @@
   mealsEl.addEventListener('click', function (e) {
     if (e.target.closest('#replanBtn')) { replanAll(); return; }
 
+    if (e.target.closest('[data-act="goalopen"]')) { openGoal(); return; }
+
     var sug = e.target.closest('[data-suggest]');
     if (sug) {
       addUseToMeal(sug.getAttribute('data-day'), sug.getAttribute('data-meal'), sug.getAttribute('data-suggest'));
@@ -4471,10 +5099,11 @@
     if (snack) {
       var day = snack.getAttribute('data-snackday');
       var sid = snack.getAttribute('data-snack');
-      var arr = state.snacks[day] || [];
+      var dk = dateKey(snack.getAttribute('data-snackday'));
+      var arr = state.snacks[dk] || [];
       var idx = arr.indexOf(sid);
       if (idx === -1) arr.push(sid); else arr.splice(idx, 1);
-      state.snacks[day] = arr;
+      state.snacks[dk] = arr;
       save();
       renderMeals();
       return;
@@ -4525,7 +5154,7 @@
     else if (act === 'fixGone') {
       var rep = pickReplacement(d, m);
       if (!rep) { toast('소진된 재료 없이 만들 수 있는 메뉴가 없어요'); return; }
-      state.plan[d][m] = rep.id;
+      planOf(d)[m] = rep.id;
       clearMealUses(d, m);
       save();
       renderAll();
@@ -4549,6 +5178,75 @@
       toast('먹은 기록을 되돌렸어요 · 재료 체크는 소진 탭에서 조정');
     }
   });
+
+  /* ── 지난 기록 탭 ── */
+  histEl.addEventListener('click', function (e) {
+    var hv = e.target.closest('[data-hview]');
+    if (hv) {
+      histUI.view = hv.getAttribute('data-hview') === 'list' ? 'list' : 'calendar';
+      renderHistory();
+      return;
+    }
+    if (e.target.closest('[data-act="goalopen"]')) { openGoal(); return; }
+
+    var nav = e.target.closest('[data-calnav]');
+    if (nav) {
+      var step = +nav.getAttribute('data-calnav') || 0;
+      var p = String(histUI.month).split('-');
+      var d = new Date(+p[0], +p[1] - 1 + step, 1);
+      var mk = d.getFullYear() + '-' + pad2(d.getMonth() + 1);
+      if (mk <= todayKey().slice(0, 7)) {
+        histUI.month = mk;
+        histUI.day = null;
+        renderHistory();
+      }
+      return;
+    }
+
+    var cell = e.target.closest('[data-calday]');
+    if (cell) {
+      histUI.day = cell.getAttribute('data-calday');
+      renderHistory();
+      var hd = histEl.querySelector('.hd');
+      if (hd && hd.scrollIntoView) hd.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    var he = e.target.closest('[data-histeat]');
+    if (he) { markPastMeal(he.getAttribute('data-histeat'), true); return; }
+    var hs = e.target.closest('[data-histskip]');
+    if (hs) { markPastMeal(hs.getAttribute('data-histskip'), false); return; }
+  });
+
+  /* 지난 날 끼니를 늦게 표시 — 재고는 건드리지 않고 기록만 남긴다 */
+  function markPastMeal(slug, eaten) {
+    var k = String(slug || '');
+    if (!/^\d{4}-\d{2}-\d{2}-(lunch|dinner)$/.test(k)) return;
+    if (k.slice(0, 10) >= todayKey()) return;
+    if (eaten) { state.eaten[k] = true; delete state.skips[k]; }
+    else { state.skips[k] = true; delete state.eaten[k]; }
+    save();
+    renderDash();
+    renderMeals();
+    renderHistory();
+    toast(eaten ? '그 끼니를 먹은 걸로 기록했어요' : '그 끼니를 외식으로 기록했어요');
+  }
+
+  if (goalSheet) {
+    $('goalSave').addEventListener('click', saveGoal);
+    $('goalCancel').addEventListener('click', function () { closeSheets(); });
+    [gKcal, gC, gP, gF].forEach(function (el) { el.addEventListener('input', goalSheetCalc); });
+    gPreset.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-preset]');
+      if (!b) return;
+      var v = b.getAttribute('data-preset').split(',');
+      gKcal.value = v[0];
+      gC.value = v[1];
+      gP.value = v[2];
+      gF.value = v[3];
+      goalSheetCalc();
+    });
+  }
 
   $('fabAdd').addEventListener('click', function () { openEditor('add'); });
 
@@ -4674,13 +5372,15 @@
     resetArmed = false;
     try { localStorage.removeItem(STORE_KEY); } catch (e) {}
     state = freshState();
-    state.plan = buildPlan(state);
     save();
     closeSheets();
     ui.filter = 'all';
     ui.hideDone = false;
+    ui.day = 'today';
+    histUI.view = 'calendar';
+    histUI.month = null;
+    histUI.day = null;
     setTab('pantry');
-    ensurePlan();
     renderAll();
     toast('처음 상태로 초기화했어요');
   });
@@ -4699,6 +5399,8 @@
   window.addEventListener('storage', function (e) {
     if (e.key === STORE_KEY) {
       state = loadState();
+      syncDay();
+      ensurePlans();
       renderAll();
     }
   });
@@ -4713,10 +5415,8 @@
   });
 
   function ensurePlan() {
-    if (!state.plan || !state.plan.today || !state.plan.tomorrow) {
-      state.plan = buildPlan(state);
-      save();
-    }
+    ensurePlans();
+    save();
   }
 
   /* =========================================================
@@ -4727,19 +5427,42 @@
       return '<button type="button" data-quick="' + esc(q) + '">' + esc(q) + '</button>';
     }).join('');
 
-  ensurePlan();
+  syncDay();
+  ensurePlans();
   renderAll();
   save();
+
+  /* 앱을 켜 둔 채 자정이 지나거나, 다음 날 다시 열었을 때
+     오늘/내일 탭이 그 날짜로 넘어가고 어제 기록은 지난 기록으로 자동 이동 */
+  setInterval(function () {
+    if (!syncDay()) return;
+    ensurePlans();
+    renderAll();
+    save();
+  }, 30000);
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState !== 'visible') return;
+    if (syncDay()) {
+      ensurePlans();
+      renderAll();
+      save();
+      toast('날짜가 바뀌었어요 · 어제 기록은 📅 지난 기록에 쌓였어요');
+    }
+  });
 
   /* 위젯 커맨드 훅 (reset / replan) */
   window.fridgeRescue = {
     reset: function () {
       try { localStorage.removeItem(STORE_KEY); } catch (e) {}
       state = freshState();
-      state.plan = buildPlan(state);
       save();
       ui.filter = 'all';
       ui.hideDone = false;
+      ui.day = 'today';
+      histUI.view = 'calendar';
+      histUI.month = null;
+      histUI.day = null;
       renderAll();
       toast('처음 상태로 초기화했어요');
     },
