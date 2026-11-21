@@ -286,8 +286,8 @@ h1,h2,h3,p{margin:0}
   font-variant-numeric:tabular-nums;letter-spacing:-.01em;background:var(--white);
 }
 .tl-gap{position:absolute;left:var(--tl-gutter);right:0;display:flex;align-items:center;gap:4px}
-.tl-gap::before{content:"";flex:1;border-top:1px dashed var(--gray-150)}
-.tl-gap span{font-size:8.5px;color:var(--text-4);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.tl-gap::after{content:"";flex:1;border-top:1px dashed var(--gray-150)}
+.tl-gap span{font-size:8.5px;color:var(--text-4);font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1}
 .tl-block{
   position:absolute;left:var(--tl-gutter);right:0;border-radius:7px;
   padding:2px 3px 2px 5px;background:var(--w);
@@ -309,6 +309,7 @@ h1,h2,h3,p{margin:0}
   font-size:8.5px;color:var(--text-3);line-height:1.15;margin-top:1px;
   font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
+.tl-block.is-compact .tl-meta{display:none}
 .tl-block.is-tiny .tl-meta{display:none}
 .tl-block.is-tiny .tl-title{-webkit-line-clamp:1}
 .tl-flex-label{color:var(--brand-strong)}
@@ -1332,8 +1333,10 @@ function renderTimeline(items, ds, isToday){
     if (bot == null) bot = top + 24;
     var height = Math.max(bot - top, 21);
     var flex = it.uncertain && !it.confirmed;
-    var tiny = height < 33;
-    var cls = 'tl-block' + (flex ? ' is-flex' : '') + (it.done ? ' is-done' : '') + (tiny ? ' is-tiny' : '');
+    var tiny = height < 30;
+    var compact = !tiny && height < 47;
+    var cls = 'tl-block' + (flex ? ' is-flex' : '') + (it.done ? ' is-done' : '') +
+      (tiny ? ' is-tiny' : compact ? ' is-compact' : '');
     var meta = toHHMM(p.s) + '–' + toHHMM(p.e) +
       (flex ? '<span class="tl-flex-label"> · ' + (it.whenLabel && it.whenLabel.indexOf('틈틈') >= 0 ? '틈틈이' : '어림') + '</span>' : '');
     var leftPct = (p.lane / p.lanes) * 100;
