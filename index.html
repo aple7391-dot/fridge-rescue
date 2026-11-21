@@ -1266,6 +1266,11 @@
   .gap-toggle:active{background:#E5E8EB}
   .gap-panel{margin-top:11px}
   .gap-panel .gap-pick{margin-top:0}
+  /* 펼쳤을 때는 숨은 칩 없이 다 보이게 줄바꿈 */
+  .gap-panel .gap-pick,
+  .gap-panel .extra-quick{flex-wrap:wrap;overflow:visible}
+  .gap-panel .gap-pick{padding-bottom:0}
+  .gap-panel .extra-quick{padding-bottom:0}
   .gap-cap{font-size:11px;font-weight:700;color:var(--sub);letter-spacing:-.01em;margin-bottom:7px}
   .gap-cap-sub{margin-top:11px}
   .gap-panel .extra-quick{margin-top:9px}
