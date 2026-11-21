@@ -278,7 +278,7 @@ h1,h2,h3,p{margin:0}
 .split-r{min-width:0;border-left:1px solid var(--border-hair);padding-left:9px}
 
 /* timeline (compact) */
-.tl{position:relative;min-height:2px}
+.tl{position:relative;min-height:2px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .tl-row{position:absolute;left:0;right:0;border-top:1px solid #F1F2F4}
 .tl-row>i{
   position:absolute;left:0;top:-6px;width:var(--tl-gutter);
@@ -458,9 +458,9 @@ h1,h2,h3,p{margin:0}
   margin-bottom:6px;letter-spacing:.01em;display:flex;align-items:center;justify-content:space-between;gap:6px;
 }
 .sh-label .hint{font-size:var(--fs-10);color:var(--text-4);font-weight:var(--fw-r)}
-.cats{display:flex;flex-wrap:wrap;gap:5px}
+.cats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
 .cat-chip{
-  height:32px;padding:0 11px;border-radius:var(--r-full);
+  height:32px;padding:0 8px;border-radius:var(--r-full);justify-content:center;overflow:hidden;
   border:1px solid var(--border-hair);background:var(--white);
   font-size:var(--fs-12);color:var(--text-2);white-space:nowrap;
   display:inline-flex;align-items:center;gap:5px;
@@ -1006,7 +1006,7 @@ function save(){
 /* 저장된 상태의 태그를 한 번 정정 */
 function migrate(){
   var changed = false;
-  if (state.version < 2){
+  if (!(state.version >= 2)){
     state.items.forEach(function(it){
       var want = CAT_FIX[String(it.title || '').trim()];
       if (want && CAT[want] && it.cat !== want){ it.cat = want; changed = true; }
@@ -1319,7 +1319,13 @@ function renderTimeline(items, ds, isToday){
 
   var placed = layout(placementsFor(ds));
   var L = tlLayout(placed, state.fullDay);
-  tl.style.height = L.total + 'px';
+  if (state.fullDay && L.total > 360){
+    tl.style.height = '360px';
+    tl.style.overflowY = 'auto';
+  } else {
+    tl.style.height = L.total + 'px';
+    tl.style.overflowY = 'visible';
+  }
 
   var grid = '';
   L.rows.forEach(function(r){
@@ -1430,13 +1436,14 @@ function attachDrag(root, L){
       var origStart = parseInt(block.getAttribute('data-start'), 10);
       var dur = parseInt(block.getAttribute('data-dur'), 10) || 60;
       var startY = ev.clientY, moved = false, lastMin = origStart;
+      var scrollTop = root.scrollTop || 0;
       var metaEl = block.querySelector('.tl-meta');
       if (grip.setPointerCapture) { try { grip.setPointerCapture(ev.pointerId); } catch(e){} }
 
       function move(e){
         var dy = e.clientY - startY;
         if (Math.abs(dy) > 2) moved = true;
-        var at = L.minForY(L.yFor(origStart) + dy);
+        var at = L.minForY(L.yFor(origStart) + scrollTop + dy);
         var s = clamp(Math.round(at/15)*15, 0, END_HOUR*60 - dur);
         lastMin = s;
         var y = L.yFor(s);
