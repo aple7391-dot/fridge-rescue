@@ -908,7 +908,7 @@ function parseSentence(raw, base){
       .replace(/정도/g, ' ')
       .replace(/(^|\s)약\s/g, ' ')
       .replace(/^(에|에는|쯤|부터|까지)\s*/,'')
-      .replace(/^(소요|예정|진행|걸릴)\s*[,.]?\s*/,'')
+      .replace(/^\s*(?:소요|예정|진행|걸릴)(?:\s+|[,.]\s*)/,'')
       .replace(/\s+/g, ' ')
       .trim();
     for (var t = 0; t < 3; t++) s = s.replace(META_TAIL, '').replace(/\s+/g,' ').trim();
