@@ -675,6 +675,7 @@
     color:var(--ink2);line-height:1.4;word-break:keep-all;
   }
   .meal-card.is-skip .mcc-title{color:var(--sub);text-decoration:line-through;text-decoration-thickness:1.5px}
+  .meal-card.is-out .mcc-title,.meal-card.is-out .meal-name{text-decoration:none;color:var(--ink2)}
   .mcc-macro{display:flex;align-items:center;gap:8px;margin-top:9px}
   .mini-bar{flex:1;min-width:40px;display:flex;gap:2px;height:6px;background:#E7EBEF;border-radius:99px;overflow:hidden}
   .mini-bar i{display:block;height:100%;border-radius:99px;min-width:2px}
@@ -3613,7 +3614,7 @@
     var part = isCountable(it) && hasPartial(it) && !it.done;
     if (isCountable(it)) {
       if (!it.done) meta.push('<span>' + esc(countText(it)) + ' 남음</span>');
-    } else if (it.qty) {
+    } else if (it.qty && !/^(소량|조금|절반 남음|반 남음)$/.test(String(it.qty).trim())) {
       meta.push('<span>' + esc(it.qty) + '</span>');
     }
     if (it.note) {
@@ -3805,7 +3806,7 @@
         tag = '<span class="gone">소진됨</span>';
       } else if (isSharing(it)) {
         cls += ' is-sharing';
-        tag = '<span class="state">소량</span>';
+        tag = '<span class="state">' + (isPctItem(it) ? pctOf(it) + '%' : '소량') + '</span>';
       } else if (it.urg === 'urgent') cls += ' urgent';
       else if (it.urg === 'soon') cls += ' soon';
       return '<button type="button" class="' + cls + '" data-chipdel="' + esc(id) + '"' +
@@ -3857,7 +3858,7 @@
       var mdata = null;
       if (out) mdata = macrosObj(out.c, out.p, out.f, out.kcal);
       else if (!skipped) mdata = (checkHtml(day, meal, { noCross: true }) || {}).data;
-      return '<article class="meal-card is-compact' + (eaten ? ' is-eaten' : ' is-skip') + '" data-day="' + day + '" data-meal="' + meal + '">' +
+      return '<article class="meal-card is-compact' + (eaten ? ' is-eaten' : ' is-skip') + (out ? ' is-out' : '') + '" data-day="' + day + '" data-meal="' + meal + '">' +
         '<button type="button" class="mcc" data-act="expand" aria-expanded="false" aria-label="' + esc(titleName) + ' 펼쳐 보기">' +
           '<span class="mcc-top">' +
             '<span class="mc-meal">' + mealName + '</span>' +
@@ -3873,7 +3874,8 @@
     }
 
     var cls = 'meal-card' + (mine ? ' is-mine' : '') + (skipped ? ' is-skip' : '') +
-      (eaten ? ' is-eaten' : '') + (gone.length && !eaten && !skipped ? ' has-gone' : '');
+      (out ? ' is-out' : '') + (eaten ? ' is-eaten' : '') +
+      (gone.length && !eaten && !skipped ? ' has-gone' : '');
 
     var badges = '';
     if (mine && !out) badges += '<span class="mc-badge mine">내가 정한 메뉴</span>';
@@ -3895,7 +3897,7 @@
 
     var metaBits = [];
     if (out) {
-      metaBits.push('🍗 외식으로 기록');
+      /* 외식 카드는 배지와 탄단지 한 줄로 충분하다 */
     } else if (mine) {
       metaBits.push('✏️ 직접 등록한 메뉴');
     } else {
@@ -3946,8 +3948,9 @@
     if (out) {
       outDetail = '<div class="out-detail">' +
         (out.items || []).map(function (x) {
+          var q = x.qty ? String(x.qty).replace(/\.0$/, '') + (x.unit || '') : '';
           return '<div class="od"><b>' + esc(x.label) + '</b>' +
-            '<span>' + Math.round(x.kcal) + 'kcal</span></div>';
+            '<span>' + esc((q ? q + ' · ' : '') + Math.round(x.kcal) + 'kcal') + '</span></div>';
         }).join('') +
       '</div>';
     }
@@ -5162,7 +5165,7 @@
     outList.innerHTML = outItems.map(function (x, i) {
       return '<div class="out-item">' +
         '<div class="out-name"><b>' + esc(x.label) + '</b>' +
-          '<em>' + esc(String(x.qty).replace(/\.0$/, '') + x.unit) + ' · ' + x.kcal + 'kcal · 탄 ' + g1(x.c) + ' · 단 ' + g1(x.p) + ' · 지 ' + g1(x.f) + 'g</em>' +
+          '<em>' + esc(String(x.qty).replace(/\.0$/, '') + x.unit) + ' · ' + x.kcal + 'kcal · 단 ' + g1(x.p) + 'g</em>' +
         '</div>' +
         '<div class="step">' +
           '<button type="button" data-outq="-1" data-oi="' + i + '" aria-label="한 단위 줄이기">−</button>' +
@@ -5185,7 +5188,7 @@
     var leftC = Math.round(dm.kcal + t.kcal);
     outGap.textContent = leftP > 0
       ? '이 끼니까지 넣으면 단백질 ' + leftP + 'g 더 필요해요'
-      : '이 끼니까지 넣으면 오늘 ' + fmtN(leftC) + 'kcal · 단백질은 다 채워요';
+      : '이 끼니까지 넣으면 오늘 ' + fmtN(leftC) + 'kcal이 돼요 · 단백질은 다 채워요';
     outSave.disabled = false;
   }
 
