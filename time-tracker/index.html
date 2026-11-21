@@ -85,7 +85,7 @@
   --gutter:var(--sp-4);
 
   /* ── Timeline ─────────────────────────────────────────── */
-  --hour-h:46px;
+  --hour-h:40px;
   --tl-gutter:42px;
 }
 
@@ -195,7 +195,8 @@ h1,h2,h3,p{margin:0}
 .p-chip .caret{font-size:9px;color:var(--text-4);line-height:1}
 .p-chip[aria-expanded="true"]{border-color:var(--ink);background:var(--white)}
 .p-chip.is-flex{border-style:dashed;color:var(--text-3)}
-.chip-opts{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:2px;scrollbar-width:none}
+.chip-opts{display:flex;gap:6px;margin-top:8px;padding-bottom:2px;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}
+.chip-opts::-webkit-scrollbar{display:none}
 .chip-opts::-webkit-scrollbar{display:none}
 .opt{
   flex:none;height:28px;padding:0 11px;border-radius:var(--r-full);
@@ -320,11 +321,13 @@ h1,h2,h3,p{margin:0}
   align-self:flex-start;letter-spacing:-.02em;
 }
 .grip{
-  width:12px;flex:none;border-radius:5px;cursor:grab;touch-action:none;
-  background-image:radial-gradient(circle,rgba(19,20,21,.28) 1px,transparent 1.2px);
-  background-size:4px 4px;background-position:center;opacity:.55;
+  width:15px;flex:none;border-radius:5px;cursor:grab;touch-action:none;
+  display:grid;place-items:center;opacity:.30;
+  color:var(--c);font-size:10px;line-height:1;letter-spacing:0;
+  -webkit-user-select:none;user-select:none;
 }
-.grip:active{cursor:grabbing;opacity:1}
+.grip::before{content:"⠿"}
+.grip:active{cursor:grabbing;opacity:.75}
 .nudge{display:flex;flex-direction:column;justify-content:center;gap:2px;flex:none;width:24px}
 .nudge button{
   height:16px;border-radius:4px;font-size:8px;line-height:1;color:var(--c);
@@ -355,7 +358,8 @@ h1,h2,h3,p{margin:0}
 
 /* ── Checklist ───────────────────────────────────────────── */
 .list-title{font-size:var(--fs-16);font-weight:var(--fw-b);letter-spacing:var(--tr-tighter)}
-.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:1px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:1px}
+.chips.is-scroll{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
 .chips + .chips{margin-top:6px}
 .chip{
@@ -592,7 +596,7 @@ h1,h2,h3,p{margin:0}
 var LS_KEY = 'time-tracker.v1';
 var WD = ['일','월','화','수','목','금','토'];
 var START_HOUR = 9, END_HOUR = 24;
-var HOUR_H = 46; /* keep in sync with --hour-h */
+var HOUR_H = 40; /* keep in sync with --hour-h */
 
 var CATS = [
   {id:'work',    name:'업무·협업',       hex:'#2E5FE8', weak:'#EDF2FE'},
@@ -1436,7 +1440,7 @@ function renderSheet(){
   var s = it.start != null ? toMin(it.start) : (placementsFor(it.date).filter(function(p){ return p.it.id === it.id; })[0] || {s:19*60}).s;
   var e = s + (it.dur || 60);
 
-  var timeChips = '<div class="chips">';
+  var timeChips = '<div class="chips is-scroll">';
   timeChips += '<button class="chip' + (it.start == null ? ' is-on' : '') + '" data-act="sheet-time" data-val="">미정</button>';
   for (var h = 9; h <= 23; h++){
     var v = pad2(h) + ':00';
