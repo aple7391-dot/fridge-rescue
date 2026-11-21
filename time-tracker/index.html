@@ -238,16 +238,18 @@ h1,h2,h3,p{margin:0}
 .cal-week span:last-child{color:#3358A8}
 .cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px 2px}
 .cal-cell{
-  position:relative;height:66px;min-width:0;overflow:hidden;padding:4px 3px 5px;border-radius:var(--r-sm);
+  position:relative;height:76px;min-width:0;overflow:hidden;padding:4px 2px 5px;border-radius:var(--r-sm);
   border:1px solid transparent;text-align:left;display:flex;flex-direction:column;gap:1px;
   background:transparent;
 }
+.cal-top{display:flex;align-items:center;justify-content:space-between;gap:2px;min-height:19px}
+.cal-count{font-size:8px;color:var(--text-4);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .cal-cell.is-out{opacity:.28;pointer-events:none}
 .cal-cell.is-sel{border-color:var(--ink);background:var(--white)}
 .cal-cell.is-today .cal-num{background:var(--ink);color:var(--white)}
 .cal-cell:not(.is-sel):active{background:var(--surface-cool)}
 .cal-num{
-  align-self:flex-start;min-width:19px;height:19px;padding:0 4px;border-radius:var(--r-full);
+  min-width:19px;height:19px;padding:0 4px;border-radius:var(--r-full);
   display:grid;place-items:center;
   font-size:var(--fs-11);font-weight:var(--fw-m);color:var(--text-2);
   font-variant-numeric:tabular-nums;line-height:1;
@@ -256,12 +258,13 @@ h1,h2,h3,p{margin:0}
 .cal-cell.is-sat .cal-num{color:#3358A8}
 .cal-cell.is-today .cal-num,.cal-cell.is-today.is-sun .cal-num,.cal-cell.is-today.is-sat .cal-num{color:var(--white)}
 .ev{
-  display:block;width:100%;max-width:100%;min-width:0;
-  font-size:8.5px;line-height:11px;height:11px;
-  padding:0 2px;border-radius:3px;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;
+  width:100%;max-width:100%;min-width:0;overflow:hidden;
+  font-size:7.5px;line-height:9px;max-height:18px;
+  padding:1px 2px;border-radius:3px;
   background:var(--w);color:var(--c);
   border-left:2px solid var(--c);
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  white-space:normal;word-break:keep-all;overflow-wrap:anywhere;
   letter-spacing:-.03em;
 }
 .ev.is-done{opacity:.5;text-decoration:line-through}
@@ -1040,7 +1043,8 @@ function renderMonth(){
     (byDate[it.date] = byDate[it.date] || []).push(it);
   });
 
-  for (var i = 0; i < 42; i++){
+  var rows = Math.ceil((startIdx + daysInMonth) / 7);
+  for (var i = 0; i < rows * 7; i++){
     var dayNum, dateStr = null, out = false;
     if (i < startIdx){
       dayNum = prevDays - startIdx + 1 + i; out = true;
@@ -1065,20 +1069,21 @@ function renderMonth(){
         var am = a.start ? toMin(a.start) : 25*60, bm = b.start ? toMin(b.start) : 25*60;
         return am - bm;
       });
-      var show = list.slice(0, 3);
+      var show = list.slice(0, 2);
       show.forEach(function(it){
         var c = CAT[it.cat] || CATS[0];
         evs += '<span class="ev' + (it.done ? ' is-done' : '') + '" style="--c:' + c.hex + ';--w:' + c.weak + '">' +
           esc(it.title) + '</span>';
       });
-      if (list.length > 3) evs += '<span class="ev-more">+' + (list.length - 3) + '</span>';
     }
 
     cells.push(
       '<button class="' + cls + '" role="gridcell"' +
         (out ? ' tabindex="-1"' : ' data-act="pick-day" data-date="' + dateStr + '"') +
         ' aria-label="' + (out ? '' : dayNum + '일, ' + ((byDate[dateStr] || []).length) + '건') + '">' +
-        '<span class="cal-num">' + dayNum + '</span>' + evs +
+        '<span class="cal-top"><span class="cal-num">' + dayNum + '</span>' +
+          (!out && (byDate[dateStr] || []).length > 2 ? '<span class="cal-count">+' + ((byDate[dateStr] || []).length - 2) + '</span>' : '') +
+        '</span>' + evs +
       '</button>'
     );
   }
