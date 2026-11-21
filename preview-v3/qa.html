@@ -12,10 +12,13 @@
 <body>
 <iframe src="./index.html" title="냉장고 구조대 390px 미리보기"></iframe>
 <script>
-  /* 캡처용 harness — ?h=2400 처럼 앱을 한 번에 그릴 높이를 정한다 */
+  /* 캡처용 harness — ?h=2400 이면 앱을 그 높이로 한 번에 그리고, 항상 최신 파일을 읽게 캐시를 비튼다 */
   (function () {
-    var h = parseInt((new URLSearchParams(location.search)).get('h') || '0', 10);
-    if (h > 0) document.querySelector('iframe').style.height = h + 'px';
+    var q = new URLSearchParams(location.search);
+    var h = parseInt(q.get('h') || '0', 10);
+    var f = document.querySelector('iframe');
+    if (h > 0) f.style.height = h + 'px';
+    f.src = './index.html?v=' + Date.now();
   })();
 </script>
 </body>
