@@ -1803,7 +1803,12 @@ document.addEventListener('keydown', function(ev){
    13. Composer wiring
    ============================================================ */
 var inputTimer = null;
+function autoGrow(el){
+  el.style.height = 'auto';
+  el.style.height = Math.min(Math.max(el.scrollHeight, 64), 168) + 'px';
+}
 $('#quickInput').addEventListener('input', function(){
+  autoGrow(this);
   clearTimeout(inputTimer);
   inputTimer = setTimeout(renderPreview, 180);
 });
@@ -1837,6 +1842,7 @@ function addFromComposer(){
   save();
 
   $('#quickInput').value = '';
+  $('#quickInput').style.height = '64px';
   $('#preview').hidden = true;
   $('#preview').innerHTML = '';
   draft = null;
