@@ -1378,6 +1378,55 @@
   .out-detail .od b{flex:1;font-weight:700;color:var(--ink)}
   .out-detail .od span{font-size:11.5px;color:var(--sub);font-weight:600}
 
+  /* ══ 외식 양 조절 — 접시 그림 ══ */
+  .portion{margin-top:18px;padding:15px 16px 16px;border-radius:18px;background:#F7F9FB;border:1px solid #EFF2F5}
+  .portion-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .portion-head span{font-size:13px;font-weight:700;color:var(--ink2);letter-spacing:-.02em}
+  .portion-head b{font-size:13.5px;font-weight:800;color:var(--blue-deep);letter-spacing:-.02em;white-space:nowrap}
+  .portion-body{display:flex;align-items:center;gap:14px;margin-top:6px}
+  .plate-wrap{flex:0 0 94px;width:94px;height:94px}
+  .plate-svg{width:94px;height:94px;display:block}
+  .plate-food{transform-box:fill-box;transform-origin:center;transition:transform .18s ease,opacity .18s ease}
+  .plate-wrap.is-empty .plate-food{opacity:.13}
+  .pchips{flex:1;min-width:0;display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  .pchip{padding:9px 4px;border-radius:12px;background:#fff;border:1px solid var(--line2);min-height:44px}
+  .pchip:active{transform:scale(.97)}
+  .pchip b{display:block;font-size:12.5px;font-weight:700;color:var(--ink2);letter-spacing:-.03em}
+  .pchip em{display:block;margin-top:1px;font-style:normal;font-size:10.5px;font-weight:600;color:var(--sub)}
+  .pchip.is-on{background:var(--blue-soft);border-color:#BFD9FB}
+  .pchip.is-on b{color:var(--blue-deep);font-weight:800}
+  .pchip.is-on em{color:#4E7CB8}
+  .portion-slider{margin-top:8px}
+  .portion-hint{margin-top:7px;font-size:11.5px;font-weight:500;color:var(--sub);line-height:1.55;letter-spacing:-.01em}
+
+  /* ══ 외식 사진 ══ */
+  .photo-add{
+    width:100%;margin-top:16px;padding:14px 12px;border-radius:14px;min-height:50px;
+    background:#F5F7F9;color:var(--ink2);font-size:13.5px;font-weight:700;letter-spacing:-.02em;
+  }
+  .photo-add:active{background:#E9EDF1}
+  .photo-add .hint-inline{font-size:11.5px;font-weight:500;color:var(--sub);margin-left:6px;letter-spacing:0}
+  .photo-prev{position:relative;margin-top:12px;border-radius:14px;overflow:hidden;background:#F2F4F6}
+  .photo-prev img{display:block;width:100%;max-height:200px;object-fit:cover}
+  .photo-del{
+    position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:10px;
+    background:rgba(17,24,39,.6);color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center;
+  }
+  .out-detail-photo{display:block;width:100%;padding:0;margin:10px 0 2px;border-radius:13px;overflow:hidden;background:#F2F4F6}
+  .out-detail-photo img{display:block;width:100%;max-height:180px;object-fit:cover}
+  .hd-photo{flex:0 0 auto;width:46px;height:46px;padding:0;border-radius:11px;overflow:hidden;background:#F2F4F6}
+  .hd-photo img{display:block;width:100%;height:100%;object-fit:cover}
+
+  /* ══ 외식 사진 크게 보기 ══ */
+  .photo-modal{padding:0 22px}
+  .photo-box{position:relative;width:100%;max-width:380px;display:grid;place-items:center}
+  .photo-box img{display:block;width:100%;max-height:70vh;object-fit:contain;border-radius:20px;background:#fff;box-shadow:var(--shadow-lg)}
+  .photo-x{
+    position:absolute;top:-46px;right:0;width:38px;height:38px;border-radius:12px;
+    background:rgba(255,255,255,.94);color:var(--ink2);font-size:13px;font-weight:800;display:grid;place-items:center;
+    box-shadow:0 4px 14px rgba(17,24,39,.18);
+  }
+
   /* ══ 토스트 되돌리기 ══ */
   .toast.is-open{pointer-events:auto}
   .toast-act{
@@ -1600,6 +1649,54 @@
 
   <div class="out-quick" id="outQuick"></div>
   <div class="out-list" id="outList"></div>
+
+  <div class="portion" id="outPortionBox">
+    <div class="portion-head">
+      <span>🍽️ 먹은 양</span>
+      <b id="outPortionVal">보통 · 1×</b>
+    </div>
+    <div class="portion-body">
+      <div class="plate-wrap is-empty" id="outPlateWrap">
+        <svg class="plate-svg" viewBox="0 0 132 132" aria-hidden="true">
+          <defs><clipPath id="outPlateClip"><circle cx="66" cy="66" r="42"/></clipPath></defs>
+          <circle cx="66" cy="69" r="53" fill="#E3E8ED" opacity=".7"/>
+          <circle cx="66" cy="66" r="52" fill="#FFFFFF" stroke="#E5E8EB" stroke-width="1.5"/>
+          <circle cx="66" cy="66" r="41" fill="#F5F7F9" stroke="#EDF0F3" stroke-width="1.5"/>
+          <g clip-path="url(#outPlateClip)">
+            <g class="plate-food" id="outFoodG">
+              <ellipse cx="58" cy="57" rx="15" ry="11" fill="#C98B5E"/>
+              <ellipse cx="77" cy="59" rx="14" ry="10" fill="#B9754A"/>
+              <ellipse cx="66" cy="73" rx="16" ry="11" fill="#E1603F"/>
+              <ellipse cx="50" cy="72" rx="12" ry="9" fill="#E8D6B8"/>
+              <ellipse cx="80" cy="75" rx="11" ry="8" fill="#6FB36B"/>
+              <ellipse cx="66" cy="46" rx="12" ry="8" fill="#D9A05B"/>
+              <ellipse cx="45" cy="60" rx="9" ry="7" fill="#8FBF6A"/>
+              <ellipse cx="86" cy="48" rx="7" ry="6" fill="#DCC3A0"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="pchips" id="outPortionChips">
+        <button type="button" class="pchip" data-portion="0.5"><b>조금</b><em>0.5×</em></button>
+        <button type="button" class="pchip is-on" data-portion="1"><b>보통</b><em>1×</em></button>
+        <button type="button" class="pchip" data-portion="1.5"><b>넉넉히</b><em>1.5×</em></button>
+        <button type="button" class="pchip" data-portion="2"><b>많이</b><em>2×</em></button>
+      </div>
+    </div>
+    <div class="pctrow portion-slider">
+      <input type="range" id="outPortion" min="0.25" max="2.5" step="0.25" value="1" aria-label="먹은 양 배율">
+      <span class="pctval" id="outPortionPct">1×<small>보통</small></span>
+    </div>
+    <p class="portion-hint">혼자 다 먹었으면 1×, 둘이 나눠 먹었으면 0.5×로 낮춰요. 접시가 작아지면 칼로리도 같이 줄어요.</p>
+  </div>
+
+  <input type="file" id="outPhotoFile" accept="image/*" hidden>
+  <button type="button" class="photo-add" id="outPhotoPick"><span id="outPhotoPickTxt">📷 사진 남기기</span><span class="hint-inline">이 기기에만 저장돼요</span></button>
+  <div class="photo-prev" id="outPhotoPrev" hidden>
+    <img id="outPhotoImg" alt="외식 사진 미리보기">
+    <button type="button" class="photo-del" id="outPhotoDel" aria-label="사진 지우기">✕</button>
+  </div>
+
   <button type="button" class="out-skip" id="outPlain">메뉴 없이 외식으로만 표시</button>
   <div class="out-total" id="outTotal" hidden>
     <b class="k" id="outKcal">0kcal</b>
@@ -1640,6 +1737,13 @@
       <button class="btn primary" id="depYes">네, 소진됐어요</button>
       <button class="btn ghost hint" id="depNo">아니요, 이 메뉴에서만 뺄게요</button>
     </div>
+  </div>
+</div>
+
+<div class="modal photo-modal" id="photoModal" role="dialog" aria-modal="true" aria-label="외식 사진">
+  <div class="photo-box">
+    <button type="button" class="photo-x" id="photoClose" aria-label="사진 닫기">✕</button>
+    <img id="photoImg" alt="외식 사진">
   </div>
 </div>
 
@@ -2865,6 +2969,12 @@
   var outSheet = $('outSheet'), outSub = $('outSub'), outText = $('outText');
   var outQuick = $('outQuick'), outList = $('outList'), outTotal = $('outTotal');
   var outKcal = $('outKcal'), outMacro = $('outMacro'), outGap = $('outGap'), outSave = $('outSave');
+  var outPortionChips = $('outPortionChips'), outPortionRange = $('outPortion');
+  var outPortionVal = $('outPortionVal'), outPortionPct = $('outPortionPct');
+  var outPlateWrap = $('outPlateWrap'), outFoodG = $('outFoodG');
+  var outPhotoFile = $('outPhotoFile'), outPhotoPick = $('outPhotoPick'), outPhotoPickTxt = $('outPhotoPickTxt');
+  var outPhotoPrev = $('outPhotoPrev'), outPhotoImg = $('outPhotoImg'), outPhotoDel = $('outPhotoDel');
+  var photoModal = $('photoModal'), photoImg = $('photoImg'), photoClose = $('photoClose');
 
   var depModal = $('depModal'), depEmo = $('depEmo'), depTitle = $('depTitle'), depSub = $('depSub');
   var depYes = $('depYes'), depNo = $('depNo');
@@ -2879,6 +2989,8 @@
   var eatPct = {};
   var outTarget = null;
   var outItems = [];
+  var outPortion = 1;
+  var outPhotoData = '';
   var toastActFn = null;
   var goalRatio = { c: 50, p: 20, f: 30 };
   var customTarget = null;
@@ -3136,6 +3248,10 @@
       o.c = Math.round((Number(o.c) || 0) * 10) / 10;
       o.p = Math.round((Number(o.p) || 0) * 10) / 10;
       o.f = Math.round((Number(o.f) || 0) * 10) / 10;
+      /* 먹은 양 배율(0.25~2.5)과 사진 — 예전 기록은 1×·사진 없음 */
+      o.portion = (typeof o.portion === 'number' && isFinite(o.portion))
+        ? Math.max(0.25, Math.min(2.5, Math.round(o.portion * 4) / 4)) : 1;
+      if (!(typeof o.photo === 'string' && /^data:image\//i.test(o.photo))) delete o.photo;
     });
     if (!validKey.test(String(s.dayAnchor || ''))) s.dayAnchor = today;
     if (!validKey.test(String(s.startedAt || ''))) s.startedAt = s.dayAnchor;
@@ -3155,7 +3271,19 @@
   }
 
   function save() {
-    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); return true; }
+    catch (e) {
+      /* 사진이 쌓여 저장 공간이 부족하면 오래된 사진부터 비워 본다 */
+      var photoKeys = Object.keys(state.outside || {}).filter(function (k) {
+        return state.outside[k] && state.outside[k].photo;
+      }).sort();
+      for (var i = 0; i < photoKeys.length; i++) {
+        delete state.outside[photoKeys[i]].photo;
+        try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); return true; }
+        catch (e2) { /* 계속 비워 본다 */ }
+      }
+      return false;
+    }
   }
 
   /* =========================================================
@@ -3947,6 +4075,10 @@
     var outDetail = '';
     if (out) {
       outDetail = '<div class="out-detail">' +
+        (out.photo ? '<button type="button" class="out-detail-photo" data-photo="' + esc(k) + '" aria-label="외식 사진 크게 보기"><img src="' + out.photo + '" alt="외식 사진"></button>' : '') +
+        (out.portion && Math.abs(out.portion - 1) > 0.01
+          ? '<div class="od"><b>먹은 양</b><span>' + outX(out.portion) + ' · ' + outPortionName(out.portion) + '</span></div>'
+          : '') +
         (out.items || []).map(function (x) {
           var q = x.qty ? String(x.qty).replace(/\.0$/, '') + (x.unit || '') : '';
           return '<div class="od"><b>' + esc(x.label) + '</b>' +
@@ -4154,7 +4286,8 @@
     if (out) nut = { c: out.c || 0, p: out.p || 0, f: out.f || 0, kcal: out.kcal || 0 };
     else if (eaten && !skip) nut = sumMacros(rec.uses);
     return { meal: meal, key: k, name: rec.name, uses: rec.uses, custom: rec.custom,
-      outside: !!out, eaten: eaten, skip: skip, nut: nut };
+      outside: !!out, eaten: eaten, skip: skip, nut: nut,
+      photo: out && out.photo ? String(out.photo) : '' };
   }
 
   function dayRecord(key) {
@@ -4248,6 +4381,7 @@
         : '';
       return '<div class="hd-meal' + cls + '">' +
         '<div class="hd-mrow">' +
+          (mm.photo ? '<button type="button" class="hd-photo" data-photo="' + esc(mm.key) + '" aria-label="외식 사진 크게 보기"><img src="' + mm.photo + '" alt="외식 사진"></button>' : '') +
           '<span class="hd-mlabel">' + (mm.meal === 'lunch' ? '점심' : '저녁') + '</span>' +
           '<span class="hd-mname">' + esc(mm.name) + '</span>' +
           histTag(mm, key) +
@@ -4998,13 +5132,13 @@
     { re: /후라이드|프라이드|순살|치킨|교촌|bbq|bhc|페리카나|청년치킨|굽네|네네|처갓집|60계/i, unit: '조각', label: '후라이드 치킨', c: 6, p: 12, f: 9 },
     { re: /치킨무|무\s*피클/, unit: '개', label: '치킨무', c: 3, p: 0, f: 0 },
     { re: /소스|양념\s*소스|디핑/, unit: '팩', label: '치킨 소스', c: 8, p: 0.2, f: 3 },
-    { re: /맥주|생맥|하이네켄|카스|테라|클라우드|기네스/, unit: '잔', label: '맥주', c: 13, p: 1.3, f: 0, kcal: 190, alt: { '캔': 0.7, '병': 1.4 } },
-    { re: /소주|참이슬|처음처럼|진로|한소끔/, unit: '잔', label: '소주', c: 0, p: 0, f: 0, kcal: 60, alt: { '병': 7 } },
-    { re: /막걸리|동동주/, unit: '사발', label: '막걸리', c: 10, p: 1, f: 0, kcal: 100 },
-    { re: /와인|샴페인/, unit: '잔', label: '와인', c: 2, p: 0, f: 0, kcal: 90 },
-    { re: /하이볼|위스키|하이볼/, unit: '잔', label: '하이볼', c: 12, p: 0, f: 0, kcal: 140 },
-    { re: /콜라|코카|펩시/, unit: '잔', label: '콜라', c: 35, p: 0, f: 0, kcal: 140, alt: { '캔': 1 } },
-    { re: /사이다|스프라이트|칠성/, unit: '잔', label: '사이다', c: 36, p: 0, f: 0, kcal: 150 },
+    { re: /맥주|생맥|하이네켄|카스|테라|클라우드|기네스/, unit: '잔', label: '맥주', c: 13, p: 1.3, f: 0, kcal: 190, servingG: 500, alt: { '캔': 0.7, '병': 1.4 } },
+    { re: /소주|참이슬|처음처럼|진로|한소끔/, unit: '잔', label: '소주', c: 0, p: 0, f: 0, kcal: 60, servingG: 50, alt: { '병': 7 } },
+    { re: /막걸리|동동주/, unit: '사발', label: '막걸리', c: 10, p: 1, f: 0, kcal: 100, servingG: 300 },
+    { re: /와인|샴페인/, unit: '잔', label: '와인', c: 2, p: 0, f: 0, kcal: 90, servingG: 150 },
+    { re: /하이볼|위스키|하이볼/, unit: '잔', label: '하이볼', c: 12, p: 0, f: 0, kcal: 140, servingG: 300 },
+    { re: /콜라|코카|펩시/, unit: '잔', label: '콜라', c: 35, p: 0, f: 0, kcal: 140, servingG: 350, alt: { '캔': 1 } },
+    { re: /사이다|스프라이트|칠성/, unit: '잔', label: '사이다', c: 36, p: 0, f: 0, kcal: 150, servingG: 350 },
     { re: /순대국|순댓국|순대\s*국밥/, unit: '그릇', label: '순대국밥', c: 85, p: 28, f: 22 },
     { re: /돼지국밥|소머리국밥|국밥/, unit: '그릇', label: '국밥', c: 80, p: 26, f: 20 },
     { re: /김치찌개|김치\s*찌개/, unit: '인분', label: '김치찌개', c: 20, p: 18, f: 12 },
@@ -5026,8 +5160,9 @@
     { re: /탕수육|꿔바로우/, unit: '인분', label: '탕수육', c: 45, p: 18, f: 22 },
     { re: /초밥|스시/, unit: '개', label: '초밥', c: 7, p: 3, f: 1 },
     { re: /회|사시미|물회/, unit: '인분', label: '회', c: 10, p: 25, f: 5 },
-    { re: /삼겹살|삼겹|오겹살/, unit: '인분', label: '삼겹살', c: 0, p: 20, f: 25 },
-    { re: /목살|항정살/, unit: '인분', label: '목살', c: 0, p: 22, f: 20 },
+    { re: /삼겹살|삼겹|오겹살/, unit: '인분', label: '삼겹살', c: 0, p: 20, f: 25, servingG: 180 },
+    { re: /목살/, unit: '인분', label: '목살', c: 0, p: 22, f: 20, servingG: 180 },
+    { re: /항정살|가브리살|갈매기살|토시살|살치살/, unit: '인분', label: '항정살', c: 0, p: 20, f: 22, servingG: 180 },
     { re: /아메리카노|아메리카노|에스프레소|아아|아메/, unit: '잔', label: '아메리카노', c: 3, p: 0.3, f: 0, kcal: 10 },
     { re: /카페라떼|라떼|카푸치노|플랫화이트/, unit: '잔', label: '카페라떼', c: 12, p: 8, f: 7 },
     { re: /베이글/, unit: '개', label: '베이글', c: 50, p: 10, f: 3 },
@@ -5043,7 +5178,7 @@
     { re: /만두|교자/, unit: '개', label: '만두', c: 10, p: 4, f: 4 },
     { re: /돈까스|돈가스|카츠/, unit: '인분', label: '돈까스', c: 60, p: 26, f: 28 },
     { re: /족발|보쌈/, unit: '인분', label: '족발', c: 25, p: 28, f: 18 },
-    { re: /곱창|대창|막창/, unit: '인분', label: '곱창', c: 15, p: 20, f: 24 },
+    { re: /곱창|대창|막창/, unit: '인분', label: '곱창', c: 15, p: 20, f: 24, servingG: 180 },
     { re: /아이스크림|빙수|젤라또/, unit: '개', label: '아이스크림', c: 25, p: 4, f: 10 },
     { re: /케이크|케익/, unit: '조각', label: '케이크', c: 40, p: 5, f: 18 },
     { re: /빵|파리바게뜨|뚜레쥬르/, unit: '개', label: '빵', c: 45, p: 8, f: 8 },
@@ -5053,23 +5188,61 @@
     { re: /죽|죽집/, unit: '그릇', label: '죽', c: 55, p: 8, f: 3 },
     { re: /샤브샤브|샤브/, unit: '인분', label: '샤브샤브', c: 25, p: 25, f: 12 },
     { re: /쌀국수|포/, unit: '그릇', label: '쌀국수', c: 70, p: 18, f: 6 },
-    { re: /타코|부리토/, unit: '개', label: '타코', c: 30, p: 14, f: 14 }
+    { re: /타코|부리토/, unit: '개', label: '타코', c: 30, p: 14, f: 14 },
+
+    /* ── 구이·외식 곁들임: 점·쪽·줌 같은 소량 단위로 적어도 과하게 오르지 않게 ── */
+    { re: /돼지껍데기|껍데기/, unit: '점', label: '돼지껍데기', c: 0, p: 3, f: 6, servingG: 22 },
+    { re: /구운\s*김치|볶음\s*김치|김치/, unit: '쪽', label: '김치', c: 1.2, p: 0.4, f: 0.3, servingG: 25 },
+    { re: /팽이버섯|새송이|표고|느타리|버섯/, unit: '줌', label: '버섯', c: 3.2, p: 1.4, f: 0.3 },
+    { re: /양파/, unit: '개', label: '양파', c: 8, p: 1, f: 0.2 },
+    { re: /마늘쫑|마늘종/, unit: '줌', label: '마늘쫑', c: 3, p: 1, f: 0.2 },
+    { re: /가지/, unit: '개', label: '가지', c: 4, p: 1, f: 0.3 },
+    { re: /고사리/, unit: '줌', label: '고사리', c: 2.5, p: 1.2, f: 0.4 },
+    { re: /파절이|파무침|부추무침|겉절이|무침|나물/, unit: '접시', label: '나물·무침', c: 5, p: 1.5, f: 2.5 },
+    { re: /쌈채소|쌈채|상추|깻잎|양배추/, unit: '접시', label: '쌈채소', c: 4, p: 1.2, f: 0.3 },
+    { re: /마늘기름장|참기름장|기름장|쌈장|초장/, unit: '스푼', label: '쌈장·기름장', c: 2.5, p: 1, f: 3.5 }
   ];
 
-  var OUT_UNITS = ['조각', '그릇', '인분', '팩', '잔', '캔', '병', '봉지', '봉', '줄', '마리', '접시', '세트', '장', '알', '컵', '사발', '스푼', 'ml', 'g'];
+  var OUT_UNITS = ['조각', '그릇', '인분', '팩', '잔', '캔', '병', '봉지', '봉', '줄', '마리', '접시', '세트', '장', '알', '컵', '사발', '스푼', '점', '쪽', '줄기', '줌', '모', '덩이', '개', '판', '사리', '그램', 'ml', 'g'];
 
   var OUT_QUICK = [
-    '치킨 4조각', '순대국밥 1그릇', '파스타 1인분', '샐러드볼', '버거세트', '맥주 1잔'
+    '치킨 4조각', '삼겹살 5점', '돼지껍데기 4점', '순대국밥 1그릇', '파스타 1인분', '맥주 1잔'
   ];
 
-  function outUnitFactor(foodUnit, u) {
-    if (!u || u === foodUnit) return 1;
-    if (foodUnit === '조각' && (u === '인분' || u === '접시')) return 4;
-    if (foodUnit === '조각' && u === '마리') return 8;
-    if (foodUnit === '잔' && u === '캔') return 0.7;
-    if (foodUnit === '잔' && u === '병') return 1.4;
-    if (foodUnit === '잔' && u === '컵') return 1;
-    return 1;
+  /* 긴 단위부터 매칭해야 '봉지'가 '봉'으로, '줄기'가 '줄'로 잘리지 않는다 */
+  var OUT_UNIT_ALT = OUT_UNITS.slice().sort(function (a, b) { return b.length - a.length; }).join('|');
+  var OUT_UNIT_RE = new RegExp('(\\d+(?:[.,]\\d+)?)\\s*(' + OUT_UNIT_ALT + ')', 'i');
+
+  /* 한 끼에 한 조각씩 작게 찍는 단위 (개·인분은 제외) */
+  var OUT_SMALL_UNIT = { '점': 1, '쪽': 1, '줄': 1, '장': 1, '스푼': 1, '줌': 1, '줄기': 1, '모': 1, '알': 1 };
+
+  /* 채소·나물·반찬·장류로 보이는 이름 — 한 그릇이 아니라 곁들임 한 조각으로 잡는다 */
+  var OUT_SIDE_RE = /김치|껍데기|버섯|양파|마늘|가지|고사리|파절이|파무침|쌈채|상추|깻잎|양배추|나물|무침|겉절이|장아찌|피클|쌈무|무생채|기름장|쌈장|초장|소스|사리|콩나물|숙주|부추|오이|당근|브로콜리|파프리카|시금치|감자|고구마/;
+
+  /* 그 음식의 기준 단위(unit)로 환산하는 배수 — 점·쪽·덩이도 인분에 비례해 계산한다 */
+  var OUT_UNIT_PER = {
+    '인분': { '인분': 1, '그릇': 1, '접시': 1, '사발': 1, '세트': 1, '덩이': 0.7, '점': 0.125, '쪽': 0.125, '조각': 0.125, '모': 0.25, '줌': 0.25, '줄기': 0.1, '개': 0.5 },
+    '접시': { '접시': 1, '그릇': 1, '인분': 1, '점': 0.125, '쪽': 0.125, '조각': 0.125, '줌': 0.25, '줄기': 0.1, '개': 0.5 },
+    '점': { '점': 1, '조각': 1, '쪽': 1, '개': 1, '인분': 8, '접시': 6, '그릇': 6, '덩이': 6, '줌': 4 },
+    '조각': { '조각': 1, '점': 1, '쪽': 1, '개': 1, '인분': 4, '접시': 4, '마리': 8 },
+    '쪽': { '쪽': 1, '점': 1, '조각': 1, '개': 1, '인분': 8, '접시': 6, '그릇': 6, '줌': 4 },
+    '개': { '개': 1, '알': 1, '조각': 0.5, '점': 0.5, '인분': 1, '접시': 1, '모': 1 },
+    '줌': { '줌': 1, '모': 1, '줄기': 0.2, '개': 1, '인분': 4, '접시': 3 },
+    '줄': { '줄': 1, '개': 1, '인분': 1, '접시': 1 },
+    '스푼': { '스푼': 1, '개': 1, '컵': 3 },
+    '잔': { '잔': 1, '캔': 0.7, '병': 1.4, '컵': 1, '사발': 1 },
+    '그릇': { '그릇': 1, '사발': 1, '인분': 1, '접시': 1 }
+  };
+
+  /* 점 ≒ 0.125인분(8점 ≒ 180g), g 은 그 음식 1인분 무게, 덩이 ≒ 0.7인분으로 본다 */
+  function outUnitFactor(food, u) {
+    var base = (food && food.unit) || '인분';
+    if (!u || u === base) return 1;
+    if (u === 'g' || u === '그램') return 1 / ((food && food.servingG) || 180);
+    if (u === 'ml') return 1 / ((food && food.servingG) || 200);
+    var map = OUT_UNIT_PER[base] || OUT_UNIT_PER['인분'];
+    var f = map[u];
+    return f == null ? 1 : f;
   }
 
   function outRound(n) { return Math.round((n || 0) * 10) / 10; }
@@ -5084,12 +5257,12 @@
 
     var items = [];
     segs.forEach(function (seg) {
-      var unitRe = new RegExp('(\\d+(?:[.,]\\d+)?)\\s*(' + OUT_UNITS.join('|') + ')', 'i');
-      var um = seg.match(unitRe);
+      var um = seg.match(OUT_UNIT_RE);
       var qty = 1, unit = '';
       if (um) {
         qty = parseFloat(String(um[1]).replace(',', '.'));
         unit = um[2];
+        if (unit === '그램') unit = 'g';
       } else {
         var nm = seg.match(/(\d+(?:[.,]\d+)?)/);
         if (nm) qty = parseFloat(String(nm[1]).replace(',', '.'));
@@ -5102,7 +5275,7 @@
       }
 
       if (hit) {
-        var factor = outUnitFactor(hit.unit, unit);
+        var factor = outUnitFactor(hit, unit);
         if (hit.alt && unit && hit.alt[unit]) factor = hit.alt[unit];
         var k = (hit.kcal != null ? hit.kcal : (hit.c * 4 + hit.p * 4 + hit.f * 9)) * qty * factor;
         items.push({
@@ -5115,25 +5288,35 @@
           f: outRound(hit.f * qty * factor),
           guess: false
         });
-      } else {
-        /* 사전에 없는 메뉴: 이름에서 영양을 추정하고 한 그릇 기준으로 잡는다 */
-        var name = seg.replace(unitRe, '').replace(/(\d+(?:[.,]\d+)?)\s*$/, '').trim();
-        if (!name) return;
-        var g0 = estimateNutri(name);
-        var est = (g0.c + g0.p + g0.f) < 20 ? { c: 40, p: 14, f: 12 } : g0;
-        var mul = qty;
-        var kc = (est.c * 4 + est.p * 4 + est.f * 9) * mul;
-        items.push({
-          label: name,
-          qty: qty,
-          unit: unit || '개',
-          kcal: Math.round(kc),
-          c: outRound(est.c * mul),
-          p: outRound(est.p * mul),
-          f: outRound(est.f * mul),
-          guess: true
-        });
+        return;
       }
+
+      /* 사전에 없는 메뉴: 이름에서 영양을 추정한다 */
+      var name = seg.replace(OUT_UNIT_RE, '').replace(/(\d+(?:[.,]\d+)?)\s*$/, '').trim();
+      if (!name) return;
+      var g0 = estimateNutri(name);
+      var est = (g0.c + g0.p + g0.f) < 20 ? { c: 40, p: 14, f: 12 } : g0;
+      var pk = est.c * 4 + est.p * 4 + est.f * 9;
+
+      /* 점·쪽·줄·장·스푽 단위이거나 채소·나물·반찬·장류로 보이면
+         한 그릇(300kcal대)이 아니라 한 조각(35~70kcal)으로 잡는다 */
+      if (OUT_SMALL_UNIT[unit] || OUT_SIDE_RE.test(name)) {
+        var target = Math.min(70, Math.max(35, pk / 6));
+        var sc = pk > 0 ? target / pk : 1;
+        est = { c: outRound(est.c * sc), p: outRound(est.p * sc), f: outRound(est.f * sc) };
+      }
+
+      var kc = (est.c * 4 + est.p * 4 + est.f * 9) * qty;
+      items.push({
+        label: name,
+        qty: qty,
+        unit: unit || '인분',
+        kcal: Math.round(kc),
+        c: outRound(est.c * qty),
+        p: outRound(est.p * qty),
+        f: outRound(est.f * qty),
+        guess: true
+      });
     });
     return items;
   }
@@ -5155,14 +5338,73 @@
     }).join('');
   }
 
+  /* ── 먹은 양 배율 — 접시 그림과 칼로리 계산을 함께 움직인다 ── */
+  var OUT_PORTION_MIN = 0.25, OUT_PORTION_MAX = 2.5;
+
+  function outPortionName(v) {
+    v = Number(v) || 1;
+    if (v <= 0.4) return '아주 조금';
+    if (v < 0.9) return '조금';
+    if (v <= 1.1) return '보통';
+    if (v < 1.9) return '넉넉히';
+    return '많이';
+  }
+
+  function outFx(v) {
+    var n = Math.round((Number(v) || 1) * 4) / 4;
+    return Math.max(OUT_PORTION_MIN, Math.min(OUT_PORTION_MAX, n));
+  }
+
+  function outX(v) { return String(Number(v).toFixed(2)).replace(/\.?0+$/, '') + '×'; }
+
+  /* 항목을 지금 배율로 환산한다 (저장은 1× 기준값으로 하고, 보여줄 때만 곱한다) */
+  function outScaled(list) {
+    var f = outPortion;
+    return (list || []).map(function (x) {
+      return {
+        label: x.label, qty: x.qty, unit: x.unit,
+        kcal: Math.round((x.kcal || 0) * f),
+        c: outRound((x.c || 0) * f),
+        p: outRound((x.p || 0) * f),
+        f: outRound((x.f || 0) * f)
+      };
+    });
+  }
+
+  function paintPortion() {
+    var v = outPortion;
+    if (outPortionVal) outPortionVal.textContent = outPortionName(v) + ' · ' + outX(v);
+    if (outPortionRange) {
+      outPortionRange.value = v;
+      var p = Math.round((v - OUT_PORTION_MIN) / (OUT_PORTION_MAX - OUT_PORTION_MIN) * 100);
+      outPortionRange.style.setProperty('--p', p + '%');
+    }
+    if (outPortionPct) outPortionPct.innerHTML = outX(v) + '<small>' + outPortionName(v) + '</small>';
+    if (outPortionChips) {
+      var btns = outPortionChips.querySelectorAll('[data-portion]');
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].classList.toggle('is-on', Math.abs(+btns[i].getAttribute('data-portion') - v) < 0.01);
+      }
+    }
+    if (outFoodG) outFoodG.style.transform = 'scale(' + (0.5 + 0.5 * v).toFixed(3) + ')';
+    if (outPlateWrap) outPlateWrap.classList.toggle('is-empty', !outItems.length);
+  }
+
+  function setPortion(v) {
+    outPortion = outFx(v);
+    renderOut();
+  }
+
   function renderOut() {
     if (!outItems.length) {
       outList.innerHTML = '<p class="out-none">메뉴를 적으면 항목별 칼로리·탄단지를 바로 계산해요.</p>';
       outTotal.hidden = true;
       outSave.disabled = true;
+      paintPortion();
       return;
     }
-    outList.innerHTML = outItems.map(function (x, i) {
+    var view = outScaled(outItems);
+    outList.innerHTML = view.map(function (x, i) {
       return '<div class="out-item">' +
         '<div class="out-name"><b>' + esc(x.label) + '</b>' +
           '<em>' + esc(String(x.qty).replace(/\.0$/, '') + x.unit) + ' · ' + x.kcal + 'kcal · 단 ' + g1(x.p) + 'g</em>' +
@@ -5176,7 +5418,7 @@
       '</div>';
     }).join('');
 
-    var t = outTotals(outItems);
+    var t = outTotals(view);
     outTotal.hidden = false;
     outKcal.textContent = fmtN(t.kcal) + 'kcal';
     outMacro.textContent = '탄 ' + g1(t.c) + 'g · 단 ' + g1(t.p) + 'g · 지 ' + g1(t.f) + 'g';
@@ -5190,6 +5432,7 @@
       ? '이 끼니까지 넣으면 단백질 ' + leftP + 'g 더 필요해요'
       : '이 끼니까지 넣으면 ' + fmtN(leftC) + 'kcal · 단백질은 다 채워요';
     outSave.disabled = false;
+    paintPortion();
   }
 
   function openOutside(day, meal) {
@@ -5197,6 +5440,9 @@
     var ex = outsideOf(day, meal);
     outSub.textContent = (meal === 'lunch' ? '점심' : '저녁') + '에 먹은 외식을 적으면 메뉴별 칼로리·탄단지를 계산해서 오늘 목표에 더해요.';
     outText.value = '';
+    outPortion = ex && ex.portion ? outFx(ex.portion) : 1;
+    outPhotoData = ex && ex.photo ? String(ex.photo) : '';
+    paintPhoto();
     outItems = ex && ex.items ? ex.items.map(function (x) {
       return { label: x.label, qty: x.qty, unit: x.unit, kcal: x.kcal, c: x.c, p: x.p, f: x.f, guess: false };
     }) : [];
@@ -5207,24 +5453,79 @@
 
   function saveOutside() {
     if (!outTarget || !outItems.length) return;
-    var t = outTotals(outItems);
+    var key = outTarget.key;
+    var t = outTotals(outScaled(outItems));
     var names = outItems.map(function (x) { return x.label; });
     var name = names.slice(0, 2).join(' · ') + (names.length > 2 ? ' 외 ' + (names.length - 2) : '');
     if (!state.outside) state.outside = {};
-    state.outside[outTarget.key] = {
+    state.outside[key] = {
       name: name,
       items: outItems.map(function (x) { return { label: x.label, qty: x.qty, unit: x.unit, kcal: x.kcal, c: x.c, p: x.p, f: x.f }; }),
-      kcal: t.kcal, c: t.c, p: t.p, f: t.f
+      kcal: t.kcal, c: t.c, p: t.p, f: t.f,
+      portion: outPortion
     };
-    state.skips[outTarget.key] = true;
-    delete state.eaten[outTarget.key];
+    if (outPhotoData) state.outside[key].photo = outPhotoData;
+    state.skips[key] = true;
+    delete state.eaten[key];
     save();
+    var kept = !!(state.outside && state.outside[key] && (!outPhotoData || state.outside[key].photo));
     closeSheets();
     outTarget = null;
     outItems = [];
+    outPhotoData = '';
     renderAll();
     toast('외식 ' + fmtN(t.kcal) + 'kcal · 단 ' + g1(t.p) + 'g 기록했어요');
+    if (!kept) setTimeout(function () { toast('사진은 저장 공간이 부족해 남기지 못했어요'); }, 1900);
   }
+
+  /* ── 외식 사진: 폰에서 고른 사진을 480px JPEG로 줄여 기기에만 보관한다 ── */
+  function compressPhoto(file, done) {
+    if (!file) { done(null); return; }
+    var reader = new FileReader();
+    reader.onload = function () {
+      var img = new Image();
+      img.onload = function () {
+        try {
+          var w = img.naturalWidth || img.width || 0;
+          var h = img.naturalHeight || img.height || 0;
+          if (!w || !h) { done(null); return; }
+          var sc = Math.min(1, 480 / w);
+          var cw = Math.max(1, Math.round(w * sc));
+          var ch = Math.max(1, Math.round(h * sc));
+          var cv = document.createElement('canvas');
+          cv.width = cw; cv.height = ch;
+          var ctx = cv.getContext('2d');
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, cw, ch);
+          ctx.drawImage(img, 0, 0, cw, ch);
+          done(cv.toDataURL('image/jpeg', 0.65));
+        } catch (err) { done(null); }
+      };
+      img.onerror = function () { done(null); };
+      img.src = String(reader.result);
+    };
+    reader.onerror = function () { done(null); };
+    reader.readAsDataURL(file);
+  }
+
+  function paintPhoto() {
+    var has = !!outPhotoData;
+    if (outPhotoPrev) outPhotoPrev.hidden = !has;
+    if (outPhotoImg && has) outPhotoImg.src = outPhotoData;
+    if (outPhotoPickTxt) outPhotoPickTxt.textContent = has ? '📷 사진 바꾸기' : '📷 사진 남기기';
+  }
+
+  function openPhotoModal(src) {
+    if (!src || !photoModal || !photoImg) return;
+    photoImg.src = src;
+    photoModal.classList.add('is-open');
+  }
+
+  function closePhotoModal() {
+    if (photoModal) photoModal.classList.remove('is-open');
+    if (photoImg) photoImg.removeAttribute('src');
+  }
+
 
   /* ── 먹음 시트 ── */
   /* 남은 양을 퍼센트로 보여주는 한 줄 */
@@ -5764,6 +6065,14 @@
   leftoverCardMeals.addEventListener('click', onLeftoverClick);
 
   mealsEl.addEventListener('click', function (e) {
+    /* 외식 사진 썸네일 → 크게 보기 */
+    var oph = e.target.closest('[data-photo]');
+    if (oph) {
+      var orec = (state.outside || {})[oph.getAttribute('data-photo')];
+      if (orec && orec.photo) openPhotoModal(orec.photo);
+      return;
+    }
+
     if (e.target.closest('#replanBtn')) { replanAll(); return; }
 
     if (e.target.closest('[data-act="goalopen"]')) { openGoal(); return; }
@@ -5893,6 +6202,13 @@
 
   /* ── 지난 기록 탭 ── */
   histEl.addEventListener('click', function (e) {
+    var hph = e.target.closest('[data-photo]');
+    if (hph) {
+      var hrec = (state.outside || {})[hph.getAttribute('data-photo')];
+      if (hrec && hrec.photo) openPhotoModal(hrec.photo);
+      return;
+    }
+
     var hv = e.target.closest('[data-hview]');
     if (hv) {
       histUI.view = hv.getAttribute('data-hview') === 'list' ? 'list' : 'calendar';
@@ -6004,6 +6320,47 @@
     }
   });
   outSave.addEventListener('click', saveOutside);
+
+  /* 먹은 양: 프리셋 칩 + 슬라이더 */
+  if (outPortionChips) {
+    outPortionChips.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-portion]');
+      if (!b) return;
+      setPortion(+b.getAttribute('data-portion'));
+    });
+  }
+  if (outPortionRange) {
+    outPortionRange.addEventListener('input', function () { setPortion(+outPortionRange.value); });
+  }
+
+  /* 외식 사진 */
+  if (outPhotoPick) {
+    outPhotoPick.addEventListener('click', function () { if (outPhotoFile) outPhotoFile.click(); });
+  }
+  if (outPhotoFile) {
+    outPhotoFile.addEventListener('change', function () {
+      var f = outPhotoFile.files && outPhotoFile.files[0];
+      outPhotoFile.value = '';
+      if (!f) return;
+      compressPhoto(f, function (data) {
+        if (!data) { toast('이 사진은 브라우저에서 열 수 없어 남기지 못했어요'); return; }
+        outPhotoData = data;
+        paintPhoto();
+        toast('사진을 붙였어요 · 기록하기를 누르면 같이 저장돼요');
+      });
+    });
+  }
+  if (outPhotoDel) {
+    outPhotoDel.addEventListener('click', function () {
+      outPhotoData = '';
+      paintPhoto();
+    });
+  }
+  if (photoModal) {
+    photoModal.addEventListener('click', function (e) {
+      if (e.target === photoModal || e.target.closest('#photoClose')) closePhotoModal();
+    });
+  }
   $('outPlain').addEventListener('click', function () {
     if (!outTarget) return;
     var key = outTarget.key;
