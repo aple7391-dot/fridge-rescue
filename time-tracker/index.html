@@ -159,7 +159,7 @@ h1,h2,h3,p{margin:0}
   border:1px solid var(--border-hair);border-radius:var(--r-md);
   background:var(--surface-cool);
   font-size:var(--fs-14);line-height:1.5;resize:none;
-  min-height:64px;outline:none;transition:border-color .14s,background .14s;
+  min-height:64px;outline:none;overflow:hidden;transition:border-color .14s,background .14s;
 }
 .quick-input::placeholder{color:var(--text-4)}
 .quick-input:focus{border-color:var(--border-focus);background:var(--white)}
@@ -1805,7 +1805,7 @@ document.addEventListener('keydown', function(ev){
 var inputTimer = null;
 function autoGrow(el){
   el.style.height = 'auto';
-  el.style.height = Math.min(Math.max(el.scrollHeight, 64), 168) + 'px';
+  el.style.height = Math.min(Math.max(el.scrollHeight + 2, 64), 168) + 'px';
 }
 $('#quickInput').addEventListener('input', function(){
   autoGrow(this);
