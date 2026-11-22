@@ -873,7 +873,9 @@
     -webkit-overflow-scrolling:touch;
     box-shadow:var(--shadow-lg);
   }
-  .sheet.is-open{transform:translate(-50%,0)}
+  /* 닫힌 시트는 화면 밖일 뿐 아니라 숨김 상태 — 화면 낭독기·탭 이동에 잡히지 않게 */
+  .sheet{visibility:hidden;transition:transform .32s cubic-bezier(.32,.72,.3,1),visibility 0s linear .32s}
+  .sheet.is-open{transform:translate(-50%,0);visibility:visible;transition:transform .32s cubic-bezier(.32,.72,.3,1),visibility 0s linear 0s}
   /* 고정 헤더 — 시트가 길어져도 제목과 ✕가 항상 보인다 */
   .sheet-head{
     position:sticky;top:0;z-index:6;
