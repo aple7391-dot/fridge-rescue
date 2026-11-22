@@ -3647,7 +3647,7 @@
     }
     toastEl.classList.add('is-open');
     if (toastTimer) clearTimeout(toastTimer);
-    toastTimer = setTimeout(hideToast, act && act.label ? 3600 : 1900);
+    toastTimer = setTimeout(hideToast, act && act.label ? 5200 : 1900);
   }
 
   /* =========================================================
@@ -3978,10 +3978,12 @@
      ========================================================= */
   function renderFilters() {
     /* 한 줄에서 밀어 보는 칩 — 두 줄로 쌓지 않는다 */
-    var html = FILTERS.map(function (f) {
+    var chips = FILTERS.map(function (f) {
       return '<button class="chip' + (ui.filter === f.id ? ' is-on' : '') + '" data-filter="' + f.id + '" aria-pressed="' + (ui.filter === f.id) + '">' + f.label + '</button>';
-    }).join('');
-    html += '<button class="chip toggle' + (ui.hideDone ? ' is-on' : '') + '" data-hide="1" aria-pressed="' + ui.hideDone + '">✓ 미처리만</button>';
+    });
+    /* 미처리만 토글이 스크롤 밖으로 밀리지 않게 두 번째 자리에 둔다 */
+    chips.splice(2, 0, '<button class="chip toggle' + (ui.hideDone ? ' is-on' : '') + '" data-hide="1" aria-pressed="' + ui.hideDone + '">✓ 미처리만</button>');
+    var html = chips.join('');
     filtersEl.innerHTML = html;
   }
 
