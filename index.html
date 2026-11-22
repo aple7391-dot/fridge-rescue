@@ -33,6 +33,7 @@
   }
 
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  [hidden]{display:none !important}
 
   html,body{height:100%}
 
@@ -2972,7 +2973,8 @@
       );
     }
 
-    if (!o.noCross && ck.cross) {
+    /* 다음 끼니와 겹치는 안내는 바로 위험한 경우에만 — 거의 매 끼니 붙어 시선을 끌던 줄 */
+    if (!o.noCross && ck.cross && ck.cross.sev === 'alert') {
       chips.push({ sev: ck.cross.sev, text: '🔁 ' + ck.cross.short });
       detail += warnBox(ck.cross.sev, '🔁', '다음 끼니와 겹쳐요', ck.cross.label, ck.cross.why, esc(ck.cross.tip));
     }
@@ -4158,7 +4160,7 @@
     if (!info) return;
     var msg;
     if (info.res && info.res.swapped) msg = info.emo + ' ' + info.nm + ' 다 씀 · ' + info.res.swapped + '끼니를 다른 메뉴로 바꿨어요';
-    else if (info.res && info.res.trimmed) msg = info.emo + ' ' + info.nm + ' 다 씀 · 끼니에서 뻐어요';
+    else if (info.res && info.res.trimmed) msg = info.emo + ' ' + info.nm + ' 다 씀 · 끼니에서 뺐어요';
     else msg = info.emo + ' ' + info.nm + ' 다 씀으로 옮겼어요';
     toast(msg, {
       label: '되돌리기',
@@ -5204,7 +5206,8 @@
     closeSheets();
     carryTarget = null;
     renderAll();
-    toast('↪︎ ' + r.name + ' · ' + (toDay === 'today' ? '오늘 ' : '내일 ') + (toMeal === 'lunch' ? '점심' : '저녁') + '로 넘겼어요');
+    var toLabel = (toDay === 'today' ? '오늘 ' : '내일 ') + (toMeal === 'lunch' ? '점심' : '저녁');
+    toast('↪︎ ' + r.name + ' · ' + toLabel + roParticle(toLabel) + ' 넘겼어요');
   }
 
   /* ── 오늘 / 내일 세그먼트 ── */
@@ -7685,7 +7688,7 @@
 
     /* 이월된 끼니 — 재료는 앞 끼니에서 이미 뻐으므로 기록만 남긴다 */
     if (carryRec(day, meal)) {
-      eatSub.textContent = '이월된 끼니예요 · 재료는 앞 끼니에서 이미 뻐어요. 먹은 기록만 남겨요.';
+      eatSub.textContent = '이월된 끼니예요 · 재료는 앞 끼니에서 이미 뺐어요. 먹은 기록만 남겨요.';
       eatList.innerHTML = rows.length
         ? rows.map(function (it) {
             return '<div class="eat-row is-done">' +
