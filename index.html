@@ -3331,6 +3331,45 @@
   var depTarget = null;
   var resetArmed = false;
 
+  /* ── 11/23(일) 점심·저녁 기본 세팅 ──
+     그 끼니를 아직 직접 정하지 않은(직접 등록·외식·먹음·건너뜀 기록이 없는) 경우에만
+     한 번 넣고, 사용자가 고치거나 지우면 다시 넣지 않는다(mealSeedVer).
+     저장값을 읽는 시점(var state = loadState())에 쓰이므로 그보다 위에 둔다. */
+  var SEED_DAY = '2026-11-23';
+  var SEED_MEALS = {
+    lunch: {
+      name: '마라 로제 파스타',
+      uses: ['milk', 'onion', 'pasta'],
+      note: '마라소스, 계란노른자 (토마토소스나 크림치즈 약간 더하면 로제 느낌)'
+    },
+    dinner: {
+      name: '샐러드 목살 볶음밥',
+      uses: ['salad', 'pork', 'rice'],
+      note: '목살 굽고 양파·밥 볶아서 샐러드 곁들이기'
+    }
+  };
+
+  function seedDayMeals(s) {
+    if (!s || s.mealSeedVer === 1) return false;
+    /* 그날이 이미 지났으면 지난 기록을 건드리지 않는다 */
+    if (todayKey() > SEED_DAY) { s.mealSeedVer = 1; return false; }
+    s.customMeals = s.customMeals && typeof s.customMeals === 'object' ? s.customMeals : {};
+    ['lunch', 'dinner'].forEach(function (m) {
+      var k = SEED_DAY + '-' + m;
+      if (s.customMeals[k] || (s.outside || {})[k] || (s.eaten || {})[k] || (s.skips || {})[k]) return;
+      /* 냉장고에 실제로 있는 재료 ID만 넣는다(없는 재료는 메모로만 남는다) */
+      var have = {};
+      (s.ingredients || []).forEach(function (it) { have[it.id] = true; });
+      s.customMeals[k] = {
+        name: SEED_MEALS[m].name,
+        uses: SEED_MEALS[m].uses.filter(function (id) { return have[id]; }),
+        note: SEED_MEALS[m].note
+      };
+    });
+    s.mealSeedVer = 1;
+    return true;
+  }
+
   var state = loadState();
 
   /* =========================================================
@@ -3629,44 +3668,6 @@
     seedDayMeals(s);
     s.v = 3;
     return s;
-  }
-
-  /* ── 11/23(일) 점심·저녁 기본 세팅 ──
-     그 끼니를 아직 직접 정하지 않은(직접 등록·외식·먹음·건너뜀 기록이 없는) 경우에만
-     한 번 넣고, 사용자가 고치거나 지우면 다시 넣지 않는다(mealSeedVer). */
-  var SEED_DAY = '2026-11-23';
-  var SEED_MEALS = {
-    lunch: {
-      name: '마라 로제 파스타',
-      uses: ['milk', 'onion', 'pasta'],
-      note: '마라소스, 계란노른자 (토마토소스나 크림치즈 약간 더하면 로제 느낌)'
-    },
-    dinner: {
-      name: '샐러드 목살 볶음밥',
-      uses: ['salad', 'pork', 'rice'],
-      note: '목살 굽고 양파·밥 볶아서 샐러드 곁들이기'
-    }
-  };
-
-  function seedDayMeals(s) {
-    if (!s || s.mealSeedVer === 1) return false;
-    /* 그날이 이미 지났으면 지난 기록을 건드리지 않는다 */
-    if (todayKey() > SEED_DAY) { s.mealSeedVer = 1; return false; }
-    s.customMeals = s.customMeals && typeof s.customMeals === 'object' ? s.customMeals : {};
-    ['lunch', 'dinner'].forEach(function (m) {
-      var k = SEED_DAY + '-' + m;
-      if (s.customMeals[k] || (s.outside || {})[k] || (s.eaten || {})[k] || (s.skips || {})[k]) return;
-      /* 냉장고에 실제로 있는 재료 ID만 넣는다(없는 재료는 메모로만 남는다) */
-      var have = {};
-      (s.ingredients || []).forEach(function (it) { have[it.id] = true; });
-      s.customMeals[k] = {
-        name: SEED_MEALS[m].name,
-        uses: SEED_MEALS[m].uses.filter(function (id) { return have[id]; }),
-        note: SEED_MEALS[m].note
-      };
-    });
-    s.mealSeedVer = 1;
-    return true;
   }
 
   /* 날짜가 넘어갔는지 확인하고, 넘어갔으면 오늘 칸을 새로 잡는다 */
