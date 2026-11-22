@@ -1555,6 +1555,21 @@
   .mix-chip.mine{background:#F2F4F6;color:var(--ink2)}
   .mix-chip.mine .x{background:#E5E8EB;color:var(--sub)}
   .mix-pick{display:flex;flex-wrap:wrap;gap:7px}
+  .mix-pick-field.is-folded .mix-pick{display:none}
+  .mix-fold{
+    display:flex;align-items:center;gap:6px;width:100%;min-height:40px;margin-bottom:10px;
+    font-size:12.5px;font-weight:700;color:var(--sub);letter-spacing:-.02em;text-align:left;
+  }
+  .mix-fold em{font-style:normal;font-weight:600;color:var(--sub2)}
+  .mix-fold i{margin-left:auto;font-style:normal;font-size:11px;color:var(--sub2);transition:transform .18s}
+  .mix-pick-field:not(.is-folded) .mix-fold i{transform:rotate(180deg)}
+  .mix-pick-field.is-folded .mix-fold{margin-bottom:0}
+  /* 결과가 먼저 보이고 재료 목록은 아래로 — 고를 땐 목록, 읽을 땐 조언 */
+  #mixSheet .mix-sel{order:1}
+  #mixSheet .mix-input{order:2}
+  #mixSheet #mixResult{order:3}
+  #mixSheet .mix-pick-field{order:4}
+  #mixSheet .sheet-actions{order:5}
   .mix-pick button{
     display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:8px 12px;
     border-radius:12px;background:#F5F7F9;border:1px solid transparent;
@@ -1900,8 +1915,8 @@
     <button type="button" class="mix-add" id="mixAdd" aria-label="재료 넣기">＋</button>
   </div>
 
-  <div class="field">
-    <label>냉장고에서 고르기 <span class="hint-inline">2개 이상 고르면 조언이 떠요</span></label>
+  <div class="field mix-pick-field" id="mixPickField">
+    <button type="button" class="mix-fold" id="mixFold" aria-expanded="true"></button>
     <div class="mix-pick" id="mixPick"></div>
   </div>
 
@@ -3276,6 +3291,7 @@
 
   var mixSheet = $('mixSheet'), mixSelBar = $('mixSelBar'), mixPick = $('mixPick');
   var mixResult = $('mixResult'), mixName = $('mixName'), mixLunch = $('mixLunch'), mixDinner = $('mixDinner');
+  var mixPickField = $('mixPickField'), mixFold = $('mixFold');
 
   var goalSheet = $('goalSheet'), gKcal = $('gKcal');
   var rC = $('rC'), rP = $('rP'), rF = $('rF');
@@ -4734,6 +4750,16 @@
 
   var mixIds = [];
   var mixNames = [];
+  var mixFoldOpen = false;
+
+  /* 받침에 맞춰 조사를 고른다 (볶음 → 을, 파스타 → 를) */
+  function eulParticle(word) {
+    var s = String(word || '');
+    if (!s) return '를';
+    var c = s.charCodeAt(s.length - 1);
+    if (c < 0xAC00 || c > 0xD7A3) return '를';
+    return ((c - 0xAC00) % 28) ? '을' : '를';
+  }
 
   function mixEntries() {
     var out = [];
@@ -4872,7 +4898,7 @@
     if (m.p < 28) {
       var pr = firstAlive(['chicken', 'tuna', 'boiledegg', 'tofu', 'egg', 'shake']);
       out.push({ t: '단백질이 한 끼 기준으로 부족해요',
-        d: (pr ? '냉장고의 ' + pr.name + '을(를) 더하면' : '닭가슴살·참치 캔·달걀 흰자 중 하나를 더하면') + ' 한 끼 단백질이 맞아요.' });
+        d: (pr ? '냉장고의 ' + pr.name + eulParticle(pr.name) + ' 더하면' : '닭가슴살·참치 캔·달걀 흰자 중 하나를 더하면') + ' 한 끼 단백질이 맞아요.' });
     }
     if (m.veg < 2) {
       var veg = firstAlive(['mushroom', 'salad', 'vegmix']);
@@ -4913,6 +4939,16 @@
     mixLunch.disabled = sel.length < 2;
     mixDinner.disabled = sel.length < 2;
 
+    /* 재료를 2개 넘게 고르면 목록은 접어서 조언이 바로 보이게 한다 */
+    var folded = sel.length >= 2 && !mixFoldOpen;
+    mixPickField.classList.toggle('is-folded', folded);
+    mixFold.setAttribute('aria-expanded', folded ? 'false' : 'true');
+    mixFold.innerHTML = sel.length >= 2
+      ? (folded
+          ? '냉장고 재료 ' + items.length + '개 더 고르기 <i>⌄</i>'
+          : '고르기 접기 <i>⌄</i>')
+      : '냉장고에서 고르기 <em>2개 이상 고르면 조언이 떠요</em>';
+
     if (sel.length < 2) {
       mixResult.innerHTML = '<p class="mx-empty">재료를 2개 이상 고르면<br>뭘 더 넣고 뭘 빼면 좋을지 바로 짚어 드려요.</p>';
       return;
@@ -4927,7 +4963,7 @@
     var html = '<div class="mix-sum">' +
       '<span class="k">이 조합이면</span>' +
       '<b>' + esc(dish) + '</b>' +
-      '<p>' + esc(sel.map(function (e) { return e.name; }).join(' · ')) + ' — 이대로 ' + esc(dish) + '로 만들 수 있어요.</p>' +
+      '<p>' + esc(sel.map(function (e) { return e.name; }).join(' · ')) + ' — 이대로 ' + esc(dish) + eulParticle(dish) + ' 만들 수 있어요.</p>' +
     '</div>';
 
     /* ① */
@@ -4970,10 +5006,10 @@
   function openMix() {
     mixIds = [];
     mixNames = [];
+    mixFoldOpen = false;
     mixName.value = '';
     renderMix();
     openSheet(mixSheet);
-    mixResult.scrollTop = 0;
   }
 
   function mixToggle(id) {
@@ -7889,6 +7925,10 @@
     if (pick) { mixToggle(pick.getAttribute('data-mixpick')); return; }
     var rec = e.target.closest('[data-mixrec]');
     if (rec) { mixToggle(rec.getAttribute('data-mixrec')); return; }
+    if (e.target.closest('#mixFold')) {
+      if (mixEntries().length >= 2) { mixFoldOpen = !mixFoldOpen; renderMix(); }
+      return;
+    }
     if (e.target.closest('#mixAdd')) { mixAddName(mixName.value); return; }
     if (e.target.closest('#mixCancel')) { closeSheets(); return; }
     if (e.target.closest('#mixLunch')) { mixSave('lunch'); return; }
