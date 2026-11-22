@@ -2803,8 +2803,10 @@
   }
 
   /* ── 하루 두 끼 합산 탄단지와 목표(g)의 차이 ──
-     20대 후반 성인 여성 · 활동량 보통 기준 권장치 (일반적인 값이며 개인차가 있어요) */
-  var GOAL_DEFAULT = { kcal: 1800, c: 225, p: 90, f: 60 };
+     기본 목표는 GOAL_DEFAULT 한 곳에서만 정한다.
+     20대 후반 성인 여성 · 활동량 적은 날 기준 (일반적인 값이며 개인차가 있어요)
+     배부른데도 목표가 높아 과식하게 되던 문제로 1,800 → 1,450kcal(탄 45 · 단 25 · 지 30%)로 낮췄어요 */
+  var GOAL_DEFAULT = { kcal: 1450, c: 163, p: 91, f: 48 };
   var MACRO_LABEL = { c: '탄수화물', p: '단백질', f: '지방' };
   var VEG_PICK_RE = /샐러드|상추|양배추|오이|토마토|당근|시금치|나물|채소|야채|버섯|브로콜리|깻잎|파프리카|양파|대파/;
 
@@ -3393,10 +3395,11 @@
       mealUses: {},
       snacks: {},
       outside: {},
-      goals: { kcal: 1800, c: 225, p: 90, f: 60 },
+      goals: { kcal: GOAL_DEFAULT.kcal, c: GOAL_DEFAULT.c, p: GOAL_DEFAULT.p, f: GOAL_DEFAULT.f },
       coOccurrence: {}
     };
     s.plans = buildPlan(s);
+    seedDayMeals(s);
     return s;
   }
 
@@ -3414,7 +3417,7 @@
   }
 
   function normalizeGoals(g) {
-    var o = { kcal: 1800, c: 225, p: 90, f: 60 };
+    var o = { kcal: GOAL_DEFAULT.kcal, c: GOAL_DEFAULT.c, p: GOAL_DEFAULT.p, f: GOAL_DEFAULT.f };
     if (g && typeof g === 'object') {
       ['kcal', 'c', 'p', 'f'].forEach(function (k) {
         var v = Math.round(Number(g[k]));
@@ -3571,6 +3574,17 @@
     });
 
     s.goals = normalizeGoals(s.goals);
+
+    /* ── 기본 목표 1,800 → 1,450kcal 마이그레이션 (한 번만) ──
+       예전 기본값(1,800kcal · 탄 225 · 단 90 · 지 60)을 그대로 쓰던 기기만 바꾸고,
+       사용자가 직접 고른 다른 값은 건드리지 않는다. */
+    if (s.goalVer !== 2) {
+      var og = s.goals;
+      if (og.kcal === 1800 && og.c === 225 && og.p === 90 && og.f === 60) {
+        s.goals = { kcal: GOAL_DEFAULT.kcal, c: GOAL_DEFAULT.c, p: GOAL_DEFAULT.p, f: GOAL_DEFAULT.f };
+      }
+      s.goalVer = 2;
+    }
     s.outside = (s.outside && typeof s.outside === 'object' && !Array.isArray(s.outside)) ? s.outside : {};
     Object.keys(s.outside).forEach(function (k) {
       var o = s.outside[k];
@@ -3612,8 +3626,47 @@
     });
     if (!validKey.test(String(s.dayAnchor || ''))) s.dayAnchor = today;
     if (!validKey.test(String(s.startedAt || ''))) s.startedAt = s.dayAnchor;
+    seedDayMeals(s);
     s.v = 3;
     return s;
+  }
+
+  /* ── 11/23(일) 점심·저녁 기본 세팅 ──
+     그 끼니를 아직 직접 정하지 않은(직접 등록·외식·먹음·건너뜀 기록이 없는) 경우에만
+     한 번 넣고, 사용자가 고치거나 지우면 다시 넣지 않는다(mealSeedVer). */
+  var SEED_DAY = '2026-11-23';
+  var SEED_MEALS = {
+    lunch: {
+      name: '마라 로제 파스타',
+      uses: ['milk', 'onion', 'pasta'],
+      note: '마라소스, 계란노른자 (토마토소스나 크림치즈 약간 더하면 로제 느낌)'
+    },
+    dinner: {
+      name: '샐러드 목살 볶음밥',
+      uses: ['salad', 'pork', 'rice'],
+      note: '목살 굽고 양파·밥 볶아서 샐러드 곁들이기'
+    }
+  };
+
+  function seedDayMeals(s) {
+    if (!s || s.mealSeedVer === 1) return false;
+    /* 그날이 이미 지났으면 지난 기록을 건드리지 않는다 */
+    if (todayKey() > SEED_DAY) { s.mealSeedVer = 1; return false; }
+    s.customMeals = s.customMeals && typeof s.customMeals === 'object' ? s.customMeals : {};
+    ['lunch', 'dinner'].forEach(function (m) {
+      var k = SEED_DAY + '-' + m;
+      if (s.customMeals[k] || (s.outside || {})[k] || (s.eaten || {})[k] || (s.skips || {})[k]) return;
+      /* 냉장고에 실제로 있는 재료 ID만 넣는다(없는 재료는 메모로만 남는다) */
+      var have = {};
+      (s.ingredients || []).forEach(function (it) { have[it.id] = true; });
+      s.customMeals[k] = {
+        name: SEED_MEALS[m].name,
+        uses: SEED_MEALS[m].uses.filter(function (id) { return have[id]; }),
+        note: SEED_MEALS[m].note
+      };
+    });
+    s.mealSeedVer = 1;
+    return true;
   }
 
   /* 날짜가 넘어갔는지 확인하고, 넘어갔으면 오늘 칸을 새로 잡는다 */
@@ -7083,13 +7136,13 @@
      하루 영양 목표 — 목적별 프리셋 + 직접 조정(칼로리·비율)
      ========================================================= */
   var GOAL_PRESETS = [
-    { id: 'balance', title: '균형 유지', sub: '두 끼로 무난하게', kcal: 1800, c: 225, p: 90, f: 60 },
-    { id: 'lean', title: '단백질 집중·감량', sub: '칼로리는 낮추고 단백질을 올려요', kcal: 1500, c: 150, p: 105, f: 53 },
-    { id: 'active', title: '활동량 많음·유지', sub: '운동하거나 많이 움직이는 날', kcal: 2000, c: 250, p: 100, f: 67 }
+    { id: 'light', title: '활동 적음·가볍게', sub: '기본 · 집에서 보내는 날', kcal: 1450, c: 163, p: 91, f: 48 },
+    { id: 'balance', title: '보통 활동·유지', sub: '두 끼로 무난하게', kcal: 1700, c: 191, p: 106, f: 57 },
+    { id: 'active', title: '활동량 많음·운동', sub: '운동하거나 많이 움직이는 날', kcal: 2000, c: 225, p: 125, f: 67 }
   ];
 
   function goalDraft() {
-    var kcal = Math.round(+gKcal.value || 0) || 1800;
+    var kcal = Math.round(+gKcal.value || 0) || GOAL_DEFAULT.kcal;
     kcal = Math.max(1000, Math.min(4000, kcal));
     return {
       kcal: kcal,
