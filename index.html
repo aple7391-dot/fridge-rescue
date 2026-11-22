@@ -416,6 +416,28 @@
   .badge.safe{background:var(--green-soft);color:#0A8A5F}
   .badge.pantry{background:#F4F5F7;color:var(--sub)}
   .badge.done{background:#F2F4F6;color:var(--sub2)}
+  .badge.wait{background:var(--blue-soft);color:var(--blue-deep)}
+
+  /* 🛒 내일 도착 — 오늘 쓸 재료와 한눈에 구분되게 */
+  .item.is-wait{background:#F8FBFF;box-shadow:none;border:1px dashed #CFE0F6}
+  .item.is-wait .item-meta{color:#6B84A0}
+
+  /* 다 쓴 재료 — 기본 접힘 */
+  .group-fold{
+    display:flex;align-items:center;gap:6px;width:100%;min-height:44px;
+    margin:20px 4px 6px;text-align:left;
+    font-size:13.5px;font-weight:800;color:var(--sub);letter-spacing:-.03em;
+  }
+  .group-fold .cnt{font-size:12.5px;font-weight:600;color:var(--sub2)}
+  .group-fold i{
+    margin-left:auto;font-style:normal;font-size:11px;color:var(--sub2);
+    transition:transform .18s;display:inline-block;
+  }
+  .group-fold[aria-expanded="true"] i{transform:rotate(180deg)}
+  .group-fold:active{opacity:.65}
+  .group-fold + .item{margin-top:0}
+
+  #shopSheet .shop-hint{margin-top:8px;font-size:12px;font-weight:600;color:var(--blue-deep);letter-spacing:-.02em}
 
   .switch{
     flex:0 0 auto;width:54px;height:32px;border-radius:99px;
@@ -607,6 +629,8 @@
   .ichip.is-finished{background:#F4F5F7;border-color:#EDF0F3;color:var(--sub)}
   .ichip.is-finished .state{background:#EDEFF2;color:var(--sub)}
   .ichip.is-finished .x{background:#EDEFF2;color:#C4CAD1}
+  .ichip.is-wait{background:#F2F8FF;border-color:#DCEAFA;color:var(--blue-deep)}
+  .ichip.is-wait .x{background:#E3EFFD;color:#7FA7DA}
   .ichip.add{
     padding:6px 14px;background:#fff;border:1px dashed #CBD5DE;
     color:var(--ink2);font-weight:700;
@@ -1246,6 +1270,12 @@
   .htag.eat{background:var(--green-soft);color:#0A8A5F}
   .htag.out{background:#EDF0F3;color:var(--sub)}
   .htag.none{background:var(--amber-soft);color:var(--amber)}
+  .hd-edit{
+    flex:0 0 auto;padding:5px 9px;border-radius:8px;
+    background:#fff;border:1px solid var(--line2);
+    font-size:11px;font-weight:700;color:var(--ink2);letter-spacing:-.02em;
+  }
+  .hd-edit:active{background:#F2F4F6}
   .hd-meal.is-off .hd-mname{color:var(--sub);text-decoration:line-through;text-decoration-thickness:1.5px}
   .hd-meal.is-none .hd-mname{color:var(--sub);font-weight:600}
   .hd-mnum{margin-top:6px;font-size:11.5px;color:var(--sub);font-weight:600;letter-spacing:-.01em}
@@ -1635,6 +1665,7 @@
       </div>
     </div>
     <div class="topbar-act">
+      <button type="button" class="ghost-btn" id="shopBtn" aria-label="장봤어요 · 새로 산 재료 담기">🛒</button>
       <button type="button" class="hd-chip" id="hdChip" aria-label="임박 재료 보기"></button>
       <button class="ghost-btn" id="menuBtn" aria-label="더보기">⋯</button>
     </div>
@@ -1714,9 +1745,12 @@
   <div class="field is-folded" id="ingMore">
     <label for="fNote">메모 <span class="hint-inline">선택</span></label>
     <input id="fNote" type="text" placeholder="예: 11/25까지" maxlength="30" autocomplete="off">
+    <label style="margin-top:16px">도착</label>
+    <div class="seg" id="segArrive">
+      <button type="button" data-val="today">오늘 바로</button>
+      <button type="button" data-val="tomorrow">내일 도착 예정</button>
+    </div>
   </div>
-
-  <div class="quick" id="quickAdd"></div>
 
   <div class="sheet-actions">
     <button class="btn ghost" id="ingCancel">취소</button>
@@ -1796,6 +1830,52 @@
   <div class="sheet-actions">
     <button class="btn ghost" id="pickCancel">취소</button>
     <button class="btn primary" id="pickSave">재료 넣기</button>
+  </div>
+</div>
+
+<div class="sheet" id="shopSheet" role="dialog" aria-modal="true" aria-labelledby="shopTitle">
+  <div class="sheet-head">
+    <div class="sheet-grip"></div>
+    <h2 id="shopTitle">🛒 장봤어요</h2>
+    <p class="sheet-sub">방금 산 재료를 한 번에 담아요. 이미 있던 재료는 새 것으로 바뀌어요.</p>
+    <button type="button" class="sheet-x" aria-label="닫기">✕</button>
+  </div>
+
+  <div class="field">
+    <label for="shopText">산 재료 <span class="hint-inline">쉼표로 나눠 적어요</span></label>
+    <textarea id="shopText" class="out-area" maxlength="120" placeholder="예: 샐러드, 닭가슴살, 그릭요거트"></textarea>
+  </div>
+
+  <div class="field">
+    <label>보관 위치</label>
+    <div class="seg" id="segShopLoc">
+      <button type="button" data-val="fridge">🧊 냉장</button>
+      <button type="button" data-val="freezer">❄️ 냉동</button>
+      <button type="button" data-val="pantry">🧺 상온</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>유통기한</label>
+    <div class="seg" id="segShopUrg">
+      <button type="button" data-val="safe">여유</button>
+      <button type="button" data-val="normal">며칠 내</button>
+      <button type="button" data-val="urgent">급함</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>도착</label>
+    <div class="seg" id="segShopWhen">
+      <button type="button" data-val="today">오늘 바로</button>
+      <button type="button" data-val="tomorrow">내일 도착</button>
+    </div>
+    <p class="shop-hint" id="shopHint">오늘 바로 담으면 지금부터 추천에 쓸 수 있어요.</p>
+  </div>
+
+  <div class="sheet-actions">
+    <button class="btn ghost" id="shopCancel">취소</button>
+    <button class="btn primary" id="shopSave">담기</button>
   </div>
 </div>
 
@@ -2683,7 +2763,7 @@
     var pref = ['egg', 'boiledegg', 'chicken', 'tofu', 'tuna', 'mackerel', 'duck', 'pork', 'shake', 'milk'];
     var cands = [];
     state.ingredients.forEach(function (it) {
-      if (inUse[it.id] || isDepleted(it)) return;
+      if (inUse[it.id] || isGone(it)) return;
       if (nutriOf(it).p < 6) return;
       cands.push({ it: it, p: nutriOf(it).p });
     });
@@ -2869,7 +2949,7 @@
     });
     var cands = [];
     state.ingredients.forEach(function (it) {
-      if (isDepleted(it) || used[it.id]) return;
+      if (isGone(it) || used[it.id]) return;
       var n = nutriOf(it);
       if (kind === 'p' && n.p < 6) return;
       if (kind === 'c' && n.c < 12) return;
@@ -3016,8 +3096,6 @@
     { id: 'shake',     label: '단쉐',     emo: '🥤' },
     { id: 'boiledegg', label: '삶은달걀', emo: '🥚' }
   ];
-
-  var QUICK_ADD = ['우유', '요거트', '감자', '대파', '양파', '바질페스토', '두부', '고기', '양념장'];
 
   var EMOJI_PICKS = ['🥚', '🥬', '🍎', '🥩', '🐟', '🥛', '🧀', '🍞', '🍄', '🧅', '🥔', '🍝'];
 
@@ -3265,9 +3343,8 @@
   var ingSheetTitle = $('ingSheetTitle');
   var ingSheetSub = $('ingSheetSub');
   var fName = $('fName'), fQty = $('fQty'), fNote = $('fNote');
-  var segLoc = $('segLoc'), segUrg = $('segUrg');
+  var segLoc = $('segLoc'), segUrg = $('segUrg'), segArrive = $('segArrive');
   var ingSave = $('ingSave'), ingDelete = $('ingDelete');
-  var quickAdd = $('quickAdd');
   var ingRestoreLine = $('ingRestoreLine'), ingRestoreText = $('ingRestoreText'), ingRestore = $('ingRestore');
   var ingMoreToggle = $('ingMoreToggle'), ingMore = $('ingMore');
 
@@ -3282,6 +3359,10 @@
 
   var pickSheet = $('pickSheet'), pickSub = $('pickSub');
   var pSearch = $('pSearch'), pList = $('pList'), pTags = $('pTags'), pRecs = $('pRecs'), pCount = $('pCount');
+
+  var shopSheet = $('shopSheet'), shopText = $('shopText'), shopHint = $('shopHint');
+  var segShopLoc = $('segShopLoc'), segShopUrg = $('segShopUrg'), segShopWhen = $('segShopWhen');
+  var shop = { loc: 'fridge', urg: 'normal', when: 'today' };
 
   var recipeSheet = $('recipeSheet'), recipeBody = $('recipeBody');
 
@@ -3311,9 +3392,9 @@
   var depYes = $('depYes'), depNo = $('depNo');
 
   /* ── 상태 ── */
-  var ui = { tab: 'pantry', filter: 'all', hideDone: false, day: 'today', gapOpen: false, warnOpen: {}, openMeal: {} };
+  var ui = { tab: 'pantry', filter: 'all', hideDone: false, doneOpen: false, day: 'today', gapOpen: false, warnOpen: {}, openMeal: {} };
   var histUI = { view: 'calendar', month: null, day: null };
-  var editor = { mode: 'add', id: null, loc: 'fridge', urg: 'normal', emoji: null, origQty: '' };
+  var editor = { mode: 'add', id: null, loc: 'fridge', urg: 'normal', arrive: 'today', emoji: null, origQty: '' };
   var eatTarget = null;
   var eatQty = {};
   var eatMode = {};
@@ -3439,7 +3520,55 @@
     };
     s.plans = buildPlan(s);
     seedDayMeals(s);
+    seedPastDinner(s);
     return s;
+  }
+
+  /* ── 11/21(토) 저녁 고기 외식 기록 ──
+     그날 저녁에 직접 남긴 기록(외식·직접 등록·먹음·건너뜀)이 없을 때만 한 번 채운다.
+     양은 외식 카드의 ✏️ 수정에서 그대로 조절할 수 있도록 저장 형식(items)에 맞춰 넣는다. */
+  var HIST_SEED = {
+    key: '2026-11-21-dinner',
+    rawText: '삼겹살 1줄, 항정살 반 줄, 돼지껍데기 4점, 구운김치 3쪽, 팽이버섯 1줌',
+    items: [
+      { label: '삼겹살',   title: '삼겹살',   qty: 1,   unit: '줄', baseQty: 1,   uk: 248,  uc: 0,   up: 17,  uf: 20 },
+      { label: '항정살',   title: '항정살',   qty: 0.5, unit: '줄', baseQty: 0.5, uk: 248,  uc: 0,   up: 17,  uf: 20 },
+      { label: '돼지껍데기', title: '돼지껍데기', qty: 4,   unit: '점', baseQty: 4,   uk: 39.6, uc: 0,   up: 1.8, uf: 3.6 },
+      { label: '구운김치', title: '구운김치', qty: 3,   unit: '쪽', baseQty: 3,   uk: 9.1,  uc: 1.2, up: 0.4, uf: 0.3 },
+      { label: '팽이버섯', title: '팽이버섯', qty: 1,   unit: '줌', baseQty: 1,   uk: 21.1, uc: 3.2, up: 1.4, uf: 0.3 }
+    ]
+  };
+
+  function seedPastDinner(s) {
+    if (!s || s.histSeedVer >= 1) return false;
+    if (todayKey() < HIST_SEED.key.slice(0, 10)) return false;
+    s.histSeedVer = 1;
+    var k = HIST_SEED.key;
+    s.outside = (s.outside && typeof s.outside === 'object') ? s.outside : {};
+    s.customMeals = (s.customMeals && typeof s.customMeals === 'object') ? s.customMeals : {};
+    s.eaten = (s.eaten && typeof s.eaten === 'object') ? s.eaten : {};
+    s.skips = (s.skips && typeof s.skips === 'object') ? s.skips : {};
+    if (s.outside[k] || s.customMeals[k] || s.eaten[k] || s.skips[k]) return false;
+
+    var t = { kcal: 0, c: 0, p: 0, f: 0 };
+    var items = HIST_SEED.items.map(function (x) {
+      t.kcal += x.uk * x.qty;
+      t.c += x.uc * x.qty; t.p += x.up * x.qty; t.f += x.uf * x.qty;
+      return { label: x.label, title: x.title, qty: x.qty, unit: x.unit, baseQty: x.baseQty,
+        uk: x.uk, uc: x.uc, up: x.up, uf: x.uf };
+    });
+    s.outside[k] = {
+      name: HIST_SEED.items.slice(0, 2).map(function (x) { return x.label; }).join(' · ') +
+        (HIST_SEED.items.length > 2 ? ' 외 ' + (HIST_SEED.items.length - 2) : ''),
+      rawText: HIST_SEED.rawText,
+      items: items,
+      kcal: Math.round(t.kcal),
+      c: outRound(t.c), p: outRound(t.p), f: outRound(t.f),
+      portion: 1
+    };
+    s.skips[k] = true;
+    delete s.eaten[k];
+    return true;
   }
 
   function loadState() {
@@ -3448,7 +3577,9 @@
       if (raw) {
         var s = JSON.parse(raw);
         if (s && Array.isArray(s.ingredients) && s.ingredients.length) {
-          return normalize(s);
+          var ns = normalize(s);
+          seedPastDinner(ns);
+          return ns;
         }
       }
     } catch (e) { /* 저장값이 깨졌으면 새로 시작 */ }
@@ -3483,6 +3614,7 @@
         note: it.note || '',
         done: !!it.done,
         custom: !!it.custom,
+        arrivesAt: /^\d{4}-\d{2}-\d{2}$/.test(String(it.arrivesAt || '')) ? String(it.arrivesAt) : '',
         emoji: it.emoji ? String(it.emoji) : (def && def.emoji) || emojiFor(it.name)
       };
 
@@ -3729,6 +3861,33 @@
     if (!it) return false;
     if (it.done) return true;
     return isCountable(it) && typeof it.count === 'number' && it.count <= 0;
+  }
+
+  /* 아직 도착하지 않은 재료 — 🛒 장봤어요에서 '내일 도착'으로 담은 것 */
+  function arrivesAtOf(it) { return it && it.arrivesAt ? String(it.arrivesAt) : ''; }
+  function isWaiting(it) {
+    var d = arrivesAtOf(it);
+    return !!d && d > todayKey();
+  }
+
+  /* 지금 냉장고에서 바로 쓸 수 없는 재료 — 다 썼거나 아직 안 왔거나.
+     고르거나 추천하는 목록에서는 이것을 뺀다 */
+  function isGone(it) { return isDepleted(it) || isWaiting(it); }
+
+  function normName(n) { return String(n || '').replace(/\s+/g, '').toLowerCase(); }
+
+  /* 이름이 같은 재료 — 새로 담을 때 중복으로 쌓지 않고 그 재료를 살린다
+     (이름이 그대로 같은 것 먼저, 없으면 이름 안에 들어 있는 것 — '닭가슴살' → '하림 칼집 닭가슴살') */
+  function findByName(n) {
+    var k = normName(n);
+    if (!k) return null;
+    var loose = null;
+    for (var i = 0; i < state.ingredients.length; i++) {
+      var t = normName(state.ingredients[i].name);
+      if (t === k) return state.ingredients[i];
+      if (!loose && k.length >= 3 && t.indexOf(k) !== -1) loose = state.ingredients[i];
+    }
+    return loose;
   }
 
   /* 재료 목록 중 이미 소진된 것들 */
@@ -4245,10 +4404,12 @@
      대시보드
      ========================================================= */
   function renderDash() {
-    var total = state.ingredients.length;
-    var done = state.ingredients.filter(function (i) { return i.done; }).length;
+    /* 아직 도착하지 않은 재료는 오늘 냉장고 기준이 아니므로 진행률에서 뺀다 */
+    var arrived = state.ingredients.filter(function (i) { return !isWaiting(i); });
+    var total = arrived.length;
+    var done = arrived.filter(function (i) { return i.done; }).length;
     var pct = total ? Math.round((done / total) * 100) : 0;
-    var urgentLeft = state.ingredients.filter(function (i) { return !i.done && i.urg === 'urgent'; }).length;
+    var urgentLeft = arrived.filter(function (i) { return !i.done && i.urg === 'urgent'; }).length;
 
     dashEl.innerHTML =
       '<div class="dash-top">' +
@@ -4357,13 +4518,30 @@
     '</div>';
   }
 
+  /* 🛒 내일 도착 재료 — 오늘 쓸 재료와 섞이지 않게 차분한 카드 한 줄 */
+  function waitRow(it) {
+    return '<div class="item is-wait" data-row="' + esc(it.id) + '">' +
+      '<button class="item-main" data-act="edit" data-id="' + esc(it.id) + '">' +
+        '<span class="item-name"><span class="emo">' + emojiOf(it) + '</span>' + esc(it.name) +
+          '<span class="badge wait">🛒 내일 도착</span></span>' +
+        '<span class="item-meta"><span>' + LOCS[it.loc].icon + ' ' + LOCS[it.loc].label + '에 둘 거예요 · 내일부터 오늘 추천에 들어와요</span></span>' +
+      '</button>' +
+    '</div>';
+  }
+
+  /* 다 쓴 재료 — 기본 접힘 */
+  function doneFold(count, open) {
+    return '<button type="button" class="group-fold" data-act="donefold" aria-expanded="' + (open ? 'true' : 'false') + '">' +
+      '✓ 다 쓴 재료 <span class="cnt">' + count + '개</span><i>▾</i></button>';
+  }
+
   function renderList() {
     var items = state.ingredients.slice();
 
     if (ui.hideDone) items = items.filter(function (i) { return !i.done; });
 
     if (ui.filter === 'urgent') {
-      items = items.filter(function (i) { return i.urg === 'urgent' || i.urg === 'soon'; });
+      items = items.filter(function (i) { return !isGone(i) && (i.urg === 'urgent' || i.urg === 'soon'); });
       items.sort(function (a, b) {
         var d = URG[a.urg].order - URG[b.urg].order;
         if (d !== 0) return d;
@@ -4377,34 +4555,48 @@
     }
 
     if (ui.filter !== 'all') {
-      items = items.filter(function (i) { return i.loc === ui.filter; });
       var loc = LOCS[ui.filter];
-      if (!items.length) {
-        listEl.innerHTML = emptyBox(loc.icon, '이 칸은 다 비웠어요.<br>＋ 재료 추가로 새로 넣을 수 있어요.');
-        return;
+      var inLoc = items.filter(function (i) { return i.loc === ui.filter; });
+      var w = inLoc.filter(isWaiting);
+      var liveL = inLoc.filter(function (i) { return !isWaiting(i) && !i.done; });
+      var doneL = inLoc.filter(function (i) { return !isWaiting(i) && i.done; });
+      var h = '';
+      if (w.length) {
+        h += sectionHead('🛒 내일 도착', w.length + '개', '내일부터 쓸 수 있어요') + w.map(waitRow).join('');
       }
-      var doneCnt = items.filter(function (i) { return i.done; }).length;
-      listEl.innerHTML = sectionHead(loc.icon + ' ' + loc.label, doneCnt + '/' + items.length + ' 처리', '') +
-        items.map(itemRow).join('');
+      if (liveL.length) {
+        h += sectionHead(loc.icon + ' ' + loc.label, '<b>' + liveL.length + '</b>개 남음', '') + liveL.map(itemRow).join('');
+      }
+      if (doneL.length) {
+        h += doneFold(doneL.length, ui.doneOpen) + (ui.doneOpen ? doneL.map(itemRow).join('') : '');
+      }
+      listEl.innerHTML = h || emptyBox(loc.icon, '이 칸은 다 비웠어요.<br>＋ 재료 추가로 새로 넣을 수 있어요.');
       return;
     }
 
-    /* 전체: 냉장고 → 냉동고 → 기본·상온 */
-    var order = ['fridge', 'freezer', 'pantry'];
+    /* 전체: 🛒 내일 도착 → 냉장고 → 냉동고 → 기본·상온 → 다 쓴 재료 */
+    var waitAll = items.filter(isWaiting);
     var html = '';
-    order.forEach(function (locId) {
-      var group = items.filter(function (i) { return i.loc === locId; });
-      if (!group.length) return;
-      var doneCnt = group.filter(function (i) { return i.done; }).length;
-      html += sectionHead(LOCS[locId].icon + ' ' + LOCS[locId].label,
-        '<b>' + doneCnt + '</b>/' + group.length, '');
-      html += group.map(itemRow).join('');
-    });
-
-    if (!html) {
-      html = emptyBox('🧺', '이 조건에 맞는 재료가 없어요.');
+    if (waitAll.length) {
+      html += sectionHead('🛒 내일 도착', waitAll.length + '개', '내일부터 쓸 수 있어요');
+      html += waitAll.map(waitRow).join('');
     }
 
+    var order = ['fridge', 'freezer', 'pantry'];
+    order.forEach(function (locId) {
+      var live = items.filter(function (i) { return i.loc === locId && !isWaiting(i) && !i.done; });
+      if (!live.length) return;
+      html += sectionHead(LOCS[locId].icon + ' ' + LOCS[locId].label, '<b>' + live.length + '</b>개 남음', '');
+      html += live.map(itemRow).join('');
+    });
+
+    var doneAll = items.filter(function (i) { return !isWaiting(i) && i.done; });
+    if (doneAll.length) {
+      html += doneFold(doneAll.length, ui.doneOpen);
+      if (ui.doneOpen) html += doneAll.map(itemRow).join('');
+    }
+
+    if (!html) html = emptyBox('🧺', '이 조건에 맞는 재료가 없어요.');
     listEl.innerHTML = html;
   }
 
@@ -4424,7 +4616,7 @@
      ========================================================= */
   function leftoverItems() {
     return state.ingredients.filter(function (it) {
-      return !it.done && !isCountable(it) && (it.used || 0) >= 2;
+      return !isGone(it) && !isCountable(it) && (it.used || 0) >= 2;
     });
   }
 
@@ -4473,7 +4665,10 @@
       var gone = isDepleted(it);
       var cls = 'ichip';
       var tag = '';
-      if (gone && eaten) {
+      if (isWaiting(it)) {
+        cls += ' is-wait';
+        tag = '<span class="state">내일 도착</span>';
+      } else if (gone && eaten) {
         cls += ' is-finished';
         tag = '<span class="state">다 먹음</span>';
       } else if (gone) {
@@ -4876,7 +5071,7 @@
     var out = [];
     table.forEach(function (row, idx) {
       var it = byId(row[0]);
-      if (!it || it.done || picked[it.id]) return;
+      if (!it || isGone(it) || picked[it.id]) return;
       var boost = it.urg === 'urgent' ? -6 : it.urg === 'soon' ? -3 : it.urg === 'safe' ? 2 : it.urg === 'pantry' ? 4 : 0;
       out.push({ it: it, why: row[1], score: idx + boost });
     });
@@ -4939,7 +5134,7 @@
     function firstAlive(ids) {
       for (var i = 0; i < ids.length; i++) {
         var it = byId(ids[i]);
-        if (it && !it.done) return it;
+        if (it && !isGone(it)) return it;
       }
       return null;
     }
@@ -4975,7 +5170,7 @@
       : '<span class="mx-empty" style="margin:0;text-align:left">쓰려는 재료를 아래에서 고르거나 직접 적어 넣으세요.</span>';
 
     /* 냉장고 재료 — 급한 것부터 */
-    var items = state.ingredients.filter(function (it) { return !it.done; }).slice();
+    var items = state.ingredients.filter(function (it) { return !isGone(it); }).slice();
     items.sort(function (a, b) { return URG[a.urg].order - URG[b.urg].order; });
     mixPick.innerHTML = items.map(function (it) {
       var on = mixIds.indexOf(it.id) >= 0;
@@ -5073,7 +5268,7 @@
     var found = null;
     for (var i = 0; i < state.ingredients.length; i++) {
       var it = state.ingredients[i];
-      if (it.done) continue;
+      if (isGone(it)) continue;
       if (it.name.indexOf(nm) >= 0) { found = it; break; }
     }
     mixName.value = '';
@@ -5232,6 +5427,7 @@
           '<span class="hd-mlabel">' + (mm.meal === 'lunch' ? '점심' : '저녁') + '</span>' +
           '<span class="hd-mname">' + esc(mm.name) + '</span>' +
           histTag(mm, key) +
+          (mm.outside ? '<button type="button" class="hd-edit" data-histedit="' + mm.key + '" aria-label="' + esc(mm.name) + ' 외식 기록 수정">✏️ 수정</button>' : '') +
         '</div>' + num + retro +
       '</div>';
     }).join('');
@@ -5373,6 +5569,7 @@
      ========================================================= */
   function ingStateOf(it) {
     if (!it) return { text: '냉장고에 없음', cls: 'none' };
+    if (isWaiting(it)) return { text: '🛒 내일 도착 · 내일부터 쓸 수 있어요', cls: 'warn' };
     if (isDepleted(it)) return { text: '소진됨 · 다시 사야 해요', cls: 'none' };
     if (isPctItem(it)) {
       var p = pctOf(it);
@@ -5508,7 +5705,7 @@
   /* 상단 헤더의 임박 요약 칩 — 소진 체크 탭에서는 대시보드가 이미 보여줘서 숨긴다 */
   function renderHdChip() {
     if (!hdChip) return;
-    var n = state.ingredients.filter(function (i) { return !i.done && (i.urg === 'urgent' || i.urg === 'soon'); }).length;
+    var n = state.ingredients.filter(function (i) { return !isGone(i) && (i.urg === 'urgent' || i.urg === 'soon'); }).length;
     hdChip.classList.toggle('is-on', n > 0 && ui.tab !== 'pantry');
     hdChip.innerHTML = '임박 <b>' + n + '</b><i>›</i>';
     hdChip.setAttribute('aria-label', '임박 재료 ' + n + '개 보기');
@@ -5548,7 +5745,7 @@
   }
 
   function closeSheets(keepScrim) {
-    [ingSheet, eatSheet, customSheet, pickSheet, menuSheet, recipeSheet, goalSheet, outSheet, mixSheet].forEach(function (el) { el.classList.remove('is-open'); });
+    [ingSheet, eatSheet, customSheet, pickSheet, shopSheet, menuSheet, recipeSheet, goalSheet, outSheet, mixSheet].forEach(function (el) { el.classList.remove('is-open'); });
     if (!keepScrim) scrim.classList.remove('is-open');
     resetArmed = false;
   }
@@ -5579,8 +5776,8 @@
       editor.emoji = it.emoji || null;
       editor.origQty = it.qty;
       editor.wasDone = !!it.done;
+      editor.arrive = isWaiting(it) ? 'tomorrow' : 'today';
       ingDelete.classList.remove('is-hidden');
-      quickAdd.style.display = 'none';
       ingRestoreLine.classList.toggle('is-hidden', !it.done);
       ingRestoreText.textContent = '다 쓴 재료예요. 되돌리면 남은 양이 다시 살아나요.';
       setMoreOpen(!!it.note);
@@ -5594,14 +5791,15 @@
       editor.urg = 'normal';
       editor.origQty = '';
       editor.wasDone = false;
+      editor.arrive = 'today';
       ingDelete.classList.add('is-hidden');
       ingRestoreLine.classList.add('is-hidden');
-      quickAdd.style.display = '';
       setMoreOpen(false);
     }
 
     segSet(segLoc, editor.loc);
     segSet(segUrg, editor.urg);
+    segSet(segArrive, editor.arrive);
     openSheet(ingSheet);
     setTimeout(function () { fName.focus(); }, 260);
   }
@@ -5637,6 +5835,10 @@
       it.loc = editor.loc;
       it.urg = editor.urg;
       it.emoji = emoji;
+
+      /* 도착 시점 — 내일 도착은 날짜로 남겨 두고, 그날이 되면 저절로 오늘 재료가 된다 */
+      if (editor.arrive === 'tomorrow') it.arrivesAt = addDays(todayKey(), 1);
+      else delete it.arrivesAt;
 
       /* 남은 양을 새로 적었으면 그 값이 그대로 상태가 된다 —
          숫자(2개·1팩)면 개수로, 그 밖의 글(절반 남음 등)이면 남은 양으로 본다 */
@@ -5676,9 +5878,40 @@
     } else {
       var id = 'c' + Date.now().toString(36) + Math.floor(Math.random() * 1000).toString(36);
       var parsedNew = countFromQty(qty);
+      var arriveOn = editor.arrive === 'tomorrow' ? addDays(todayKey(), 1) : '';
+      var dup = findByName(name);
+
+      /* 이미 있는 재료는 새 줄로 늘리지 않고 그 재료를 새것으로 되살린다 */
+      if (dup) {
+        dup.name = name;
+        dup.loc = editor.loc;
+        dup.urg = editor.urg;
+        dup.emoji = emoji;
+        if (qty) dup.qty = qty;
+        if (note) dup.note = note;
+        dup.done = false;
+        dup.used = 0;
+        delete dup._prev;
+        if (parsedNew) {
+          dup.count = parsedNew.count;
+          dup.unit = parsedNew.unit;
+        } else if (isCountable(dup)) {
+          dup.count = (dup.count > 0 ? dup.count : 1);
+        }
+        dup.partial = isCountable(dup) && Math.abs(dup.count - Math.round(dup.count)) > 0.001;
+        dup.pct = (isCountable(dup) && dup.count >= 2) ? null : 100;
+        if (arriveOn) dup.arrivesAt = arriveOn; else delete dup.arrivesAt;
+        save();
+        closeSheets();
+        renderAll();
+        toast(emoji + ' ' + name + ' 다시 담았어요' + (arriveOn ? ' · 내일 도착' : ''));
+        return;
+      }
+
       state.ingredients.push({
         id: id, name: name, qty: qty, note: note,
         loc: editor.loc, urg: editor.urg, done: false, custom: true,
+        arrivesAt: arriveOn,
         emoji: emoji,
         count: parsedNew ? parsedNew.count : null,
         unit: parsedNew ? parsedNew.unit : '개',
@@ -5692,7 +5925,7 @@
       ui.hideDone = false;
       renderAll();
       setTab('pantry');
-      toast(emoji + ' ' + name + ' 추가 완료');
+      toast(emoji + ' ' + name + ' 추가 완료' + (arriveOn ? ' · 내일 도착' : ''));
     }
   }
 
@@ -5723,11 +5956,11 @@
   function recommendItems(selMap) {
     var sel = Object.keys(selMap).filter(function (id) {
       var it = byId(id);
-      return selMap[id] && it && !it.done;
+      return selMap[id] && it && !isGone(it);
     });
 
     if (!sel.length) {
-      var urgent = state.ingredients.filter(function (it) { return !it.done && (it.urg === 'urgent' || it.urg === 'soon'); });
+      var urgent = state.ingredients.filter(function (it) { return !isGone(it) && (it.urg === 'urgent' || it.urg === 'soon'); });
       urgent.sort(function (a, b) { return URG[a.urg].order - URG[b.urg].order; });
       return { picks: urgent.slice(0, 4), base: true };
     }
@@ -5750,7 +5983,7 @@
       var bonus = cand ? (cand.urg === 'urgent' ? 1.2 : cand.urg === 'soon' ? 0.6 : 0) : 0;
       return { it: cand, s: score[id] + bonus };
     }).filter(function (o) {
-      return o.it && !o.it.done && !selMap[o.it.id] && o.s > 0;
+      return o.it && !isGone(o.it) && !selMap[o.it.id] && o.s > 0;
     });
     ranked.sort(function (a, b) { return b.s - a.s; });
 
@@ -5760,7 +5993,7 @@
     if (picks.length < 4) {
       state.ingredients.forEach(function (it) {
         if (picks.length >= 4) return;
-        if (it.done || selMap[it.id]) return;
+        if (isGone(it) || selMap[it.id]) return;
         if (picks.indexOf(it) !== -1) return;
         if (it.urg !== 'urgent' && it.urg !== 'soon') return;
         picks.push(it);
@@ -5771,7 +6004,10 @@
   }
 
   function renderSelBar() {
-    var ids = Object.keys(customSel).filter(function (id) { return customSel[id] && byId(id); });
+    var ids = Object.keys(customSel).filter(function (id) {
+      var it = byId(id);
+      return customSel[id] && it && !isGone(it);
+    });
 
     cTags.innerHTML = ids.length
       ? ids.map(function (id) {
@@ -5800,7 +6036,7 @@
 
     ['fridge', 'freezer', 'pantry'].forEach(function (locId) {
       var group = state.ingredients.filter(function (it) {
-        if (it.done || it.loc !== locId) return false;
+        if (isGone(it) || it.loc !== locId) return false;
         return !q || it.name.toLowerCase().indexOf(q) !== -1;
       });
       if (!group.length) return;
@@ -5865,7 +6101,7 @@
       return;
     }
     var uses = [];
-    state.ingredients.forEach(function (it) { if (customSel[it.id] && !it.done) uses.push(it.id); });
+    state.ingredients.forEach(function (it) { if (customSel[it.id] && !isGone(it)) uses.push(it.id); });
 
     if (uses.length >= 2) recordHistory(uses);
 
@@ -5911,7 +6147,7 @@
 
     ['fridge', 'freezer', 'pantry'].forEach(function (locId) {
       var group = state.ingredients.filter(function (it) {
-        if (it.done || it.loc !== locId) return false;
+        if (isGone(it) || it.loc !== locId) return false;
         return !q || it.name.toLowerCase().indexOf(q) !== -1;
       });
       if (!group.length) return;
@@ -5946,7 +6182,10 @@
   }
 
   function renderPickBar() {
-    var ids = Object.keys(pickSel).filter(function (id) { return pickSel[id] && byId(id); });
+    var ids = Object.keys(pickSel).filter(function (id) {
+      var it = byId(id);
+      return pickSel[id] && it && !isGone(it);
+    });
     pCount.innerHTML = ids.length ? '<b>' + ids.length + '개</b> 추가' : '선택 안 함';
 
     pTags.innerHTML = ids.length
@@ -6001,6 +6240,88 @@
       var it = byId(id);
       return it ? emojiOf(it) + ' ' + it.name : '';
     }).filter(Boolean).join(' · ') + ' 넣었어요');
+  }
+
+  /* =========================================================
+     🛒 장봤어요 — 방금 산 재료를 한 번에 담는다
+     · ‘내일 도착’은 arrivesAt 날짜로 남겨 두고,
+       그날이 되면 저절로 오늘 쓸 수 있는 재료가 된다
+     ========================================================= */
+  function paintShopHint() {
+    if (!shopHint) return;
+    shopHint.textContent = shop.when === 'tomorrow'
+      ? '내일 도착은 오늘 추천·재료 조합에서 빠지고, 내일부터 쓸 수 있어요.'
+      : '오늘 바로 담으면 지금부터 추천에 쓸 수 있어요.';
+  }
+
+  function openShop() {
+    shop.loc = 'fridge';
+    shop.urg = 'normal';
+    shop.when = 'today';
+    shopText.value = '';
+    segSet(segShopLoc, shop.loc);
+    segSet(segShopUrg, shop.urg);
+    segSet(segShopWhen, shop.when);
+    paintShopHint();
+    openSheet(shopSheet);
+    setTimeout(function () { if (shopText && shopText.focus) shopText.focus(); }, 260);
+  }
+
+  /* 쉼표·줄바꿈·플러스로 나눈다 */
+  function splitShopNames(raw) {
+    return String(raw || '').split(/[,，、\n]+/).map(function (s) { return s.trim(); }).filter(Boolean);
+  }
+
+  function saveShop() {
+    var names = [], seen = {};
+    splitShopNames(shopText.value).forEach(function (n) {
+      var k = normName(n);
+      if (!k || seen[k]) return;
+      seen[k] = true;
+      names.push(n);
+    });
+    if (!names.length) {
+      shopText.focus();
+      toast('산 재료를 적어주세요');
+      return;
+    }
+
+    var arriveOn = shop.when === 'tomorrow' ? addDays(todayKey(), 1) : '';
+    names.forEach(function (n) {
+      var it = findByName(n);
+      if (it) {
+        /* 이미 있던 재료 — 새 줄을 늘리지 않고 새것으로 바꿔 준다 */
+        it.loc = shop.loc;
+        it.urg = shop.urg;
+        it.done = false;
+        it.used = 0;
+        delete it._prev;
+        if (isCountable(it)) it.count = (it.count > 0 ? it.count : 1);
+        it.partial = isCountable(it) && Math.abs(it.count - Math.round(it.count)) > 0.001;
+        it.pct = (isCountable(it) && it.count >= 2) ? null : 100;
+        if (arriveOn) it.arrivesAt = arriveOn; else delete it.arrivesAt;
+        return;
+      }
+      state.ingredients.push({
+        id: 'c' + Date.now().toString(36) + Math.floor(Math.random() * 100000).toString(36),
+        name: n, qty: '', note: '',
+        loc: shop.loc, urg: shop.urg, done: false, custom: true,
+        arrivesAt: arriveOn,
+        emoji: emojiFor(n),
+        count: null, unit: '개', used: 0, partial: false, pct: 100
+      });
+    });
+
+    save();
+    closeSheets();
+    ui.filter = 'all';
+    ui.hideDone = false;
+    renderAll();
+    setTab('pantry');
+    var label = names.length > 2
+      ? names.slice(0, 2).join(' · ') + ' 외 ' + (names.length - 2)
+      : names.join(' · ');
+    toast('🛒 ' + label + ' 담았어요' + (arriveOn ? ' · 내일 도착' : ''));
   }
 
   /* =========================================================
@@ -6859,10 +7180,18 @@
 
   /* 저장된 외식 카드의 ✏️ 수정 — 적어 둔 메뉴·양·사진을 그대로 불러온다 */
   function openOutsideEdit(day, meal) {
-    var ex = outsideOf(day, meal);
+    openOutsideEditKey(slotKey(day, meal));
+  }
+
+  /* 지난 기록의 외식 카드도 같은 시트로 고친다 (날짜 키를 그대로 쓴다) */
+  function openOutsideEditKey(key) {
+    var ex = (state.outside || {})[key];
     if (!ex) return;
-    outTarget = { day: day, meal: meal, key: slotKey(day, meal), edit: true };
-    outSub.textContent = '적어 둔 메뉴·먹은 양·사진이 그대로 불러왔어요. 고쳐서 수정 완료를 누르면 바로 바뀝니다.';
+    outTarget = { key: key, edit: true };
+    var d10 = String(key).slice(0, 10);
+    var mealName = key.slice(-6) === 'dinner' ? '저녁' : '점심';
+    outSub.textContent = koDate(d10, true) + ' ' + mealName +
+      ' · 적어 둔 메뉴·먹은 양·사진이 그대로 불러왔어요. 고쳐서 수정 완료를 누르면 바로 바뀝니다.';
     if (outTitle) outTitle.textContent = '외식 기록 수정';
     outSave.textContent = '수정 완료';
     outItems = outItemsFromRecord(ex);
@@ -6974,13 +7303,20 @@
 
     var rows = r.uses.map(function (id) { return byId(id); }).filter(Boolean);
     rows.sort(function (a, b) {
-      if (a.done !== b.done) return a.done ? 1 : -1;
+      if (isGone(a) !== isGone(b)) return isGone(a) ? 1 : -1;
       return URG[a.urg].order - URG[b.urg].order;
     });
 
     eatSub.textContent = r.name + ' — 쓴 만큼만 아래에서 덜어내면 끝이에요.';
 
     eatList.innerHTML = rows.map(function (it) {
+      if (isWaiting(it)) {
+        return '<div class="eat-row is-done">' +
+          '<span class="eat-check">🛒</span>' +
+          '<span class="eat-name"><span class="emo">' + emojiOf(it) + '</span>' + esc(it.name) + '</span>' +
+          '<span class="badge wait">내일 도착</span>' +
+        '</div>';
+      }
       if (it.done) {
         return '<div class="eat-row is-done">' +
           '<span class="eat-check">✓</span>' +
@@ -7341,6 +7677,13 @@
       return;
     }
 
+    /* 다 쓴 재료 접기 · 페기 */
+    if (act === 'donefold') {
+      ui.doneOpen = !ui.doneOpen;
+      renderList();
+      return;
+    }
+
     /* 개수 스테퍼: 2개 → 1개 → 소량 → 다 씀, 숫자를 누르면 반 개(소량) 표시를 켜고 끈다 */
     if (act === 'dec' || act === 'inc' || act === 'part') {
       var cit = byId(id);
@@ -7676,6 +8019,8 @@
     if (he) { markPastMeal(he.getAttribute('data-histeat'), true); return; }
     var hs = e.target.closest('[data-histskip]');
     if (hs) { markPastMeal(hs.getAttribute('data-histskip'), false); return; }
+    var heo = e.target.closest('[data-histedit]');
+    if (heo) { openOutsideEditKey(heo.getAttribute('data-histedit')); return; }
   });
 
   /* 지난 날 끼니를 늦게 표시 — 재고는 건드리지 않고 기록만 남긴다 */
@@ -7820,11 +8165,27 @@
     segSet(segUrg, editor.urg);
   });
 
-  quickAdd.addEventListener('click', function (e) {
-    var b = e.target.closest('button[data-quick]');
-    if (!b) return;
-    fName.value = b.getAttribute('data-quick');
-    fName.focus();
+  if (segArrive) {
+    segArrive.addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-val]');
+      if (!b) return;
+      editor.arrive = b.getAttribute('data-val');
+      segSet(segArrive, editor.arrive);
+    });
+  }
+
+  /* 🛒 장봤어요 */
+  $('shopBtn').addEventListener('click', openShop);
+  $('shopCancel').addEventListener('click', function () { closeSheets(); });
+  $('shopSave').addEventListener('click', saveShop);
+  [[segShopLoc, 'loc'], [segShopUrg, 'urg'], [segShopWhen, 'when']].forEach(function (pair) {
+    pair[0].addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-val]');
+      if (!b) return;
+      shop[pair[1]] = b.getAttribute('data-val');
+      segSet(pair[0], shop[pair[1]]);
+      if (pair[1] === 'when') paintShopHint();
+    });
   });
 
   ingSave.addEventListener('click', saveEditor);
@@ -8023,11 +8384,6 @@
   /* =========================================================
      시작
      ========================================================= */
-  quickAdd.innerHTML = '<span class="quick-label">장 본 재료 빠르게 담기</span>' +
-    QUICK_ADD.map(function (q) {
-      return '<button type="button" data-quick="' + esc(q) + '">' + esc(q) + '</button>';
-    }).join('');
-
   syncDay();
   ensurePlans();
   renderAll();
