@@ -3451,6 +3451,21 @@
     return true;
   }
 
+  /* ── 11/21(토) 저녁 고기 외식 기록 ──
+     그날 저녁에 직접 남긴 기록(외식·직접 등록·먹음·건너뜀)이 없을 때만 한 번 채운다.
+     양은 외식 카드의 ✏️ 수정에서 그대로 조절할 수 있도록 저장 형식(items)에 맞춰 넣는다. */
+  var HIST_SEED = {
+    key: '2026-11-21-dinner',
+    rawText: '삼겹살 1줄, 항정살 반 줄, 돼지껍데기 4점, 구운김치 3쪽, 팽이버섯 1줌',
+    items: [
+      { label: '삼겹살',   title: '삼겹살',   qty: 1,   unit: '줄', baseQty: 1,   uk: 248,  uc: 0,   up: 17,  uf: 20 },
+      { label: '항정살',   title: '항정살',   qty: 0.5, unit: '줄', baseQty: 0.5, uk: 248,  uc: 0,   up: 17,  uf: 20 },
+      { label: '돼지껍데기', title: '돼지껍데기', qty: 4,   unit: '점', baseQty: 4,   uk: 39.6, uc: 0,   up: 1.8, uf: 3.6 },
+      { label: '구운김치', title: '구운김치', qty: 3,   unit: '쪽', baseQty: 3,   uk: 9.1,  uc: 1.2, up: 0.4, uf: 0.3 },
+      { label: '팽이버섯', title: '팽이버섯', qty: 1,   unit: '줌', baseQty: 1,   uk: 21.1, uc: 3.2, up: 1.4, uf: 0.3 }
+    ]
+  };
+
   var state = loadState();
 
   /* =========================================================
@@ -3523,21 +3538,6 @@
     seedPastDinner(s);
     return s;
   }
-
-  /* ── 11/21(토) 저녁 고기 외식 기록 ──
-     그날 저녁에 직접 남긴 기록(외식·직접 등록·먹음·건너뜀)이 없을 때만 한 번 채운다.
-     양은 외식 카드의 ✏️ 수정에서 그대로 조절할 수 있도록 저장 형식(items)에 맞춰 넣는다. */
-  var HIST_SEED = {
-    key: '2026-11-21-dinner',
-    rawText: '삼겹살 1줄, 항정살 반 줄, 돼지껍데기 4점, 구운김치 3쪽, 팽이버섯 1줌',
-    items: [
-      { label: '삼겹살',   title: '삼겹살',   qty: 1,   unit: '줄', baseQty: 1,   uk: 248,  uc: 0,   up: 17,  uf: 20 },
-      { label: '항정살',   title: '항정살',   qty: 0.5, unit: '줄', baseQty: 0.5, uk: 248,  uc: 0,   up: 17,  uf: 20 },
-      { label: '돼지껍데기', title: '돼지껍데기', qty: 4,   unit: '점', baseQty: 4,   uk: 39.6, uc: 0,   up: 1.8, uf: 3.6 },
-      { label: '구운김치', title: '구운김치', qty: 3,   unit: '쪽', baseQty: 3,   uk: 9.1,  uc: 1.2, up: 0.4, uf: 0.3 },
-      { label: '팽이버섯', title: '팽이버섯', qty: 1,   unit: '줌', baseQty: 1,   uk: 21.1, uc: 3.2, up: 1.4, uf: 0.3 }
-    ]
-  };
 
   function seedPastDinner(s) {
     if (!s || s.histSeedVer >= 1) return false;
