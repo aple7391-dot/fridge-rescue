@@ -1588,18 +1588,18 @@
   .mx-h.need i{background:#EAF2FF;color:var(--blue-deep)}
   .mx-h em{font-style:normal;font-size:11.5px;font-weight:600;color:var(--sub2);letter-spacing:-.01em}
   .mx-row{
-    display:flex;align-items:center;gap:9px;width:100%;margin-top:9px;padding:12px 13px;
-    border-radius:13px;background:#F7F8FA;text-align:left;
+    display:grid;grid-template-columns:auto minmax(0,1fr) 26px;align-items:center;gap:9px;width:100%;
+    margin-top:9px;padding:12px 13px;border-radius:13px;background:#F7F8FA;text-align:left;
   }
   .mx-row .nm{
-    flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;
-    font-size:13.5px;font-weight:800;color:var(--ink);letter-spacing:-.02em;white-space:nowrap;
+    display:inline-flex;align-items:center;gap:4px;white-space:nowrap;
+    font-size:13.5px;font-weight:800;color:var(--ink);letter-spacing:-.02em;
   }
   .mx-row .nm .ub{font-size:9.5px;font-weight:800;padding:2px 4px;border-radius:5px;background:#FFEFEF;color:#C2323E}
   .mx-row .nm .ub.soon{background:#FFF6E5;color:#B26A00}
-  .mx-row .why{flex:1;min-width:0;font-size:11.5px;font-weight:500;color:var(--sub);line-height:1.45;letter-spacing:-.01em}
+  .mx-row .why{min-width:0;font-size:11.5px;font-weight:500;color:var(--sub);line-height:1.45;letter-spacing:-.01em}
   .mx-row .plus{
-    flex:0 0 auto;width:26px;height:26px;border-radius:9px;display:grid;place-items:center;
+    width:26px;height:26px;border-radius:9px;display:grid;place-items:center;
     background:#fff;border:1px solid var(--line);font-size:14px;font-weight:700;color:var(--blue-deep);
   }
   .mx-row:active{background:#EFF2F6}
