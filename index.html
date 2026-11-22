@@ -1379,11 +1379,11 @@
     width:24px;height:24px;border:1px solid #DCE1E6;background:#fff;box-shadow:0 2px 7px rgba(17,24,39,.18);
   }
   .pctval{
-    flex:0 0 auto;min-width:52px;text-align:right;
-    font-size:12.5px;font-weight:800;color:var(--blue-deep);letter-spacing:-.02em;white-space:nowrap;
+    flex:0 0 auto;min-width:94px;text-align:right;
+    font-size:13px;font-weight:800;color:var(--ink);letter-spacing:-.035em;white-space:nowrap;
   }
   .pctval.dim{color:var(--sub2)}
-  .pctval small{display:block;font-size:10px;font-weight:600;color:var(--sub);letter-spacing:0}
+  .pctval small{display:block;margin-top:3px;font-size:10px;font-weight:600;color:var(--sub2);letter-spacing:0}
   .pct-hint{margin:9px 2px 0;font-size:11.5px;font-weight:500;color:var(--sub2);line-height:1.45}
 
   /* 먹었음 시트 퍼센트 행 */
@@ -1525,6 +1525,90 @@
     font-size:13px;font-weight:800;color:#fff;letter-spacing:-.01em;
   }
   .toast-act:active{background:rgba(255,255,255,.3)}
+
+  /* ══ 재료 조합 ══ */
+  .head-tools{display:flex;gap:6px;flex:0 0 auto;margin-top:3px}
+  .head-tools .mini-btn{padding:8px 10px;font-size:12px;min-height:36px}
+  .mix-input{display:flex;gap:8px;margin-top:16px}
+  .mix-input input{
+    flex:1;min-width:0;padding:14px 15px;border-radius:14px;min-height:50px;
+    background:#F5F7F9;border:1px solid transparent;font-size:15px;font-weight:600;
+    outline:none;letter-spacing:-.02em;
+  }
+  .mix-input input:focus{border-color:var(--blue);background:#fff}
+  .mix-input input::placeholder{color:var(--sub2);font-weight:400}
+  .mix-add{
+    flex:0 0 auto;width:50px;border-radius:14px;background:#191F28;color:#fff;
+    font-size:21px;font-weight:600;line-height:1;
+  }
+  .mix-add:active{background:#000}
+  .mix-sel{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+  .mix-chip{
+    display:inline-flex;align-items:center;gap:4px;min-height:34px;padding:6px 6px 6px 11px;
+    border-radius:11px;background:var(--blue-soft);color:var(--blue-deep);
+    font-size:13px;font-weight:700;letter-spacing:-.02em;
+  }
+  .mix-chip .x{
+    width:22px;height:22px;border-radius:8px;display:grid;place-items:center;
+    font-size:9px;font-weight:800;background:#D8E8FA;color:#6F9BD8;line-height:1;
+  }
+  .mix-chip.mine{background:#F2F4F6;color:var(--ink2)}
+  .mix-chip.mine .x{background:#E5E8EB;color:var(--sub)}
+  .mix-pick{display:flex;flex-wrap:wrap;gap:7px}
+  .mix-pick button{
+    display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:8px 12px;
+    border-radius:12px;background:#F5F7F9;border:1px solid transparent;
+    font-size:13px;font-weight:600;color:var(--ink2);letter-spacing:-.02em;
+  }
+  .mix-pick button.is-on{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:700}
+  .mix-pick button.urgent:not(.is-on){background:var(--red-soft);color:#C2323E}
+  .mix-pick button.soon:not(.is-on){background:var(--amber-soft);color:#94600A}
+  .mix-pick button:active{transform:scale(.97)}
+  .mix-sum{margin-top:20px;padding:16px;border-radius:16px;background:#F5F9FF;border:1px solid #DCEAFA}
+  .mix-sum .k{font-size:11.5px;font-weight:800;color:var(--blue-deep);letter-spacing:-.01em}
+  .mix-sum b{display:block;margin-top:5px;font-size:18px;font-weight:800;letter-spacing:-.045em;color:var(--ink);line-height:1.32}
+  .mix-sum p{margin-top:6px;font-size:12.5px;font-weight:500;color:#5A7091;line-height:1.5;letter-spacing:-.01em}
+  .mx{margin-top:22px}
+  .mx-h{display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:800;letter-spacing:-.035em;color:var(--ink)}
+  .mx-h i{
+    flex:0 0 auto;width:20px;height:20px;border-radius:7px;display:grid;place-items:center;
+    font-style:normal;font-size:11px;font-weight:800;background:#EAEFF5;color:#5B6B7C;
+  }
+  .mx-h.good i{background:#E4F4EC;color:#0A8A5F}
+  .mx-h.warn i{background:#FFF1E0;color:#B26A00}
+  .mx-h.need i{background:#EAF2FF;color:var(--blue-deep)}
+  .mx-h em{font-style:normal;font-size:11.5px;font-weight:600;color:var(--sub2);letter-spacing:-.01em}
+  .mx-row{
+    display:flex;align-items:center;gap:9px;width:100%;margin-top:9px;padding:12px 13px;
+    border-radius:13px;background:#F7F8FA;text-align:left;
+  }
+  .mx-row .nm{
+    flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;
+    font-size:13.5px;font-weight:800;color:var(--ink);letter-spacing:-.02em;white-space:nowrap;
+  }
+  .mx-row .nm .ub{font-size:9.5px;font-weight:800;padding:2px 4px;border-radius:5px;background:#FFEFEF;color:#C2323E}
+  .mx-row .nm .ub.soon{background:#FFF6E5;color:#B26A00}
+  .mx-row .why{flex:1;min-width:0;font-size:11.5px;font-weight:500;color:var(--sub);line-height:1.45;letter-spacing:-.01em}
+  .mx-row .plus{
+    flex:0 0 auto;width:26px;height:26px;border-radius:9px;display:grid;place-items:center;
+    background:#fff;border:1px solid var(--line);font-size:14px;font-weight:700;color:var(--blue-deep);
+  }
+  .mx-row:active{background:#EFF2F6}
+  .mx-w{
+    display:flex;gap:9px;margin-top:9px;padding:12px 13px;border-radius:13px;
+    background:#FFF8EC;border:1px solid #F5E6C9;
+  }
+  .mx-w.alert{background:#FFF1F1;border-color:#FFDCDC}
+  .mx-w .em{flex:0 0 auto;font-size:13px;line-height:1.45}
+  .mx-w .tx{flex:1;min-width:0;font-size:12px;font-weight:500;color:#7A5410;line-height:1.5;letter-spacing:-.01em}
+  .mx-w.alert .tx{color:#A8323C}
+  .mx-w .tx b{display:block;font-size:13px;font-weight:800;margin-bottom:2px;letter-spacing:-.025em}
+  .mx-need{margin-top:9px;padding:12px 13px;border-radius:13px;background:#F5F9FF;border:1px solid #DCEAFA}
+  .mx-need b{display:block;font-size:13px;font-weight:800;color:var(--blue-deep);letter-spacing:-.025em}
+  .mx-need span{display:block;margin-top:3px;font-size:12px;font-weight:500;color:#5A7091;line-height:1.5;letter-spacing:-.01em}
+  .mx-empty{margin-top:22px;font-size:12.5px;font-weight:600;color:var(--sub2);line-height:1.6;text-align:center;letter-spacing:-.01em}
+  #mixSheet .sheet-actions .btn{font-size:14.5px;padding:16px 6px}
+  #mixSheet .btn:disabled{opacity:.4}
 
   /* 시트 직계 자식은 세로 flex에서 늘어나지 않게 고정 — .field의 flex:1은 field-row 전용 */
   .sheet > *{flex:0 0 auto}
@@ -1799,6 +1883,34 @@
   <div class="sheet-actions">
     <button class="btn ghost" id="outCancel">취소</button>
     <button class="btn primary" id="outSave" disabled>기록하기</button>
+  </div>
+</div>
+
+<div class="sheet" id="mixSheet" role="dialog" aria-modal="true" aria-labelledby="mixTitle">
+  <div class="sheet-head">
+    <div class="sheet-grip"></div>
+    <h2 id="mixTitle">🧪 재료 조합</h2>
+    <p class="sheet-sub">지금 쓰려는 재료를 고르면, 냉장고에 있는 걸로 뭘 더 넣고 뭘 빼면 좋을지 바로 짚어 드려요.</p>
+    <button type="button" class="sheet-x" aria-label="닫기">✕</button>
+  </div>
+
+  <div class="mix-sel" id="mixSelBar"></div>
+  <div class="mix-input">
+    <input id="mixName" type="text" placeholder="예: 마라소스, 계란노른자" maxlength="20" autocomplete="off" enterkeyhint="done" aria-label="없는 재료 직접 넣기">
+    <button type="button" class="mix-add" id="mixAdd" aria-label="재료 넣기">＋</button>
+  </div>
+
+  <div class="field">
+    <label>냉장고에서 고르기 <span class="hint-inline">2개 이상 고르면 조언이 떠요</span></label>
+    <div class="mix-pick" id="mixPick"></div>
+  </div>
+
+  <div id="mixResult"></div>
+
+  <div class="sheet-actions">
+    <button class="btn ghost" id="mixCancel">닫기</button>
+    <button class="btn primary" id="mixLunch">☀️ 점심에 담기</button>
+    <button class="btn primary" id="mixDinner">🌙 저녁에 담기</button>
   </div>
 </div>
 
@@ -2963,7 +3075,7 @@
   function amountOrPctText(it) {
     if (!it) return '';
     if (isCountable(it)) return countText(it);
-    return pctOf(it) + '%';
+    return amtFull(it, pctOf(it));
   }
 
   /* ── 잔량 퍼센트(0~100) 모델 ──
@@ -2985,7 +3097,8 @@
 
   function setPct(it, pct) {
     if (!it) return;
-    pct = Math.max(0, Math.min(100, Math.round(pct / 5) * 5));
+    /* 장보기 앱처럼 네 단계(1/4 · 절반 · 3/4 · 가득)로 딱딱 끊어 세운다 */
+    pct = Math.max(0, Math.min(100, Math.round(pct / 25) * 25));
     it.pct = pct;
     it.partial = false;
     if (isCountable(it)) {
@@ -3003,15 +3116,72 @@
     if (it.done) it.pct = 0;
   }
 
-  /* 퍼센트를 사람 말로 */
-  function pctLabel(p) {
+  /* ── 분량을 사람 말로 ──
+     % 대신 장보기 앱처럼 '몇 잔 · 몇 회분 · 한 줌'으로 말한다.
+     재료마다 세는 단위가 다르니 종류별로 단계 말을 따로 둔다. */
+  var AMT_KIND = {
+    liquid:  { words: ['가득', '거의 다 남음', '절반 남음', '바닥 보임'], unit: '잔',   serv: 4 },
+    dairy:   { words: ['그대로 있음', '넉넉', '절반 남음', '한 번 분량'], unit: '회분', serv: 4 },
+    sauce:   { words: ['병 가득', '넉넉', '절반 남음', '한 번 분량'], unit: '회분', serv: 4 },
+    veg:     { words: ['한 봉지 가득', '두세 끼 분량', '한 끼 분량', '한 줌 남음'], unit: '', serv: 0 },
+    fruit:   { words: ['한 송이 그대로', '넉넉', '절반 남음', '한 줌 남음'], unit: '', serv: 0 },
+    banchan: { words: ['통 가득', '넉넉', '반 통', '한 번 분량'], unit: '번', serv: 6 },
+    staple:  { words: ['한 봉지 그대로', '넉넉', '절반 남음', '한 번 분량'], unit: '끼', serv: 5 },
+    etc:     { words: ['가득', '넉넉', '절반 남음', '조금 남음'], unit: '회분', serv: 4 }
+  };
+  var AMT_ITEM = {
+    milk: 'liquid', soy: 'liquid', vinegar: 'liquid', stock: 'liquid',
+    creamcheese: 'dairy', butter: 'dairy', mozzarella: 'dairy', jam: 'dairy', peanut: 'dairy', shake: 'dairy',
+    pesto: 'sauce', pastasauce: 'sauce', tunasauce: 'sauce', dashida: 'sauce',
+    mushroom: 'veg', salad: 'veg', vegmix: 'veg',
+    grape: 'fruit',
+    kimchi: 'banchan',
+    rice: 'staple', pasta: 'staple'
+  };
+  var AMT_FULL = { milk: '한 팩 그대로' };
+
+  /* 남은 양 한 마디 — '절반 남음 · 약 2잔' / '반 모 남음' / '다 씀' */
+  function amtWord(it, p) {
+    if (!it) return '';
+    if (p == null) p = pctOf(it);
+    if (p <= 0) return '다 씀';
+    var kindKey = AMT_ITEM[it.id];
+    if (!kindKey && isCountable(it)) {
+      if (p >= 100) return countText(it);
+      if (p >= 75) return '거의 다 남음';
+      if (p >= 50) return '반 ' + unitOf(it) + ' 남음';
+      return '조금 남음';
+    }
+    var k = AMT_KIND[kindKey] || AMT_KIND.etc;
+    if (p >= 100) return AMT_FULL[it.id] || k.words[0];
+    return k.words[p >= 75 ? 1 : p >= 50 ? 2 : 3];
+  }
+
+  /* 몇 잔·몇 회분 — 반쯤 남은 양을 더 구체적으로 */
+  function amtNum(it, p) {
+    if (!it) return '';
+    if (p == null) p = pctOf(it);
+    if (isCountable(it) && !AMT_ITEM[it.id]) return '';
+    var k = AMT_KIND[AMT_ITEM[it.id]] || AMT_KIND.etc;
+    if (!k.serv || !k.unit || p <= 0 || p >= 100) return '';
+    return '약 ' + Math.max(1, Math.round(k.serv * p / 100)) + k.unit;
+  }
+
+  /* '절반 남음 · 약 2잔' */
+  function amtFull(it, p) {
+    if (p == null) p = pctOf(it);
+    var w = amtWord(it, p);
+    var n = amtNum(it, p);
+    return n ? w + ' · ' + n : w;
+  }
+
+  /* 칩·레시피 줄에 붙는 짧은 말 */
+  function amtChip(it, p) {
+    if (p == null) p = pctOf(it);
+    if (isCountable(it) && !AMT_ITEM[it.id]) return countText(it);
     if (p >= 100) return '가득';
-    if (p >= 80) return '대부분 남음';
-    if (p >= 55) return '넉넉';
-    if (p >= 40) return '반 남음';
-    if (p >= 20) return '조금';
-    if (p > 0) return '얼마 안 남음';
-    return '다 씀';
+    if (p <= 0) return '다 씀';
+    return p >= 75 ? '거의 다' : p >= 50 ? '절반' : '조금';
   }
 
   /* 덜어 쓰는 통 재료 — 퍼센트 슬라이더로 다루는 재료 */
@@ -3103,6 +3273,9 @@
   var pSearch = $('pSearch'), pList = $('pList'), pTags = $('pTags'), pRecs = $('pRecs'), pCount = $('pCount');
 
   var recipeSheet = $('recipeSheet'), recipeBody = $('recipeBody');
+
+  var mixSheet = $('mixSheet'), mixSelBar = $('mixSelBar'), mixPick = $('mixPick');
+  var mixResult = $('mixResult'), mixName = $('mixName'), mixLunch = $('mixLunch'), mixDinner = $('mixDinner');
 
   var goalSheet = $('goalSheet'), gKcal = $('gKcal');
   var rC = $('rC'), rP = $('rP'), rF = $('rF');
@@ -3284,7 +3457,7 @@
       if (o.count !== null && o.count >= 2) {
         o.pct = null;
       } else if (typeof it.pct === 'number' && isFinite(it.pct)) {
-        o.pct = Math.max(0, Math.min(100, Math.round(it.pct / 5) * 5));
+        o.pct = Math.max(0, Math.min(100, Math.round(it.pct / 25) * 25));
       } else if (o.done) {
         o.pct = 0;
       } else if ((o.count === null || o.count <= 1) && /절반|반\s*남|소량/.test(String(o.qty || ''))) {
@@ -3305,7 +3478,7 @@
         var pv = it._prev;
         var keep = {};
         if (typeof pv.count === 'number' && isFinite(pv.count)) keep.count = Math.max(0, Math.round(pv.count * 2) / 2);
-        if (typeof pv.pct === 'number' && isFinite(pv.pct)) keep.pct = Math.max(0, Math.min(100, Math.round(pv.pct / 5) * 5));
+        if (typeof pv.pct === 'number' && isFinite(pv.pct)) keep.pct = Math.max(0, Math.min(100, Math.round(pv.pct / 25) * 25));
         if (typeof pv.used === 'number' && isFinite(pv.used)) keep.used = Math.max(0, Math.round(pv.used));
         keep.partial = !!pv.partial;
         ["plans", "mealUses", "customMeals"].forEach(function (k) {
@@ -4078,16 +4251,17 @@
       '</div>';
     }
 
-    /* 잔량 퍼센트 슬라이더 — 드르륵 옮겨서 남은 양을 표현한다 */
+    /* 잔량 슬라이더 — % 대신 '절반 남음 · 약 2잔'처럼 분량 감각으로 보여준다 */
     if (isPctItem(it)) {
       var p = pctOf(it);
+      var pn = amtNum(it, p);
       return '<div class="item is-pct" data-row="' + esc(it.id) + '">' +
         '<div class="item-top">' + nameBtn + toggle + '</div>' +
         '<div class="pctrow">' +
-          '<input type="range" min="0" max="100" step="5" value="' + p + '" style="--p:' + p + '%"' +
-            ' data-pct="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 남은 양 ' + p + '%">' +
-          '<span class="pctval' + (p === 0 ? ' dim' : '') + '" data-pctv="' + esc(it.id) + '">' + p + '%' +
-            '<small>' + pctLabel(p) + '</small></span>' +
+          '<input type="range" min="0" max="100" step="25" value="' + p + '" style="--p:' + p + '%"' +
+            ' data-pct="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 남은 양 ' + esc(amtFull(it, p)) + '">' +
+          '<span class="pctval' + (p === 0 ? ' dim' : '') + '" data-pctv="' + esc(it.id) + '">' + esc(amtWord(it, p)) +
+            '<small>' + esc((pn ? pn + ' · ' : '') + p + '%') + '</small></span>' +
         '</div>' +
       '</div>';
     }
@@ -4243,7 +4417,7 @@
         tag = '<span class="gone">소진됨</span>';
       } else if (isSharing(it)) {
         cls += ' is-sharing';
-        tag = '<span class="state">' + (isPctItem(it) ? pctOf(it) + '%' : '소량') + '</span>';
+        tag = '<span class="state">' + esc(amtChip(it, pctOf(it))) + '</span>';
       } else if (it.urg === 'urgent') cls += ' urgent';
       else if (it.urg === 'soon') cls += ' soon';
       return '<button type="button" class="' + cls + '" data-chipdel="' + esc(id) + '"' +
@@ -4490,12 +4664,361 @@
     mealsEl.innerHTML =
       '<div class="meals-head">' +
         '<h2>' + (day === 'today' ? '오늘' : '내일') + ' 뭐 먹지</h2>' +
-        '<button class="mini-btn" id="replanBtn">🔄 다시 짜기</button>' +
+        '<div class="head-tools">' +
+          '<button class="mini-btn" id="mixBtn">🧪 재료 조합</button>' +
+          '<button class="mini-btn" id="replanBtn">🔄 다시 짜기</button>' +
+        '</div>' +
       '</div>' +
       dayTabs() +
       goalBox(day) +
       mealCard(day, 'lunch') +
       mealCard(day, 'dinner');
+  }
+
+  /* =========================================================
+     재료 조합 가이드
+     고른 재료와 냉장고 사정을 같이 보고 세 가지를 짚는다.
+      ① 넣으면 더 좋은 보유 재료  ② 빼거나 줄일 것·조리 주의  ③ 부족한 영양
+     ========================================================= */
+  var MIX_RULES = [
+    { k: 'spicy',   re: /마라|고추|매운|매콤|얼큰|김치|불닭|청양|떡볶이|제육|짬뽕|라면/ },
+    { k: 'salty',   re: /마라|스팸|햄|소시지|베이컨|김치|간장|된장|고추장|액젓|젓갈|다시다|스톡|소금|참치액|짜장|짬뽕|장아찌|단무지|어묵|치즈|소스/ },
+    { k: 'creamy',  re: /우유|크림|치즈|버터|모짜렐라|요거트|마요/ },
+    { k: 'pasta',   re: /파스타|스파게티|페투치네|링귀네|국수|우동|라면|소면|면/ },
+    { k: 'rice',    re: /밥|쌀|현미|잡곡|죽/ },
+    { k: 'bread',   re: /빵|베이글|토스트|또띠아|크루아상/ },
+    { k: 'protein', re: /계란|달걀|노른자|고기|목살|삼겹|닭|오리|고등어|연어|참치|새우|두부|콩|스팸|햄|소시지|치즈/ },
+    { k: 'veg',     re: /양파|버섯|샐러드|야채|채소|대파|마늘|상추|오이|토마토|당근|시금치|양배추|깻잎|파프리카|브로콜리|호박/ },
+    { k: 'fat',     re: /버터|기름|마요|참기름|올리브|페스토|땅콩|견과|베이컨|삼겹|목살|스팸|치즈/ },
+    { k: 'acid',    re: /식초|레몬|토마토|김치|요거트|사과/ }
+  ];
+
+  /* 요리 갈래별로 잘 어울리는 보유 재료 (냉장고에 있을 때만 추천한다) */
+  var MIX_ADD = {
+    pastaCream: [
+      ['mushroom', '크림소스에 향과 식감을 더해요'],
+      ['creamcheese', '한 스푼 넣으면 소스가 더 진해져요'],
+      ['garlic', '다진마늘을 먼저 볶으면 향이 살아요'],
+      ['mozzarella', '마지막에 얹으면 치즈 파스타가 돼요'],
+      ['onion', '양파부터 볶으면 단맛이 올라와요'],
+      ['butter', '버터 한 조각이면 소스에 윤기가 흘러요']
+    ],
+    pasta: [
+      ['garlic', '다진마늘·양파를 먼저 볶으면 기본 맛이 잡혀요'],
+      ['onion', '양파를 볶으면 단맛이 올라와요'],
+      ['mushroom', '버섯은 어떤 파스타에도 잘 어울려요'],
+      ['mozzarella', '마지막에 얹으면 고소함이 더해져요'],
+      ['butter', '버터 한 조각이면 소스에 윤기가 흘러요']
+    ],
+    rice: [
+      ['egg', '계란 프라이는 볶음밥에 거의 필수예요'],
+      ['onion', '양파를 먼저 볶으면 단맛이 올라와요'],
+      ['kimchi', '김치는 볶으면 신맛이 줄고 감칠맛이 나요'],
+      ['garlic', '다진마늘을 살짝 볶아 향을 내요'],
+      ['butter', '마지막에 버터 반 스푼이면 고소해져요']
+    ],
+    bread: [
+      ['egg', '계란을 풀어 적시면 프렌치토스트가 돼요'],
+      ['mozzarella', '치즈를 올리면 든든해져요'],
+      ['salad', '샐러드를 곁들이면 한 끼가 돼요'],
+      ['butter', '버터에 구우면 겉이 바삭해져요']
+    ],
+    stir: [
+      ['onion', '양파를 먼저 볶으면 단맛이 올라와요'],
+      ['garlic', '다진마늘을 살짝 볶아 향을 내요'],
+      ['mushroom', '버섯을 더하면 식감과 부피가 늘어요'],
+      ['salad', '마지막에 채소를 넣으면 아삭해져요'],
+      ['butter', '버터 반 스푼이면 고소해져요']
+    ]
+  };
+
+  var mixIds = [];
+  var mixNames = [];
+
+  function mixEntries() {
+    var out = [];
+    mixIds.forEach(function (id) {
+      var it = byId(id);
+      if (it) out.push({ id: it.id, name: it.name, emoji: emojiOf(it), urg: it.urg, item: it, mine: false });
+    });
+    mixNames.forEach(function (nm) {
+      out.push({ id: null, name: nm, emoji: emojiFor(nm), urg: '', item: null, mine: true });
+    });
+    return out;
+  }
+
+  function mixTags(e) {
+    var t = {};
+    var src = String(e.name || '');
+    MIX_RULES.forEach(function (r) { if (r.re.test(src)) t[r.k] = true; });
+    return t;
+  }
+
+  function mixCollect(sel) {
+    var T = {};
+    sel.forEach(function (e) {
+      var t = mixTags(e);
+      Object.keys(t).forEach(function (k) {
+        if (!T[k]) T[k] = [];
+        T[k].push(e);
+      });
+    });
+    return T;
+  }
+
+  function mixHasName(sel, re) {
+    for (var i = 0; i < sel.length; i++) if (re.test(String(sel[i].name || ''))) return true;
+    return false;
+  }
+
+  function mixDishName(T) {
+    var h = function (k) { return !!(T[k] && T[k].length); };
+    if (h('pasta') && h('creamy') && h('spicy')) return '마라 크림 파스타';
+    if (h('pasta') && h('creamy')) return '크림 파스타';
+    if (h('pasta') && h('spicy')) return '매콤 파스타';
+    if (h('pasta') && h('acid')) return '토마토 파스타';
+    if (h('pasta')) return '재료 파스타';
+    if (h('rice') && h('spicy')) return '매콤 볶음밥';
+    if (h('rice')) return '재료 볶음밥';
+    if (h('bread') && h('protein')) return '에그 토스트';
+    if (h('protein') && h('veg')) return '재료 볶음';
+    if (h('veg')) return '채소 볶음';
+    return '냉장고 볶음';
+  }
+
+  function mixFamily(T) {
+    var h = function (k) { return !!(T[k] && T[k].length); };
+    if (h('pasta') && h('creamy')) return 'pastaCream';
+    if (h('pasta')) return 'pasta';
+    if (h('rice')) return 'rice';
+    if (h('bread')) return 'bread';
+    return 'stir';
+  }
+
+  function mixRecs(sel, T) {
+    var table = MIX_ADD[mixFamily(T)] || MIX_ADD.stir;
+    var picked = {};
+    sel.forEach(function (e) { if (e.id) picked[e.id] = true; });
+    var out = [];
+    table.forEach(function (row, idx) {
+      var it = byId(row[0]);
+      if (!it || it.done || picked[it.id]) return;
+      var boost = it.urg === 'urgent' ? -6 : it.urg === 'soon' ? -3 : it.urg === 'safe' ? 2 : it.urg === 'pantry' ? 4 : 0;
+      out.push({ it: it, why: row[1], score: idx + boost });
+    });
+    out.sort(function (a, b) { return a.score - b.score; });
+    return out.slice(0, 4);
+  }
+
+  /* ② 빼거나 줄일 것 · 조리 주의 */
+  function mixWarns(sel, T) {
+    var out = [];
+    var h = function (k) { return !!(T[k] && T[k].length); };
+    var names = function (k) {
+      return (T[k] || []).map(function (e) { return e.name; }).slice(0, 3).join('·');
+    };
+    var salty = T.salty || [];
+    if (salty.length >= 2) {
+      out.push({ a: true, t: '짠 재료가 겹쳤어요',
+        d: names('salty') + '는 간이 센 편이에요. 소금·간장은 빼고 간은 마지막에 한 번만 보세요.' });
+    } else if (salty.length === 1) {
+      out.push({ a: false, t: salty[0].name + ' 하나로 간은 충분해요',
+        d: '소금·간장·다시다는 넣지 말고, 마지막에 맛을 보고 부족할 때만 조금 더하세요.' });
+    }
+    if (mixHasName(sel, /노른자/)) {
+      out.push({ a: false, t: '계란노른자는 불 끄고 마지막에',
+        d: '불을 끈 뒤 풀어야 눌어붙지 않고 부드러워져요. 남은 흰자는 따로 스크램블해 곁들여요.' });
+    }
+    if (mixHasName(sel, /우유/) && h('creamy')) {
+      out.push({ a: false, t: '우유는 약불에서 천천히',
+        d: '끓기 직전에 내려야 분리되지 않아요. 한 번에 다 붓지 말고 조금씩 넣으며 농도를 봐요.' });
+    }
+    if (h('pasta')) {
+      out.push({ a: false, t: '면수 한 컵은 남겨두세요',
+        d: '소스가 되직하면 면수로 농도를 풀어요. 면은 소스와 30초 더 볶아야 맛이 배요.' });
+    }
+    if (h('spicy') && h('creamy')) {
+      out.push({ a: false, t: '매운맛은 우유가 눌러줘요',
+        d: '마라를 다 넣으면 매운맛이 순해져요. 더 맵게 먹고 싶으면 마라를 조금 남겨 마지막에 더해요.' });
+    }
+    if (h('salty') && h('fat') && h('creamy')) {
+      out.push({ a: false, t: '기름·염분이 겹치면 다음 끼니가 무거워요',
+        d: '치즈나 버터는 한 가지만 쓰고, 곁들이는 샐러드에 식초를 살짝 쳐요.' });
+    }
+    return out.slice(0, 4);
+  }
+
+  /* ③ 부족한 영양 */
+  function mixMacros(sel) {
+    var t = { c: 0, p: 0, f: 0, veg: 0 };
+    sel.forEach(function (e) {
+      var n = e.item ? nutriOf(e.item) : estimateNutri(e.name);
+      t.c += n.c; t.p += n.p; t.f += n.f;
+      if (mixTags(e).veg) t.veg++;
+    });
+    t.kcal = Math.round(t.c * 4 + t.p * 4 + t.f * 9);
+    return t;
+  }
+
+  function mixNeeds(sel, m) {
+    var out = [];
+    function firstAlive(ids) {
+      for (var i = 0; i < ids.length; i++) {
+        var it = byId(ids[i]);
+        if (it && !it.done) return it;
+      }
+      return null;
+    }
+    if (m.p < 28) {
+      var pr = firstAlive(['chicken', 'tuna', 'boiledegg', 'tofu', 'egg', 'shake']);
+      out.push({ t: '단백질이 한 끼 기준으로 부족해요',
+        d: (pr ? '냉장고의 ' + pr.name + '을(를) 더하면' : '닭가슴살·참치 캔·달걀 흰자 중 하나를 더하면') + ' 한 끼 단백질이 맞아요.' });
+    }
+    if (m.veg < 2) {
+      var veg = firstAlive(['mushroom', 'salad', 'vegmix']);
+      out.push({ t: '채소가 적어요',
+        d: (veg ? '냉장고의 ' + veg.name + ' 한 줌을 더하면' : '버섯이나 샐러드 한 줌을 더하면') + ' 식감과 포만감이 채워져요.' });
+    }
+    if (m.c < 35) out.push({ t: '탄수화물이 적어요', d: '밥 반 공기나 모닝빵 1개를 곁들이면 든든해요.' });
+    if (m.f > 30) out.push({ t: '기름이 많은 편이에요', d: '버터·치즈는 한 가지만 쓰고 샐러드를 곁들여요.' });
+    if (m.kcal < 350) out.push({ t: '양이 적어 보여요', d: '달걀 1개나 밥 반 공기를 더하면 한 끼가 돼요.' });
+    if (!out.length) out.push({ t: '균형이 좋아요', d: '이 조합이면 한 끼로 충분해요. 간은 마지막에 한 번만 맞춰요.' });
+    return out.slice(0, 3);
+  }
+
+  function mixKey(kind, val) { return kind + ':' + val; }
+
+  function renderMix() {
+    var sel = mixEntries();
+
+    /* 고른 재료 칩 */
+    mixSelBar.innerHTML = sel.length
+      ? sel.map(function (e) {
+          return '<button type="button" class="mix-chip' + (e.mine ? ' mine' : '') + '"' +
+            ' data-mixdel="' + esc(mixKey(e.id ? 'i' : 'n', e.id || e.name)) + '" aria-label="' + esc(e.name) + ' 빼기">' +
+            e.emoji + ' ' + esc(e.name) + '<span class="x">✕</span></button>';
+        }).join('')
+      : '<span class="mx-empty" style="margin:0;text-align:left">쓰려는 재료를 아래에서 고르거나 직접 적어 넣으세요.</span>';
+
+    /* 냉장고 재료 — 급한 것부터 */
+    var items = state.ingredients.filter(function (it) { return !it.done; }).slice();
+    items.sort(function (a, b) { return URG[a.urg].order - URG[b.urg].order; });
+    mixPick.innerHTML = items.map(function (it) {
+      var on = mixIds.indexOf(it.id) >= 0;
+      return '<button type="button" class="' + URG[it.urg].cls + (on ? ' is-on' : '') + '"' +
+        ' data-mixpick="' + esc(it.id) + '" aria-pressed="' + (on ? 'true' : 'false') + '">' +
+        emojiOf(it) + ' ' + esc(it.name) + '</button>';
+    }).join('');
+
+    mixLunch.disabled = sel.length < 2;
+    mixDinner.disabled = sel.length < 2;
+
+    if (sel.length < 2) {
+      mixResult.innerHTML = '<p class="mx-empty">재료를 2개 이상 고르면<br>뭘 더 넣고 뭘 빼면 좋을지 바로 짚어 드려요.</p>';
+      return;
+    }
+
+    var T = mixCollect(sel);
+    var dish = mixDishName(T);
+    var recs = mixRecs(sel, T);
+    var warns = mixWarns(sel, T);
+    var needs = mixNeeds(sel, mixMacros(sel));
+
+    var html = '<div class="mix-sum">' +
+      '<span class="k">이 조합이면</span>' +
+      '<b>' + esc(dish) + '</b>' +
+      '<p>' + esc(sel.map(function (e) { return e.name; }).join(' · ')) + ' — 이대로 ' + esc(dish) + '로 만들 수 있어요.</p>' +
+    '</div>';
+
+    /* ① */
+    html += '<div class="mx">' +
+      '<p class="mx-h good"><i>1</i>넣으면 더 좋아요 <em>' + (recs.length ? '냉장고에 있는 것' : '') + '</em></p>' +
+      (recs.length
+        ? recs.map(function (r) {
+            var ub = r.it.urg === 'urgent' ? '<span class="ub">오늘</span>' : r.it.urg === 'soon' ? '<span class="ub soon">곧</span>' : '';
+            return '<button type="button" class="mx-row" data-mixrec="' + esc(r.it.id) + '" aria-label="' + esc(r.it.name) + ' 조합에 넣기">' +
+              '<span class="nm">' + emojiOf(r.it) + ' ' + esc(r.it.name) + ub + '</span>' +
+              '<span class="why">' + esc(r.why) + '</span>' +
+              '<span class="plus">＋</span>' +
+            '</button>';
+          }).join('')
+        : '<p class="mx-empty" style="margin-top:10px;text-align:left">지금 냉장고에 더할 만한 게 없어요. 아래 ③만 보면 돼요.</p>') +
+    '</div>';
+
+    /* ② */
+    html += '<div class="mx">' +
+      '<p class="mx-h warn"><i>2</i>빼거나 줄일 것</p>' +
+      (warns.length
+        ? warns.map(function (w) {
+            return '<div class="mx-w' + (w.a ? ' alert' : '') + '"><span class="em">' + (w.a ? '⚠️' : '💡') + '</span>' +
+              '<span class="tx"><b>' + esc(w.t) + '</b>' + esc(w.d) + '</span></div>';
+          }).join('')
+        : '<div class="mx-w"><span class="em">👍</span><span class="tx"><b>따로 뺄 건 없어요</b>이 조합 그대로 가도 좋아요.</span></div>') +
+    '</div>';
+
+    /* ③ */
+    html += '<div class="mx">' +
+      '<p class="mx-h need"><i>3</i>더 필요한 것</p>' +
+      needs.map(function (n) {
+        return '<div class="mx-need"><b>' + esc(n.t) + '</b><span>' + esc(n.d) + '</span></div>';
+      }).join('') +
+    '</div>';
+
+    mixResult.innerHTML = html;
+  }
+
+  function openMix() {
+    mixIds = [];
+    mixNames = [];
+    mixName.value = '';
+    renderMix();
+    openSheet(mixSheet);
+    mixResult.scrollTop = 0;
+  }
+
+  function mixToggle(id) {
+    var i = mixIds.indexOf(id);
+    if (i >= 0) mixIds.splice(i, 1); else mixIds.push(id);
+    renderMix();
+  }
+
+  /* 직접 적은 재료 — 냉장고에 같은 이름이 있으면 그 재료를 고른 것으로 */
+  function mixAddName(raw) {
+    var nm = String(raw || '').replace(/\s+/g, ' ').trim();
+    if (!nm) return;
+    var found = null;
+    for (var i = 0; i < state.ingredients.length; i++) {
+      var it = state.ingredients[i];
+      if (it.done) continue;
+      if (it.name.indexOf(nm) >= 0) { found = it; break; }
+    }
+    mixName.value = '';
+    if (found) { mixToggle(found.id); return; }
+    if (mixNames.indexOf(nm) < 0) mixNames.push(nm);
+    renderMix();
+  }
+
+  function mixSave(meal) {
+    var sel = mixEntries();
+    if (sel.length < 2) { toast('재료를 2개 이상 골라주세요'); return; }
+    var name = mixDishName(mixCollect(sel));
+    var uses = mixIds.slice();
+    var key = slotKey('today', meal);
+    state.customMeals = state.customMeals || {};
+    state.customMeals[key] = {
+      name: name,
+      uses: uses,
+      note: sel.map(function (e) { return e.name; }).join(', ')
+    };
+    delete state.skips[key];
+    delete state.eaten[key];
+    if (uses.length >= 2) recordHistory(uses);
+    save();
+    closeSheets();
+    ui.day = 'today';
+    setTab('meals');
+    renderAll();
+    toast('🧪 ' + name + ' · 오늘 ' + (meal === 'lunch' ? '점심' : '저녁') + '에 담았어요');
   }
 
   /* =========================================================
@@ -4769,8 +5292,7 @@
     if (isDepleted(it)) return { text: '소진됨 · 다시 사야 해요', cls: 'none' };
     if (isPctItem(it)) {
       var p = pctOf(it);
-      if (p >= 100) return { text: isCountable(it) ? countText(it) + ' 남음' : (it.qty || '있음'), cls: 'ok' };
-      return { text: p + '% 남음', cls: 'warn' };
+      return { text: amtFull(it, p), cls: p >= 100 ? 'ok' : 'warn' };
     }
     if (isCountable(it)) return { text: countText(it) + ' 남음', cls: hasPartial(it) ? 'warn' : 'ok' };
     return { text: '있음', cls: 'ok' };
@@ -4942,7 +5464,7 @@
   }
 
   function closeSheets(keepScrim) {
-    [ingSheet, eatSheet, customSheet, pickSheet, menuSheet, recipeSheet, goalSheet, outSheet].forEach(function (el) { el.classList.remove('is-open'); });
+    [ingSheet, eatSheet, customSheet, pickSheet, menuSheet, recipeSheet, goalSheet, outSheet, mixSheet].forEach(function (el) { el.classList.remove('is-open'); });
     if (!keepScrim) scrim.classList.remove('is-open');
     resetArmed = false;
   }
@@ -6354,7 +6876,7 @@
   /* 남은 양을 퍼센트로 보여주는 한 줄 */
   function pctEatText(it, next) {
     var cur = it.done ? 0 : pctOf(it);
-    return cur + '% 남음 → ' + (next <= 0 ? '다 씀' : next + '% 남아요');
+    return amtWord(it, cur) + ' → ' + amtWord(it, next);
   }
 
   function openEat(day, meal) {
@@ -6384,7 +6906,7 @@
       }
       if (isPctItem(it)) {
         var cur = pctOf(it);
-        var def = cur >= 100 ? 50 : Math.max(0, Math.round(cur / 2 / 5) * 5);
+        var def = cur >= 100 ? 50 : Math.max(0, Math.round(cur / 2 / 25) * 25);
         eatPct[it.id] = def;
         return '<div class="eat-row eat-pct" data-eatrow="' + esc(it.id) + '">' +
           '<div class="eat-top">' +
@@ -6392,9 +6914,10 @@
             '<span class="eat-sub" data-eatstate="' + esc(it.id) + '">' + esc(pctEatText(it, def)) + '</span>' +
           '</div>' +
           '<div class="pctrow">' +
-            '<input type="range" min="0" max="100" step="5" value="' + def + '" style="--p:' + def + '%"' +
+            '<input type="range" min="0" max="100" step="25" value="' + def + '" style="--p:' + def + '%"' +
               ' data-eatpct="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 남은 양">' +
-            '<span class="pctval" data-eatpctv="' + esc(it.id) + '">' + def + '%<small>' + pctLabel(def) + '</small></span>' +
+            '<span class="pctval" data-eatpctv="' + esc(it.id) + '">' + esc(amtWord(it, def)) +
+              '<small>' + esc((amtNum(it, def) ? amtNum(it, def) + ' · ' : '') + def + '%') + '</small></span>' +
           '</div>' +
         '</div>';
       }
@@ -6432,7 +6955,7 @@
     var slider = row.querySelector('[data-eatpct]');
     if (slider) { slider.value = v; slider.style.setProperty('--p', v + '%'); }
     var lab = row.querySelector('[data-eatpctv]');
-    if (lab) lab.innerHTML = v + '%<small>' + pctLabel(v) + '</small>';
+    if (lab) lab.innerHTML = esc(amtWord(it, v)) + '<small>' + esc((amtNum(it, v) ? amtNum(it, v) + ' · ' : '') + v + '%') + '</small>';
     var sub = row.querySelector('[data-eatstate="' + id + '"]');
     if (sub) sub.textContent = pctEatText(it, v);
     var qb = row.querySelectorAll('[data-eatp]');
@@ -6465,7 +6988,7 @@
         parts.push(emojiOf(it) + ' ' + it.name + ' 다 씀');
       } else {
         shareCount++;
-        parts.push(emojiOf(it) + ' ' + it.name + ' ' + next + '% 남김');
+        parts.push(emojiOf(it) + ' ' + it.name + ' · ' + amtWord(it, pctOf(it)));
       }
     });
 
@@ -6680,7 +7203,10 @@
     save();
     var p = pctOf(it);
     var lab = listEl.querySelector('[data-pctv="' + it.id + '"]');
-    if (lab) lab.innerHTML = p + '%<small>' + pctLabel(p) + '</small>';
+    if (lab) {
+      var pn = amtNum(it, p);
+      lab.innerHTML = esc(amtWord(it, p)) + '<small>' + esc((pn ? pn + ' · ' : '') + p + '%') + '</small>';
+    }
     var row = s.closest('.item');
     if (row) row.classList.toggle('is-done', it.done);
     renderDash();
@@ -6901,6 +7427,7 @@
       return;
     }
 
+    if (e.target.closest('#mixBtn')) { openMix(); return; }
     if (e.target.closest('#replanBtn')) { replanAll(); return; }
 
     if (e.target.closest('[data-act="goalopen"]')) { openGoal(); return; }
@@ -7340,6 +7867,36 @@
 
   recipeBody.addEventListener('click', function (e) {
     if (e.target.closest('[data-rclose]')) closeSheets();
+  });
+
+  /* ── 재료 조합 시트 ── */
+  mixSheet.addEventListener('click', function (e) {
+    var del = e.target.closest('[data-mixdel]');
+    if (del) {
+      var v = del.getAttribute('data-mixdel') || '';
+      var kind = v.slice(0, 1), val = v.slice(2);
+      if (kind === 'i') {
+        var ix = mixIds.indexOf(val);
+        if (ix >= 0) mixIds.splice(ix, 1);
+      } else {
+        var nx = mixNames.indexOf(val);
+        if (nx >= 0) mixNames.splice(nx, 1);
+      }
+      renderMix();
+      return;
+    }
+    var pick = e.target.closest('[data-mixpick]');
+    if (pick) { mixToggle(pick.getAttribute('data-mixpick')); return; }
+    var rec = e.target.closest('[data-mixrec]');
+    if (rec) { mixToggle(rec.getAttribute('data-mixrec')); return; }
+    if (e.target.closest('#mixAdd')) { mixAddName(mixName.value); return; }
+    if (e.target.closest('#mixCancel')) { closeSheets(); return; }
+    if (e.target.closest('#mixLunch')) { mixSave('lunch'); return; }
+    if (e.target.closest('#mixDinner')) { mixSave('dinner'); return; }
+  });
+
+  mixName.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); mixAddName(mixName.value); }
   });
 
   /* 시트 우상단 ✕ — 어느 시트에서든 공통 닫기 */
