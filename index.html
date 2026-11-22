@@ -3138,7 +3138,7 @@
     kimchi: 'banchan',
     rice: 'staple', pasta: 'staple'
   };
-  var AMT_FULL = { milk: '한 팩 그대로' };
+  var AMT_FULL = { milk: '한 팩 그대로', rice: '그대로 있음' };
 
   /* 남은 양 한 마디 — '절반 남음 · 약 2잔' / '반 모 남음' / '다 씀' */
   function amtWord(it, p) {
@@ -4216,9 +4216,9 @@
   function itemRow(it) {
     var meta = [];
     var part = isCountable(it) && hasPartial(it) && !it.done;
-    if (isCountable(it)) {
+    if (isCountable(it) && !isPctItem(it)) {
       if (!it.done) meta.push('<span>' + esc(countText(it)) + ' 남음</span>');
-    } else if (it.qty && !/^(소량|조금|절반 남음|반 남음)$/.test(String(it.qty).trim())) {
+    } else if (!isCountable(it) && it.qty && !/^(소량|조금|절반 남음|반 남음)$/.test(String(it.qty).trim())) {
       meta.push('<span>' + esc(it.qty) + '</span>');
     }
     if (it.note) {
