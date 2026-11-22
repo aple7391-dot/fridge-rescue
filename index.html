@@ -1653,6 +1653,103 @@
 
   /* 시트 직계 자식은 세로 flex에서 늘어나지 않게 고정 — .field의 flex:1은 field-row 전용 */
   .sheet > *{flex:0 0 auto}
+
+  /* ══════════════════════════════════════════════
+     v2 — MVP 다이어트 (2026-11-23)
+     요약은 한 줄, 재료는 원탭 소분, 끼니는 이월까지
+     ══════════════════════════════════════════════ */
+  .topbar{padding:16px 20px 8px}
+  .brand{gap:9px}
+  .brand-mark{width:32px;height:32px;border-radius:10px;font-size:17px}
+  .brand h1{font-size:18px;font-weight:800;letter-spacing:-.04em;line-height:1.25}
+  .ghost-btn{width:38px;height:38px;border-radius:12px;font-size:17px}
+
+  /* 얇은 한 줄 요약 */
+  .dash{margin:0;border-radius:0;padding:2px 20px 0;background:transparent;box-shadow:none}
+  .summary{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--sub);font-weight:600;letter-spacing:-.02em;min-height:24px}
+  .summary .n{color:var(--ink);font-weight:800}
+  .summary .div{color:var(--sub2)}
+  .summary .hot{display:inline-flex;align-items:center;gap:3px;color:#C2323E;font-weight:700}
+  .summary .hot b{font-weight:800}
+  .summary .hot:active{opacity:.6}
+  .tabs{margin:12px 20px 0}
+  .tab{min-height:42px;padding:10px 4px;font-size:13px}
+  .main{padding:14px 20px 8px}
+  .filters{padding:0 0 4px;gap:6px}
+  .filters .chip{padding:8px 12px;min-height:36px;font-size:12.5px;border-radius:10px}
+
+  /* 재료 카드 — 이름 한 줄 + 남은 양·소분 칩 한 줄 */
+  .item2{background:var(--card);border-radius:16px;padding:11px 12px 10px;margin-bottom:8px;box-shadow:var(--shadow);transition:background .18s,opacity .18s}
+  .item2.is-done{background:#F7F8FA;box-shadow:none}
+  .item2.is-done .nm{color:var(--sub);text-decoration:line-through;text-decoration-thickness:1.5px}
+  .item2 .r1{display:flex;align-items:center;gap:8px;width:100%;text-align:left}
+  .item2 .nm{flex:1;min-width:0;display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;letter-spacing:-.03em;line-height:1.35}
+  .item2 .nm .emo{font-size:16px;line-height:1}
+  .item2 .nm .txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .item2 .badge{flex:0 0 auto;font-size:10.5px;font-weight:800;padding:3px 6px;border-radius:7px;letter-spacing:-.01em;white-space:nowrap}
+  .item2 .badge.urgent{background:var(--red-soft);color:#C2323E}
+  .item2 .badge.soon{background:var(--amber-soft);color:#94600A}
+  .item2 .badge.wait{background:var(--blue-soft);color:var(--blue-deep)}
+  .item2 .badge.gone{background:#EDEFF2;color:var(--sub)}
+  .item2 .note{margin-top:3px;font-size:11.5px;font-weight:500;color:var(--sub);letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .item2 .note.warn{color:#C25E00;font-weight:600}
+  .item2 .r2{display:flex;align-items:center;gap:8px;margin-top:7px}
+  .item2 .amt{flex:0 1 auto;min-width:0;font-size:12.5px;font-weight:700;color:var(--blue-deep);letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .item2.is-done .amt{color:var(--sub)}
+  .port{flex:1;min-width:0;display:flex;gap:5px;justify-content:flex-end}
+  .port button{
+    flex:0 0 auto;min-height:30px;padding:5px 9px;border-radius:9px;
+    background:#F2F4F6;color:var(--ink2);font-size:12px;font-weight:700;letter-spacing:-.02em;white-space:nowrap;
+    transition:background .12s,color .12s,transform .1s;
+  }
+  .port button.on{background:#191F28;color:#fff}
+  .port button:active{transform:scale(.95);background:#E5E8EB}
+  .port button.on:active{background:#191F28}
+  .port button.end{color:#8A3038;background:#FFF1F1}
+  .port button.end:active{background:#FFE3E3}
+  .port .undo{background:#fff;color:var(--blue-deep);border:1px solid #CBDFFA;min-height:32px;padding:5px 12px;border-radius:9px;font-size:12px;font-weight:700}
+  .port .undo:active{background:var(--blue-soft)}
+
+  /* 오늘·내일 — 한 줄 목표 바 */
+  .dayline{background:var(--card);border-radius:16px;padding:12px 14px;margin-bottom:12px;box-shadow:var(--shadow)}
+  .dayline .top{display:flex;align-items:baseline;gap:5px}
+  .dayline .k{font-size:16px;font-weight:800;letter-spacing:-.04em;color:var(--ink)}
+  .dayline .goal{font-size:12px;font-weight:600;color:var(--sub);letter-spacing:-.01em}
+  .dayline .bar2{margin-left:auto;flex:0 0 88px;height:6px;border-radius:99px;background:#EDF1F4;overflow:hidden;display:flex;gap:2px}
+  .dayline .bar2 i{display:block;height:100%;border-radius:99px;min-width:2px}
+  .dayline .bar2 .c{background:#FFC64D}
+  .dayline .bar2 .p{background:#4C93F7}
+  .dayline .bar2 .f{background:#FFA07A}
+  .dayline .g{display:flex;gap:8px;margin-top:6px;font-size:11.5px;font-weight:500;color:var(--sub);letter-spacing:-.01em}
+  .dayline .g b{color:var(--ink2);font-weight:700}
+  .dayline .g .over{color:#C2323E}
+
+  /* 끼니 카드 — 이월 배지·이월 버튼 */
+  .meal-card{padding:18px 18px 16px;border-radius:20px;margin-bottom:10px}
+  .mc-top{margin-bottom:10px}
+  .meal-name{font-size:19px}
+  .mc-badge.carry{background:#EEF4FF;color:#2C5FA8}
+  .mc-tiny{display:flex;align-items:center;gap:6px;margin-top:10px}
+  .mc-tiny button{
+    font-size:12px;font-weight:600;color:var(--sub);letter-spacing:-.02em;
+    padding:6px 9px;border-radius:9px;background:#F5F7F9;min-height:30px;
+  }
+  .mc-tiny button:active{background:#E9EDF1}
+  .mc-actions{margin-top:9px}
+  .mc-actions.three{grid-template-columns:1fr 1.2fr 1.5fr}
+  .act.carry{background:#EEF4FF;color:#2C5FA8}
+  .act.carry:active{background:#E2EDFF}
+  .ichip.ro{padding:6px 11px;min-height:34px;font-size:12.5px}
+  .use-chips{margin-top:12px;gap:7px}
+  .carry-list{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+  .carry-list button{
+    display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+    padding:16px 16px;border-radius:16px;background:#F5F7F9;min-height:58px;
+    font-size:15px;font-weight:700;letter-spacing:-.03em;color:var(--ink);
+  }
+  .carry-list button em{font-style:normal;margin-left:auto;font-size:12px;font-weight:600;color:var(--sub)}
+  .carry-list button:active{background:#E9EDF1}
+  .carry-list button .em{font-size:18px;line-height:1}
 </style>
 </head>
 <body>
@@ -1661,16 +1758,9 @@
   <header class="topbar">
     <div class="brand">
       <span class="brand-mark">🧊</span>
-      <div class="brand-text">
-        <h1>냉장고 구조대</h1>
-        <p>한 달 소진 프로젝트</p>
-      </div>
+      <h1>냉장고 구조대</h1>
     </div>
-    <div class="topbar-act">
-      <button type="button" class="ghost-btn" id="shopBtn" aria-label="장봤어요 · 새로 산 재료 담기">🛒</button>
-      <button type="button" class="hd-chip" id="hdChip" aria-label="임박 재료 보기"></button>
-      <button class="ghost-btn" id="menuBtn" aria-label="더보기">⋯</button>
-    </div>
+    <button class="ghost-btn" id="menuBtn" aria-label="더보기">⋯</button>
   </header>
 
   <section class="dash" id="dash"></section>
@@ -1683,12 +1773,10 @@
 
   <main class="main">
     <section class="view" id="view-pantry">
-      <div id="leftoverCard"></div>
       <div class="filters" id="filters"></div>
       <div id="pantryList"></div>
     </section>
     <section class="view is-hidden" id="view-meals">
-      <div id="leftoverCardMeals"></div>
       <div id="mealsWrap"></div>
     </section>
     <section class="view is-hidden" id="view-history">
@@ -1696,7 +1784,7 @@
     </section>
   </main>
 
-  <button class="fab" id="fabAdd">＋ 재료 추가</button>
+  <button class="fab" id="fabAdd">＋ 재료</button>
 </div>
 
 <div class="scrim" id="scrim"></div>
@@ -1705,53 +1793,56 @@
   <div class="sheet-head">
     <div class="sheet-grip"></div>
     <h2 id="ingSheetTitle">재료 추가</h2>
-    <p class="sheet-sub" id="ingSheetSub">이름만 적어도 담겨요. 나머지는 기본값으로 들어가요.</p>
+    <p class="sheet-sub" id="ingSheetSub">쉼표로 여러 개 한 번에 적어도 돼요. 예: 대파, 두부 1모</p>
     <button type="button" class="sheet-x" aria-label="닫기">✕</button>
   </div>
 
   <div class="restore-line is-hidden" id="ingRestoreLine">
-    <p id="ingRestoreText">소진 처리된 재료예요.</p>
+    <p id="ingRestoreText">다 쓴 재료예요.</p>
     <button type="button" id="ingRestore">↩︎ 되돌리기</button>
   </div>
 
   <div class="field">
-    <label for="fName">이름</label>
-    <input id="fName" type="text" placeholder="예: 대파" maxlength="24" autocomplete="off">
+    <label for="fName">재료</label>
+    <input id="fName" type="text" placeholder="예: 대파, 두부 1모" maxlength="60" autocomplete="off">
   </div>
 
-  <div class="field">
-    <label for="fQty">남은 양 <span class="hint-inline">선택 · 예: 1단, 3개, 절반 남음</span></label>
+  <div class="field" id="fQtyField" hidden>
+    <label for="fQty">남은 양 <span class="hint-inline">예: 1단, 3개, 절반 남음</span></label>
     <input id="fQty" type="text" placeholder="예: 1단" maxlength="20" autocomplete="off">
   </div>
 
   <div class="field">
     <label>보관 위치</label>
     <div class="seg" id="segLoc">
-      <button type="button" data-val="fridge">🧊 냉장고</button>
-      <button type="button" data-val="freezer">❄️ 냉동고</button>
-      <button type="button" data-val="pantry">🧺 기본·상온</button>
+      <button type="button" data-val="fridge" class="is-on">🧊 냉장</button>
+      <button type="button" data-val="freezer">❄️ 냉동</button>
+      <button type="button" data-val="pantry">🧺 상온</button>
     </div>
   </div>
 
   <div class="field">
-    <label>급한 정도</label>
+    <label>임박</label>
     <div class="seg" id="segUrg">
-      <button type="button" data-val="urgent">🚨 급해요</button>
-      <button type="button" data-val="soon">⏳ 곧 소진</button>
-      <button type="button" data-val="normal">보통</button>
+      <button type="button" data-val="urgent">🚨 임박</button>
+      <button type="button" data-val="soon">⏳ 곧</button>
+      <button type="button" data-val="normal" class="is-on">보통</button>
       <button type="button" data-val="safe">여유</button>
     </div>
   </div>
 
-  <button type="button" class="opt-toggle" id="ingMoreToggle" aria-expanded="false">메모·유통기한 <i>⌄</i></button>
-  <div class="field is-folded" id="ingMore">
+  <div class="field">
+    <label>도착</label>
+    <div class="seg" id="segArrive">
+      <button type="button" data-val="today" class="is-on">오늘</button>
+      <button type="button" data-val="tomorrow">내일</button>
+    </div>
+  </div>
+
+  <button type="button" class="opt-toggle" id="ingMoreToggle" aria-expanded="false" hidden>메모 <i>⌄</i></button>
+  <div class="field is-folded" id="ingMore" hidden>
     <label for="fNote">메모 <span class="hint-inline">선택</span></label>
     <input id="fNote" type="text" placeholder="예: 11/25까지" maxlength="30" autocomplete="off">
-    <label style="margin-top:16px">도착</label>
-    <div class="seg" id="segArrive">
-      <button type="button" data-val="today">오늘 바로</button>
-      <button type="button" data-val="tomorrow">내일 도착 예정</button>
-    </div>
   </div>
 
   <div class="sheet-actions">
@@ -2012,12 +2103,27 @@
     <button type="button" class="sheet-x" aria-label="닫기">✕</button>
   </div>
   <div class="menu-list">
-    <button id="menuReplan">🔄 식단 다시 짜기<em>지금 남은 재료 기준으로 네 끼를 새로 배치해요</em></button>
-    <button id="menuGoPantry">🧺 소진 체크로 가기<em>남은 재료와 급한 순서를 확인해요</em></button>
+    <button id="menuReplan">🔄 식단 다시 짜기<em>남은 재료 기준으로 네 끼를 새로 배치해요</em></button>
+    <button id="menuGoal">🎯 하루 목표 바꾸기<em>지금은 <span id="menuGoalNow">1,450kcal</span>로 보고 있어요</em></button>
+    <button id="menuMix">🧪 재료 조합 보기<em>이 재료로 뭘 더 넣으면 좋을지 짚어 드려요</em></button>
+    <button id="menuShop">🛒 장봤어요<em>방금 산 재료를 여러 개 한 번에 담아요</em></button>
     <button id="menuReset" class="danger">♻️ 전체 초기화<em>모든 체크·메모·식단 기록을 처음 상태로 되돌려요</em></button>
   </div>
   <div class="sheet-actions">
     <button class="btn ghost" id="menuClose">닫기</button>
+  </div>
+</div>
+
+<div class="sheet" id="carrySheet" role="dialog" aria-modal="true">
+  <div class="sheet-head">
+    <div class="sheet-grip"></div>
+    <h2>어디로 이월할까요?</h2>
+    <p class="sheet-sub" id="carrySub">같은 메뉴와 영양을 그대로 넘겨요. 재료는 다시 빼지 않아요.</p>
+    <button type="button" class="sheet-x" aria-label="닫기">✕</button>
+  </div>
+  <div class="carry-list" id="carryList"></div>
+  <div class="sheet-actions">
+    <button class="btn ghost" id="carryCancel">닫기</button>
   </div>
 </div>
 
@@ -2992,8 +3098,30 @@
     '</div>';
   }
 
-  /* 주제: 오늘(내일) 목표 대비 섭취량(g) + 부족분을 채울 남은 재료 */
+  /* 오늘·내일 탭의 한 줄 — 칼로리와 탄단지 */
   function goalBox(day) {
+    var t = dayMacros(day);
+    var g = goals();
+    var over = t.kcal > g.kcal;
+    return '<section class="dayline" data-extraday="' + day + '">' +
+      '<div class="top">' +
+        '<span class="k">' + fmtN(t.kcal) + '</span>' +
+        '<span class="goal">/ ' + fmtN(g.kcal) + 'kcal' + (over ? ' · ' + fmtN(t.kcal - g.kcal) + ' 넘음' : '') + '</span>' +
+        '<span class="bar2" aria-hidden="true">' +
+          '<i class="c" style="width:' + (t.pct.c || 0) + '%"></i>' +
+          '<i class="p" style="width:' + (t.pct.p || 0) + '%"></i>' +
+          '<i class="f" style="width:' + (t.pct.f || 0) + '%"></i>' +
+        '</span>' +
+      '</div>' +
+      '<div class="g">' +
+        '<span>탄 <b>' + Math.round(t.c) + '</b> / ' + g.c + 'g</span>' +
+        '<span>단 <b>' + Math.round(t.p) + '</b> / ' + g.p + 'g</span>' +
+        '<span>지 <b>' + Math.round(t.f) + '</b> / ' + g.f + 'g</span>' +
+      '</div>' +
+    '</section>';
+  }
+
+  function goalBoxLegacy(day) {
     var t = dayMacros(day);
     var g = goals();
     /* 먹은 기록이 하나도 없으면 목표 줄도 숨기지만, 담아 둔 추가 섭취는 남겨 둔다 */
@@ -3085,10 +3213,11 @@
 
   var FILTERS = [
     { id: 'all',    label: '전체' },
-    { id: 'urgent', label: '🚨 급한 순' },
-    { id: 'fridge', label: '냉장고' },
-    { id: 'freezer',label: '냉동고' },
-    { id: 'pantry', label: '기본·상온' }
+    { id: 'urgent', label: '임박' },
+    { id: 'fridge', label: '냉장' },
+    { id: 'freezer',label: '냉동' },
+    { id: 'pantry', label: '상온' },
+    { id: 'done',   label: '다 씀' }
   ];
 
   var SNACKS = [
@@ -3351,6 +3480,7 @@
   var ingMoreToggle = $('ingMoreToggle'), ingMore = $('ingMore');
 
   var eatSheet = $('eatSheet'), eatSub = $('eatSub'), eatList = $('eatList'), eatConfirm = $('eatConfirm');
+  var carrySheet = $('carrySheet'), carrySub = $('carrySub'), carryList = $('carryList');
   var menuSheet = $('menuSheet');
   var leftoverCard = $('leftoverCard'), leftoverCardMeals = $('leftoverCardMeals');
 
@@ -4316,6 +4446,10 @@
       ['lunch', 'dinner'].forEach(function (meal) {
         var k = slotKey(day, meal);
         if (state.eaten[k] || state.skips[k]) return;
+        /* 이월한 끼니는 앞 끼니 재료를 그대로 보여 주기만 한다 */
+        var carriedNow = state.customMeals && state.customMeals[k];
+        if (carriedNow && carriedNow.carried) return;
+
         var r = mealRecipe(day, meal);
         if (!r || !r.uses || r.uses.indexOf(depletedId) === -1) return;
 
@@ -4406,38 +4540,30 @@
      대시보드
      ========================================================= */
   function renderDash() {
-    /* 아직 도착하지 않은 재료는 오늘 냉장고 기준이 아니므로 진행률에서 뺀다 */
+    /* 진행률 카드 대신 한 줄 — 남은 재료와 임박만 */
     var arrived = state.ingredients.filter(function (i) { return !isWaiting(i); });
-    var total = arrived.length;
-    var done = arrived.filter(function (i) { return i.done; }).length;
-    var pct = total ? Math.round((done / total) * 100) : 0;
-    var urgentLeft = arrived.filter(function (i) { return !i.done && i.urg === 'urgent'; }).length;
+    var left = arrived.filter(function (i) { return !i.done; });
+    var urgentLeft = left.filter(function (i) { return i.urg === 'urgent' || i.urg === 'soon'; }).length;
+    var wait = state.ingredients.filter(isWaiting).length;
 
-    dashEl.innerHTML =
-      '<div class="dash-top">' +
-        '<div class="dash-main">' +
-          '<p class="dash-eyebrow">소진 진행률</p>' +
-          '<p class="dash-num"><strong>' + done + '</strong><span>/ ' + total + '개 처리</span></p>' +
-          '<div class="bar"><i style="width:' + pct + '%"></i></div>' +
-        '</div>' +
-      '</div>' +
+    dashEl.innerHTML = '<p class="summary">' +
+      '<span>남은 재료 <span class="n">' + left.length + '개</span></span>' +
+      '<span class="div">·</span>' +
       (urgentLeft
-        ? '<button type="button" class="dash-one" data-jumpurgent="1">🚨 급하게 처리할 재료 <b>' + urgentLeft + '개</b><i>›</i></button>'
-        : '<p class="dash-one calm">🎉 급하게 처리할 재료가 없어요</p>');
+        ? '<button type="button" class="hot" data-jumpurgent="1">임박 <b>' + urgentLeft + '</b></button>'
+        : '<span>임박 <span class="n">0</span></span>') +
+      (wait ? '<span class="div">·</span><span>내일 도착 <span class="n">' + wait + '개</span></span>' : '') +
+    '</p>';
   }
 
   /* =========================================================
      필터 & 재료 리스트
      ========================================================= */
   function renderFilters() {
-    /* 한 줄에서 밀어 보는 칩 — 두 줄로 쌓지 않는다 */
     var chips = FILTERS.map(function (f) {
       return '<button class="chip' + (ui.filter === f.id ? ' is-on' : '') + '" data-filter="' + f.id + '" aria-pressed="' + (ui.filter === f.id) + '">' + f.label + '</button>';
     });
-    /* 미처리만 토글이 스크롤 밖으로 밀리지 않게 두 번째 자리에 둔다 */
-    chips.splice(2, 0, '<button class="chip toggle' + (ui.hideDone ? ' is-on' : '') + '" data-hide="1" aria-pressed="' + ui.hideDone + '">✓ 미처리만</button>');
-    var html = chips.join('');
-    filtersEl.innerHTML = html;
+    filtersEl.innerHTML = chips.join('');
   }
 
   function itemRow(it) {
@@ -4537,7 +4663,7 @@
       '✓ 다 쓴 재료 <span class="cnt">' + count + '개</span><i>▾</i></button>';
   }
 
-  function renderList() {
+  function renderListLegacy() {
     var items = state.ingredients.slice();
 
     if (ui.hideDone) items = items.filter(function (i) { return !i.done; });
@@ -4602,6 +4728,136 @@
     listEl.innerHTML = html;
   }
 
+  /* ── v2 재료 카드: 남은 양 + 원탭 소분 칩 ── */
+  function amtChipHtml(it) {
+    if (it.done) {
+      return '<div class="port"><button type="button" class="undo" data-act="restore" data-id="' + esc(it.id) + '">↩︎ 되돌리기</button></div>';
+    }
+    var countItem = isCountable(it) && !isPctItem(it);
+    var un = unitOf(it);
+    var chips;
+    if (countItem) {
+      chips = [
+        { k: 'half', label: '− 반' + un },
+        { k: 'one', label: '− 1' + un },
+        { k: 'end', label: '다 씀' }
+      ];
+    } else {
+      var p = pctOf(it);
+      chips = [
+        { k: 'full', label: '가득', on: p >= 100 },
+        { k: 'half', label: '절반', on: p >= 50 && p < 100 },
+        { k: 'little', label: '조금', on: p > 0 && p < 50 },
+        { k: 'end', label: '다 씀' }
+      ];
+    }
+    return '<div class="port" role="group" aria-label="' + esc(it.name) + ' 남은 양 조절">' +
+      chips.map(function (c) {
+        if (c.k === 'end') {
+          return '<button type="button" class="end" data-act="kill" data-id="' + esc(it.id) + '">' + c.label + '</button>';
+        }
+        return '<button type="button"' + (c.on ? ' class="on"' : '') + ' data-act="amt" data-lv="' + c.k + '" data-id="' + esc(it.id) + '">' + c.label + '</button>';
+      }).join('') +
+    '</div>';
+  }
+
+  function itemCard(it) {
+    var done = !!it.done;
+    var countItem = isCountable(it) && !isPctItem(it);
+    var amt = done ? '다 씀' : (countItem ? countText(it) + ' 남음' : amtFull(it, pctOf(it)));
+    var badge = '';
+    if (!done && it.urg === 'urgent') badge = '<span class="badge urgent">임박</span>';
+    else if (!done && it.urg === 'soon') badge = '<span class="badge soon">곧</span>';
+    var note = it.note
+      ? '<p class="note' + (it.note.indexOf('⚠️') === 0 ? ' warn' : '') + '">' + esc(it.note) + '</p>'
+      : '';
+    return '<div class="item2' + (done ? ' is-done' : '') + '" data-row="' + esc(it.id) + '">' +
+      '<button type="button" class="r1" data-act="edit" data-id="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 수정">' +
+        '<span class="nm"><span class="emo">' + emojiOf(it) + '</span><span class="txt">' + esc(it.name) + '</span></span>' +
+        badge +
+      '</button>' +
+      note +
+      '<div class="r2"><span class="amt">' + esc(amt) + '</span>' + amtChipHtml(it) + '</div>' +
+    '</div>';
+  }
+
+  function waitCard(it) {
+    return '<div class="item2" data-row="' + esc(it.id) + '">' +
+      '<button type="button" class="r1" data-act="edit" data-id="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 수정">' +
+        '<span class="nm"><span class="emo">' + emojiOf(it) + '</span><span class="txt">' + esc(it.name) + '</span></span>' +
+        '<span class="badge wait">내일 도착</span>' +
+      '</button>' +
+    '</div>';
+  }
+
+  /* v2 목록 — 임박 먼저, 그다음 보관 위치별. 다 쓴 재료는 접어 둔다 */
+  function renderList() {
+    var items = state.ingredients.slice();
+    var html = '';
+
+    if (ui.filter === 'done') {
+      var doneList = items.filter(isDepleted);
+      listEl.innerHTML = doneList.length
+        ? doneList.map(itemCard).join('')
+        : emptyBox('🧺', '다 쓴 재료가 없어요.');
+      return;
+    }
+
+    if (ui.filter === 'urgent') {
+      var urgList = items.filter(function (i) { return !isGone(i) && (i.urg === 'urgent' || i.urg === 'soon'); });
+      urgList.sort(function (a, b) {
+        var d = URG[a.urg].order - URG[b.urg].order;
+        return d !== 0 ? d : LOCS[a.loc].order - LOCS[b.loc].order;
+      });
+      listEl.innerHTML = urgList.length
+        ? urgList.map(itemCard).join('')
+        : emptyBox('🌿', '임박한 재료가 없어요.<br>이 페이스면 한 달 소진 충분해요.');
+      return;
+    }
+
+    if (ui.filter !== 'all') {
+      var loc = LOCS[ui.filter];
+      var inLoc = items.filter(function (i) { return i.loc === ui.filter; });
+      var w = inLoc.filter(isWaiting);
+      var live = inLoc.filter(function (i) { return !isWaiting(i) && !i.done; });
+      var doneL = inLoc.filter(function (i) { return !isWaiting(i) && i.done; });
+      if (w.length) html += sectionHead('🛒 내일 도착', w.length + '개', '') + w.map(waitCard).join('');
+      if (live.length) html += live.map(itemCard).join('');
+      if (doneL.length) {
+        html += doneFold(doneL.length, ui.doneOpen) + (ui.doneOpen ? doneL.map(itemCard).join('') : '');
+      }
+      listEl.innerHTML = html || emptyBox(loc.icon, '이 칸은 다 비웠어요.<br>＋ 재료로 새로 넣을 수 있어요.');
+      return;
+    }
+
+    var waitAll = items.filter(isWaiting);
+    if (waitAll.length) html += sectionHead('🛒 내일 도착', waitAll.length + '개', '') + waitAll.map(waitCard).join('');
+
+    var urgAll = items.filter(function (i) { return !isWaiting(i) && !i.done && (i.urg === 'urgent' || i.urg === 'soon'); });
+    urgAll.sort(function (a, b) { return URG[a.urg].order - URG[b.urg].order; });
+    var urgIds = {};
+    urgAll.forEach(function (i) { urgIds[i.id] = true; });
+    if (urgAll.length) {
+      html += sectionHead('🚨 임박', '<b>' + urgAll.length + '</b>개', '') + urgAll.map(itemCard).join('');
+    }
+
+    ['fridge', 'freezer', 'pantry'].forEach(function (locId) {
+      var liveL = items.filter(function (i) { return i.loc === locId && !isWaiting(i) && !i.done && !urgIds[i.id]; });
+      if (!liveL.length) return;
+      html += sectionHead(LOCS[locId].icon + ' ' + LOCS[locId].label, '<b>' + liveL.length + '</b>개', '');
+      html += liveL.map(itemCard).join('');
+    });
+
+    var doneAll = items.filter(function (i) { return !isWaiting(i) && i.done; });
+    if (doneAll.length) {
+      html += doneFold(doneAll.length, ui.doneOpen);
+      if (ui.doneOpen) html += doneAll.map(itemCard).join('');
+    }
+
+    if (!html) html = emptyBox('🧺', '이 조건에 맞는 재료가 없어요.');
+    listEl.innerHTML = html;
+  }
+
   function sectionHead(title, right, hint) {
     return '<div class="group-head">' +
       '<span class="group-title">' + title + ' <span class="cnt">' + right + '</span></span>' +
@@ -4623,6 +4879,7 @@
   }
 
   function renderLeftover() {
+    return; /* v2: 중간 확인 카드 없이 재료 카드 칩으로 바로 조절한다 */
     var rows = leftoverItems();
     var html = '';
     if (rows.length) {
@@ -4711,7 +4968,246 @@
   }
 
   /* ── 끼니 카드 ── */
+  function carryRec(day, meal) {
+    var c = customMeal(day, meal);
+    return (c && c.carried) ? c : null;
+  }
+
+  function carryMacro(c) {
+    if (!c || !c.macro) return null;
+    var m = c.macro;
+    return macrosObj(m.c || 0, m.p || 0, m.f || 0, m.kcal || 0);
+  }
+
+  function carryLabel(c) {
+    return c && c.from === 'dinner' ? '저녁에서' : '점심에서';
+  }
+
   function mealCard(day, meal) {
+    var k = slotKey(day, meal);
+    var r = mealRecipe(day, meal);
+    if (!r) return '';
+    var carry = carryRec(day, meal);
+    var carried = !!carry;
+    var mine = !!r.custom && !carried;
+    var skipped = !!state.skips[k];
+    var eaten = !!state.eaten[k];
+    var out = outsideOf(day, meal);
+    var mealName = meal === 'lunch' ? '점심' : '저녁';
+    var dateStr = shortDate(day === 'tomorrow' ? 1 : 0);
+    var gone = (carried || skipped) ? [] : goneUses(r.uses);
+    var titleName = out ? out.name : r.name;
+    var cmacro = carried ? carryMacro(carry) : null;
+
+    /* 먹은·외식 끼니는 작은 아코디언 */
+    var accordion = eaten || skipped;
+    if (accordion && !(ui.openMeal && ui.openMeal[k])) {
+      var mdata = null;
+      if (out) mdata = macrosObj(out.c, out.p, out.f, out.kcal);
+      else if (!skipped) mdata = cmacro || (checkHtml(day, meal, { noCross: true }) || {}).data;
+      return '<article class="meal-card is-compact' + (eaten ? ' is-eaten' : ' is-skip') + (out ? ' is-out' : '') + '" data-day="' + day + '" data-meal="' + meal + '">' +
+        '<button type="button" class="mcc" data-act="expand" aria-expanded="false" aria-label="' + esc(titleName) + ' 펼쳐 보기">' +
+          '<span class="mcc-top">' +
+            '<span class="mc-meal">' + mealName + '</span>' +
+            '<i class="mc-dot">·</i>' +
+            '<span class="mc-date">' + dateStr + '</span>' +
+            (eaten ? '<span class="mc-badge eaten">✅ 먹음</span>' : '<span class="mc-badge skip">🍗 외식</span>') +
+            (carried ? '<span class="mc-badge carry">↪︎ 이월</span>' : '') +
+            '<span class="mcc-caret">⌄</span>' +
+          '</span>' +
+          '<span class="mcc-title">' + esc(titleName) + '</span>' +
+          (mdata ? miniMacroHtml(mdata) : '') +
+        '</button>' +
+      '</article>';
+    }
+
+    var cls = 'meal-card' + (mine ? ' is-mine' : '') + (carried ? ' is-mine' : '') + (skipped ? ' is-skip' : '') +
+      (out ? ' is-out' : '') + (eaten ? ' is-eaten' : '') +
+      (gone.length && !eaten && !skipped ? ' has-gone' : '');
+
+    var badges = '';
+    if (carried) badges += '<span class="mc-badge carry">↪︎ ' + carryLabel(carry) + ' 이월</span>';
+    if (mine && !out) badges += '<span class="mc-badge mine">내가 정한 메뉴</span>';
+    if (out) badges += '<span class="mc-badge skip">🍗 외식</span>';
+    if (eaten) badges += '<span class="mc-badge eaten">✅ 먹음</span>';
+    if (skipped && !out) badges += '<span class="mc-badge skip">🍗 외식</span>';
+
+    var head = '<div class="mc-top">' +
+      '<div class="mc-label">' +
+        '<span class="mc-meal">' + mealName + '</span>' +
+        '<i class="mc-dot">·</i>' +
+        '<span class="mc-date">' + dateStr + '</span>' +
+        badges +
+      '</div>' +
+      (accordion ? '<button type="button" class="mc-collapse" data-act="expand" aria-label="접기">접기 ⌃</button>' : '') +
+    '</div>';
+
+    var title = '<div class="mc-title">' +
+      ((skipped || out)
+        ? '<h3 class="meal-name">' + esc(titleName) + '</h3>'
+        : '<button type="button" class="meal-name as-btn" data-act="recipe" aria-label="' + esc(titleName) + ' 레시피 보기">' + esc(titleName) + '</button>') +
+    '</div>';
+
+    var steps = '';
+    if ((mine || carried) && !skipped && r.steps) {
+      steps = '<p class="steps">' + esc(r.steps) + '</p>';
+    }
+
+    /* 탄단지 한 줄 — 이월 끼니는 넘길 때 값을 그대로 보여 준다 */
+    var macroHtml = '', warnHtml = '';
+    if (out) {
+      macroHtml = macroLineHtml(macrosObj(out.c, out.p, out.f, out.kcal));
+    } else if (!skipped) {
+      if (carried) {
+        macroHtml = cmacro ? macroLineHtml(cmacro) : '';
+      } else {
+        var chk = checkHtml(day, meal, { noCross: eaten });
+        macroHtml = chk.macro;
+        warnHtml = eaten ? '' : chk.compact;
+      }
+    }
+
+    var usesHtml = '';
+    if (!skipped && !out) {
+      if (carried) {
+        usesHtml = '<div class="use-chips">' + (r.uses || []).map(function (id) {
+          var it = byId(id);
+          if (!it) return '';
+          return '<span class="ichip ro">' + emojiOf(it) + ' ' + esc(it.name) + '</span>';
+        }).join('') + '</div>';
+      } else if (!r.uses.length) {
+        usesHtml = mine
+          ? '<p class="mine-empty">쓸 재료를 고르지 않았어요 · <b>수정</b>에서 골라두면 먹을 때 한 번에 처리돼요</p>'
+          : '<div class="use-chips"><button type="button" class="ichip add" data-act="addIng">＋ 재료</button></div>';
+      } else {
+        usesHtml = '<div class="use-chips">' + ingChips(r, day, meal) + '</div>';
+      }
+    }
+
+    var outDetail = '';
+    if (out) {
+      outDetail = '<div class="out-detail">' +
+        (out.photo ? '<button type="button" class="out-detail-photo" data-photo="' + esc(k) + '" aria-label="외식 사진 크게 보기"><img src="' + out.photo + '" alt="외식 사진"></button>' : '') +
+        (out.items || []).map(function (x) {
+          var q = outQtyText(outQty(x), x.unit);
+          return '<div class="od"><b>' + esc(x.label) + '</b>' +
+            '<span>' + esc((q ? q + ' · ' : '') + fmtN(Math.round((x.uk || 0) * outQty(x))) + 'kcal') + '</span></div>';
+        }).join('') +
+      '</div>';
+    }
+
+    var goneBar = '';
+    if (gone.length && !eaten && !skipped) {
+      goneBar = '<div class="gone-bar">' +
+        '<span>⚠️ <strong>' + esc(gone.map(function (it) { return it.name; }).join(' · ')) + '</strong> 소진됨 — 지금은 이대로 못 만들어요</span>' +
+        '<button data-act="' + (mine ? 'trimGone' : 'fixGone') + '">' +
+          (mine ? '소진 재료 빼기' : '다른 레시피로 바꾸기') + '</button>' +
+      '</div>';
+    }
+
+    var skipNote = (skipped && !out) ? '<div class="skip-note">🍗 이 끼니는 외식으로 비웠어요</div>' : '';
+
+    /* 작은 보조 줄 — 직접 입력 / 이월 취소 */
+    var tiny = '';
+    if (eaten) {
+      tiny = '';
+    } else if (out) {
+      tiny = '<div class="mc-tiny"><button type="button" data-act="editOut">✏️ 수정</button></div>';
+    } else if (skipped) {
+      tiny = '';
+    } else if (carried) {
+      tiny = '<div class="mc-tiny"><button type="button" data-act="uncarry">↩︎ 이월 취소</button></div>';
+    } else {
+      tiny = '<div class="mc-tiny"><button type="button" data-act="' + (mine ? 'editCustom' : 'custom') + '">' + (mine ? '✏️ 수정' : '✏️ 직접 입력') + '</button></div>';
+    }
+
+    var actionsCls = (eaten || out || skipped || carried) ? ' edit-only' : ' three';
+    var actions = '<div class="mc-actions' + actionsCls + '">';
+    if (eaten) {
+      actions += '<button class="act undo" data-act="uneat">↩︎ 먹은 기록 되돌리기</button>';
+    } else if (skipped && out) {
+      actions += '<button class="act revert" data-act="unskip" aria-label="외식 기록 되돌리기">↩︎ 되돌리기</button>';
+    } else if (skipped) {
+      actions += '<button class="act undo" data-act="unskip">↩︎ 외식 기록 되돌리기</button>';
+    } else if (carried) {
+      actions += '<button class="act carry" data-act="carry">↪︎ 이월</button>' +
+        '<button class="act solid" data-act="eat">✅ 먹었음</button>';
+    } else {
+      actions += '<button class="act out" data-act="skip">🍗 외식</button>' +
+        '<button class="act carry" data-act="carry">↪︎ 이월</button>' +
+        '<button class="act solid" data-act="eat">✅ 먹었음</button>';
+    }
+    actions += '</div>';
+
+    return '<article class="' + cls + '" data-day="' + day + '" data-meal="' + meal + '">' +
+      head + title + macroHtml + warnHtml + steps +
+      usesHtml +
+      goneBar +
+      outDetail +
+      skipNote +
+      tiny +
+      actions +
+    '</article>';
+  }
+
+  /* ── 이월: 다음 끼니로 같은 메뉴·영양을 넘긴다 (재료 재차감 없음) ── */
+  function carrySlots(day, meal) {
+    var seq = [['today', 'lunch'], ['today', 'dinner'], ['tomorrow', 'lunch'], ['tomorrow', 'dinner']];
+    var idx = -1;
+    for (var i = 0; i < seq.length; i++) {
+      if (seq[i][0] === day && seq[i][1] === meal) idx = i;
+    }
+    return idx < 0 ? [] : seq.slice(idx + 1);
+  }
+
+  var carryTarget = null;
+  function openCarry(day, meal) {
+    var r = mealRecipe(day, meal);
+    if (!r) return;
+    carryTarget = { day: day, meal: meal };
+    carrySub.textContent = '“' + r.name + '”을(를) 그대로 넘겨요. 재료는 다시 빼지 않아요.';
+    var slots = carrySlots(day, meal);
+    carryList.innerHTML = slots.map(function (s) {
+      var label = (s[0] === 'today' ? '오늘 ' : '내일 ') + (s[1] === 'lunch' ? '점심' : '저녁');
+      var dk = slotKey(s[0], s[1]);
+      var has = state.eaten[dk] || state.skips[dk] || !!(state.outside || {})[dk];
+      return '<button type="button" data-carryto="' + s[0] + '|' + s[1] + '">' +
+        '<span class="em">' + (s[1] === 'lunch' ? '☀️' : '🌙') + '</span>' + label +
+        '<em>' + mmdd(dateKey(s[0])) + (has ? ' · 지금 기록은 지우고 넣어요' : '') + '</em>' +
+      '</button>';
+    }).join('') || '<p class="sheet-sub">넘길 다음 끼니가 없어요.</p>';
+    openSheet(carrySheet);
+  }
+
+  function doCarry(toDay, toMeal) {
+    if (!carryTarget) return;
+    var fromDay = carryTarget.day, fromMeal = carryTarget.meal;
+    var r = mealRecipe(fromDay, fromMeal);
+    if (!r) return;
+    var src = customMeal(fromDay, fromMeal);
+    var sum = sumMacros(r.uses);
+    var to = slotKey(toDay, toMeal);
+    state.customMeals = state.customMeals || {};
+    state.customMeals[to] = {
+      name: r.name,
+      note: (src && src.note) ? src.note : (r.steps || ''),
+      uses: (r.uses || []).slice(),
+      carried: true,
+      from: fromMeal,
+      macro: { kcal: sum.kcal, c: Math.round(sum.c * 10) / 10, p: Math.round(sum.p * 10) / 10, f: Math.round(sum.f * 10) / 10 }
+    };
+    if (state.mealUses) delete state.mealUses[to];
+    delete state.eaten[to];
+    delete state.skips[to];
+    if (state.outside) delete state.outside[to];
+    save();
+    closeSheets();
+    carryTarget = null;
+    renderAll();
+    toast('↪︎ ' + r.name + ' · ' + (toDay === 'today' ? '오늘 ' : '내일 ') + (toMeal === 'lunch' ? '점심' : '저녁') + '로 넘겼어요');
+  }
+
+  function mealCardLegacy(day, meal) {
     var k = slotKey(day, meal);
     var r = mealRecipe(day, meal);
     if (!r) return '';
@@ -4923,13 +5419,6 @@
     var day = ui.day === 'tomorrow' ? 'tomorrow' : 'today';
 
     mealsEl.innerHTML =
-      '<div class="meals-head">' +
-        '<h2>' + (day === 'today' ? '오늘' : '내일') + ' 뭐 먹지</h2>' +
-        '<div class="head-tools">' +
-          '<button class="mini-btn" id="mixBtn">🧪 재료 조합</button>' +
-          '<button class="mini-btn" id="replanBtn">🔄 다시 짜기</button>' +
-        '</div>' +
-      '</div>' +
       dayTabs() +
       goalBox(day) +
       mealCard(day, 'lunch') +
@@ -5748,7 +6237,7 @@
   }
 
   function closeSheets(keepScrim) {
-    [ingSheet, eatSheet, customSheet, pickSheet, shopSheet, menuSheet, recipeSheet, goalSheet, outSheet, mixSheet].forEach(function (el) { el.classList.remove('is-open'); });
+    [ingSheet, eatSheet, customSheet, pickSheet, shopSheet, menuSheet, recipeSheet, goalSheet, outSheet, mixSheet, carrySheet].forEach(function (el) { if (el) el.classList.remove('is-open'); });
     if (!keepScrim) scrim.classList.remove('is-open');
     resetArmed = false;
   }
@@ -5771,6 +6260,8 @@
       if (!it) return;
       ingSheetTitle.textContent = '재료 수정';
       ingSheetSub.textContent = it.done ? '지금은 다 쓴 상태예요.' : '바꿀 것만 고치고 저장하면 돼요.';
+      $('fQtyField').hidden = false;
+      ingMoreToggle.hidden = false;
       fName.value = it.name;
       fQty.value = it.qty;
       fNote.value = it.note;
@@ -5786,7 +6277,12 @@
       setMoreOpen(!!it.note);
     } else {
       ingSheetTitle.textContent = '재료 추가';
-      ingSheetSub.textContent = '이름만 적어도 담겨요. 나머지는 기본값으로 들어가요.';
+      ingSheetSub.textContent = '쉼표로 여러 개 한 번에 적어도 돼요. 예: 대파, 두부 1모';
+      $('fQtyField').hidden = true;
+      ingMoreToggle.hidden = true;
+      ingMore.hidden = true;
+      ingMoreToggle.classList.remove('is-open');
+      ingMore.classList.add('is-folded');
       fName.value = '';
       fQty.value = '';
       fNote.value = '';
@@ -5879,57 +6375,79 @@
       else if (it.done) toast(emojiOf(it) + ' ' + it.name + ' 아직 다 쓴 상태예요 · 되돌리려면 위의 ↩︎ 되돌리기를 눌러 주세요');
       else toast('재료를 수정했어요');
     } else {
-      var id = 'c' + Date.now().toString(36) + Math.floor(Math.random() * 1000).toString(36);
-      var parsedNew = countFromQty(qty);
+      /* 쉼표로 여러 개 — "두부 1모"처럼 뒤에 수량을 붙이면 그대로 읽어요 */
+      var rawList = fName.value.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+      if (!rawList.length) { fName.focus(); toast('재료 이름을 적어주세요'); return; }
+      rawList = rawList.slice(0, 15);
       var arriveOn = editor.arrive === 'tomorrow' ? addDays(todayKey(), 1) : '';
-      var dup = findByName(name);
+      var first = '', added = 0, revived = 0;
 
-      /* 이미 있는 재료는 새 줄로 늘리지 않고 그 재료를 새것으로 되살린다 */
-      if (dup) {
-        dup.name = name;
-        dup.loc = editor.loc;
-        dup.urg = editor.urg;
-        dup.emoji = emoji;
-        if (qty) dup.qty = qty;
-        if (note) dup.note = note;
-        dup.done = false;
-        dup.used = 0;
-        delete dup._prev;
-        if (parsedNew) {
-          dup.count = parsedNew.count;
-          dup.unit = parsedNew.unit;
-        } else if (isCountable(dup)) {
-          dup.count = (dup.count > 0 ? dup.count : 1);
+      rawList.forEach(function (raw) {
+        var p = parseQuickName(raw);
+        if (!p.name) return;
+        if (!first) first = p.name;
+        var emoji = emojiFor(p.name);
+        var dup = findByName(p.name);
+
+        if (dup) {
+          dup.name = p.name;
+          dup.loc = editor.loc;
+          dup.urg = editor.urg;
+          dup.emoji = emoji;
+          if (p.qty) dup.qty = p.qty;
+          dup.done = false;
+          dup.used = 0;
+          delete dup._prev;
+          if (p.count) {
+            dup.count = p.count;
+            dup.unit = p.unit;
+          } else if (isCountable(dup)) {
+            dup.count = (dup.count > 0 ? dup.count : 1);
+          }
+          dup.partial = isCountable(dup) && Math.abs(dup.count - Math.round(dup.count)) > 0.001;
+          dup.pct = (isCountable(dup) && dup.count >= 2) ? null : 100;
+          if (arriveOn) dup.arrivesAt = arriveOn; else delete dup.arrivesAt;
+          revived++;
+          return;
         }
-        dup.partial = isCountable(dup) && Math.abs(dup.count - Math.round(dup.count)) > 0.001;
-        dup.pct = (isCountable(dup) && dup.count >= 2) ? null : 100;
-        if (arriveOn) dup.arrivesAt = arriveOn; else delete dup.arrivesAt;
-        save();
-        closeSheets();
-        renderAll();
-        toast(emoji + ' ' + name + ' 다시 담았어요' + (arriveOn ? ' · 내일 도착' : ''));
-        return;
-      }
 
-      state.ingredients.push({
-        id: id, name: name, qty: qty, note: note,
-        loc: editor.loc, urg: editor.urg, done: false, custom: true,
-        arrivesAt: arriveOn,
-        emoji: emoji,
-        count: parsedNew ? parsedNew.count : null,
-        unit: parsedNew ? parsedNew.unit : '개',
-        used: 0,
-        partial: false,
-        pct: (parsedNew && parsedNew.count >= 2) ? null : 100
+        state.ingredients.push({
+          id: 'c' + Date.now().toString(36) + Math.floor(Math.random() * 1000).toString(36),
+          name: p.name, qty: p.qty, note: '',
+          loc: editor.loc, urg: editor.urg, done: false, custom: true,
+          arrivesAt: arriveOn,
+          emoji: emoji,
+          count: p.count,
+          unit: p.count ? p.unit : '개',
+          used: 0,
+          partial: false,
+          pct: (p.count && p.count >= 2) ? null : 100
+        });
+        added++;
       });
+
       save();
       closeSheets();
       ui.filter = 'all';
       ui.hideDone = false;
       renderAll();
       setTab('pantry');
-      toast(emoji + ' ' + name + ' 추가 완료' + (arriveOn ? ' · 내일 도착' : ''));
+      var total = added + revived;
+      toast(total > 1
+        ? first + ' 외 ' + (total - 1) + '개 담았어요' + (arriveOn ? ' · 내일 도착' : '')
+        : first + (revived ? ' 다시 담았어요' : ' 추가 완료') + (arriveOn ? ' · 내일 도착' : ''));
     }
+  }
+
+  /* "두부 1모" → 이름 '두부', 개수 1, 단위 '모' */
+  function parseQuickName(raw) {
+    var s = String(raw || '').trim();
+    var m = s.match(/^(.*\S)\s+(\d{1,3}\s*[^\s0-9]{0,3})$/);
+    if (m) {
+      var p = countFromQty(m[2].replace(/\s+/g, ''));
+      if (p) return { name: m[1], qty: m[2].trim(), count: p.count, unit: p.unit };
+    }
+    return { name: s, qty: '', count: null, unit: '개' };
   }
 
   function deleteEditor() {
@@ -7310,6 +7828,22 @@
       return URG[a.urg].order - URG[b.urg].order;
     });
 
+    /* 이월된 끼니 — 재료는 앞 끼니에서 이미 뻐으므로 기록만 남긴다 */
+    if (carryRec(day, meal)) {
+      eatSub.textContent = '이월된 끼니예요 · 재료는 앞 끼니에서 이미 뻐어요. 먹은 기록만 남겨요.';
+      eatList.innerHTML = rows.length
+        ? rows.map(function (it) {
+            return '<div class="eat-row is-done">' +
+              '<span class="eat-check">✓</span>' +
+              '<span class="eat-name"><span class="emo">' + emojiOf(it) + '</span>' + esc(it.name) + '</span>' +
+              '<span class="badge wait">' + (isDepleted(it) ? '이미 다 씀' : esc(amtChip(it, pctOf(it)))) + '</span>' +
+            '</div>';
+          }).join('')
+        : '<div class="empty"><p>고른 재료가 없어요.<br>먹은 기록만 남길 수 있어요.</p></div>';
+      openSheet(eatSheet);
+      return;
+    }
+
     eatSub.textContent = r.name + ' — 쓴 만큼만 아래에서 덜어내면 끝이에요.';
 
     eatList.innerHTML = rows.map(function (it) {
@@ -7687,6 +8221,44 @@
       return;
     }
 
+    /* v2 원탭 소분 — 개수 재료는 반 개·한 개씩, 그 밖은 가득·절반·조금 */
+    if (act === 'amt') {
+      var ait = byId(id);
+      if (!ait || ait.done) return;
+      var lv = btn.getAttribute('data-lv');
+      var aem = emojiOf(ait), anm = ait.name;
+
+      if (isCountable(ait) && !isPctItem(ait)) {
+        var cut = lv === 'one' ? 1 : 0.5;
+        var leftN = Math.round((ait.count - cut) * 2) / 2;
+        if (leftN <= 0) {
+          var ainfo = depleteItem(ait.id);
+          if (ainfo) toastDepleted(ainfo);
+          return;
+        }
+        ait.count = leftN;
+        ait.partial = Math.abs(leftN - Math.round(leftN)) > 0.001;
+        ait.pct = leftN >= 2 ? null : (leftN >= 1 ? 100 : 50);
+        save();
+        renderDash();
+        renderList();
+        renderMeals();
+        toast(aem + ' ' + anm + ' ' + amountText(leftN, unitOf(ait)) + ' 남음' +
+          (leftN <= 0.5 ? ' · 다 씀을 누르면 끝' : ''));
+        return;
+      }
+
+      var targetPct = lv === 'full' ? 100 : (lv === 'half' ? 50 : 25);
+      if (pctOf(ait) === targetPct) return;
+      setPct(ait, targetPct);
+      save();
+      renderDash();
+      renderList();
+      renderMeals();
+      toast(aem + ' ' + anm + ' · ' + amtFull(ait, pctOf(ait)));
+      return;
+    }
+
     /* 개수 스테퍼: 2개 → 1개 → 소량 → 다 씀, 숫자를 누르면 반 개(소량) 표시를 켜고 끈다 */
     if (act === 'dec' || act === 'inc' || act === 'part') {
       var cit = byId(id);
@@ -7845,8 +8417,8 @@
       if (linfo) toastDepleted(linfo);
     }
   }
-  leftoverCard.addEventListener('click', onLeftoverClick);
-  leftoverCardMeals.addEventListener('click', onLeftoverClick);
+  if (leftoverCard) leftoverCard.addEventListener('click', onLeftoverClick);
+  if (leftoverCardMeals) leftoverCardMeals.addEventListener('click', onLeftoverClick);
 
   mealsEl.addEventListener('click', function (e) {
     /* 외식 사진 썸네일 → 크게 보기 */
@@ -7925,6 +8497,14 @@
     var m = card.getAttribute('data-meal');
     var k = slotKey(d, m);
     var act = actBtn.getAttribute('data-act');
+
+    if (act === 'carry') { openCarry(d, m); return; }
+    if (act === 'uncarry') {
+      delete state.customMeals[k];
+      save(); renderAll();
+      toast('이월을 취소했어요 · 원래 메뉴로 돌아왔어요');
+      return;
+    }
 
     if (act === 'warn') {
       var wbox = actBtn.closest('[data-wsum]');
@@ -8178,7 +8758,7 @@
   }
 
   /* 🛒 장봤어요 */
-  $('shopBtn').addEventListener('click', openShop);
+  if ($('shopBtn')) $('shopBtn').addEventListener('click', openShop);
   $('shopCancel').addEventListener('click', function () { closeSheets(); });
   $('shopSave').addEventListener('click', saveShop);
   [[segShopLoc, 'loc'], [segShopUrg, 'urg'], [segShopWhen, 'when']].forEach(function (pair) {
@@ -8278,12 +8858,18 @@
     if (e.target === depModal) closeDeplete();
   });
 
-  $('menuBtn').addEventListener('click', function () { openSheet(menuSheet); });
+  $('menuBtn').addEventListener('click', function () {
+    if ($('menuGoalNow')) $('menuGoalNow').textContent = fmtN(goals().kcal) + 'kcal';
+    openSheet(menuSheet);
+  });
   $('menuClose').addEventListener('click', function () { closeSheets(); });
 
   $('menuReplan').addEventListener('click', function () { closeSheets(); replanAll(); });
 
-  $('menuGoPantry').addEventListener('click', function () {
+  if ($('menuGoal')) $('menuGoal').addEventListener('click', function () { closeSheets(); openGoal(); });
+  if ($('menuMix')) $('menuMix').addEventListener('click', function () { closeSheets(); openMix(); });
+  if ($('menuShop')) $('menuShop').addEventListener('click', function () { closeSheets(); openShop(); });
+  if ($('menuGoPantry')) $('menuGoPantry').addEventListener('click', function () {
     closeSheets();
     setTab('pantry');
   });
