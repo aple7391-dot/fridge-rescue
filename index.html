@@ -1276,6 +1276,7 @@
     font-size:11px;font-weight:700;color:var(--ink2);letter-spacing:-.02em;
   }
   .hd-edit:active{background:#F2F4F6}
+  .hd-mtools{display:flex;margin-top:8px}
   .hd-meal.is-off .hd-mname{color:var(--sub);text-decoration:line-through;text-decoration-thickness:1.5px}
   .hd-meal.is-none .hd-mname{color:var(--sub);font-weight:600}
   .hd-mnum{margin-top:6px;font-size:11.5px;color:var(--sub);font-weight:600;letter-spacing:-.01em}
@@ -5427,8 +5428,9 @@
           '<span class="hd-mlabel">' + (mm.meal === 'lunch' ? '점심' : '저녁') + '</span>' +
           '<span class="hd-mname">' + esc(mm.name) + '</span>' +
           histTag(mm, key) +
-          (mm.outside ? '<button type="button" class="hd-edit" data-histedit="' + mm.key + '" aria-label="' + esc(mm.name) + ' 외식 기록 수정">✏️ 수정</button>' : '') +
-        '</div>' + num + retro +
+        '</div>' + num +
+        (mm.outside ? '<div class="hd-mtools"><button type="button" class="hd-edit" data-histedit="' + mm.key + '" aria-label="' + esc(mm.name) + ' 외식 기록 수정">✏️ 수정</button></div>' : '') +
+        retro +
       '</div>';
     }).join('');
 
