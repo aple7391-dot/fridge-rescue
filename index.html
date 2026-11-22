@@ -169,10 +169,14 @@
   .main{padding:20px 20px 8px;flex:1}
   .view.is-hidden{display:none}
 
-  /* ── 필터 ── */
+  /* ── 필터 — 한 줄로 밀어 보는 칩 (줄바꿈 없이) ── */
   .filters{
-    display:flex;flex-wrap:wrap;gap:8px;padding:2px 0 6px;
+    display:flex;flex-wrap:nowrap;gap:7px;padding:2px 0 6px;
+    overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+    -webkit-overflow-scrolling:touch;
   }
+  .filters::-webkit-scrollbar{display:none}
+  .filters .chip{padding:10px 13px;min-height:42px;font-size:13.5px}
   .chip{
     flex:0 0 auto;padding:11px 15px;border-radius:12px;min-height:44px;
     display:inline-flex;align-items:center;
@@ -214,7 +218,9 @@
     min-height:76px;
     transition:opacity .2s,background .2s;
   }
-  .item.is-done{opacity:.5;background:#FAFBFC;box-shadow:none}
+  .item.is-done{background:#F7F8FA;box-shadow:none}
+  .item.is-done .item-meta{opacity:.7}
+  .item.is-done .emo{opacity:.6}
   .item-main{flex:1;min-width:0;text-align:left;display:block;padding:2px 0}
   .item-name{
     display:flex;align-items:center;gap:7px;flex-wrap:wrap;
@@ -232,6 +238,21 @@
     font-size:12px;font-weight:700;letter-spacing:-.02em;
     color:var(--blue-deep);background:var(--blue-soft);
     padding:3px 8px;border-radius:8px;
+  }
+  /* 한 번에 처리/되돌리는 원탭 버튼 — 처리 전 ✓, 처리 후 ↩︎ */
+  .kill-btn{
+    flex:0 0 auto;width:42px;height:42px;border-radius:50%;
+    display:grid;place-items:center;
+    font-size:17px;font-weight:800;line-height:1;color:var(--ink2);
+    background:#F2F4F6;border:1px solid transparent;
+    transition:background .15s,color .15s,transform .12s;
+  }
+  .kill-btn:active{transform:scale(.92);background:#E5E8EB}
+  .kill-btn.is-undo{background:#fff;color:var(--blue-deep);border-color:#CBDFFA}
+  .kill-btn.is-undo:active{background:var(--blue-soft)}
+  .done-tag{
+    flex:0 0 auto;font-size:12.5px;font-weight:700;letter-spacing:-.02em;
+    color:var(--sub);white-space:nowrap;
   }
   .finish-btn{
     flex:0 0 auto;font-size:13px;font-weight:700;letter-spacing:-.02em;
@@ -521,6 +542,9 @@
     word-break:keep-all;
   }
   .meal-card.is-skip .meal-name{color:var(--sub);text-decoration:line-through;text-decoration-thickness:2px;font-size:18px}
+  .meal-name.as-btn{display:block;width:100%;text-align:left;line-height:1.34;background:none;padding:0}
+  .meal-name.as-btn:active{opacity:.55}
+  .meal-name.as-btn::after{content:' ›';font-size:15px;font-weight:600;color:var(--sub2);letter-spacing:0}
   .mc-tools{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
   .mc-edit{
     flex:0 0 auto;
@@ -873,6 +897,27 @@
   .quick button:active{background:var(--blue-soft);color:var(--blue-deep)}
 
   .sheet-actions{display:flex;gap:10px;margin-top:26px}
+  /* 시트 안 한 줄 되돌리기 — 소진한 재료를 바로 살려낼 때 */
+  .restore-line{
+    display:flex;align-items:center;gap:10px;
+    margin-top:16px;padding:14px 16px;border-radius:16px;
+    background:var(--blue-soft);
+  }
+  .restore-line p{flex:1;min-width:0;font-size:13px;font-weight:600;color:var(--blue-deep);line-height:1.45;letter-spacing:-.02em}
+  .restore-line button{
+    flex:0 0 auto;font-size:13px;font-weight:800;letter-spacing:-.02em;
+    color:#fff;background:var(--blue);padding:10px 14px;border-radius:12px;min-height:40px;
+    white-space:nowrap;
+  }
+  .restore-line button:active{background:var(--blue-deep)}
+  .restore-line.is-hidden{display:none}
+  .opt-toggle{
+    display:inline-flex;align-items:center;gap:6px;margin-top:8px;
+    font-size:12.5px;font-weight:700;color:var(--sub);letter-spacing:-.02em;
+  }
+  .opt-toggle i{font-style:normal;transition:transform .2s}
+  .opt-toggle.is-open i{transform:rotate(180deg)}
+  .field.is-folded{display:none}
   .btn{
     flex:1;padding:17px 12px;border-radius:16px;min-height:56px;
     font-size:16px;font-weight:700;letter-spacing:-.03em;
@@ -1502,11 +1547,21 @@
 <div class="sheet" id="ingSheet" role="dialog" aria-modal="true">
   <div class="sheet-grip"></div>
   <h2 id="ingSheetTitle">재료 추가</h2>
-  <p class="sheet-sub" id="ingSheetSub">장 본 재료를 바로 넣고 급한 정도를 정해두세요.</p>
+  <p class="sheet-sub" id="ingSheetSub">이름만 적어도 담겨요. 나머지는 기본값으로 들어가요.</p>
+
+  <div class="restore-line is-hidden" id="ingRestoreLine">
+    <p id="ingRestoreText">소진 처리된 재료예요.</p>
+    <button type="button" id="ingRestore">↩︎ 되돌리기</button>
+  </div>
 
   <div class="field">
     <label for="fName">이름</label>
     <input id="fName" type="text" placeholder="예: 대파" maxlength="24" autocomplete="off">
+  </div>
+
+  <div class="field">
+    <label for="fQty">남은 양 <span class="hint-inline">선택 · 예: 1단, 3개, 절반 남음</span></label>
+    <input id="fQty" type="text" placeholder="예: 1단" maxlength="20" autocomplete="off">
   </div>
 
   <div class="field">
@@ -1528,20 +1583,10 @@
     </div>
   </div>
 
-  <div class="field-row">
-    <div class="field">
-      <label for="fQty">수량</label>
-      <input id="fQty" type="text" placeholder="예: 1단" maxlength="20" autocomplete="off">
-    </div>
-    <div class="field">
-      <label for="fNote">메모</label>
-      <input id="fNote" type="text" placeholder="예: 11/25까지" maxlength="30" autocomplete="off">
-    </div>
-  </div>
-
-  <div class="field">
-    <label>이모지 <span class="hint-inline">누르면 바뀌어요</span></label>
-    <div class="emopick" id="fEmo"></div>
+  <button type="button" class="opt-toggle" id="ingMoreToggle" aria-expanded="false">메모·유통기한 <i>⌄</i></button>
+  <div class="field is-folded" id="ingMore">
+    <label for="fNote">메모 <span class="hint-inline">선택</span></label>
+    <input id="fNote" type="text" placeholder="예: 11/25까지" maxlength="30" autocomplete="off">
   </div>
 
   <div class="quick" id="quickAdd"></div>
@@ -2672,7 +2717,7 @@
     var w = Math.max(0, Math.min(100, pct));
     var diff = Math.round(goal - val);
     var cls = '', note;
-    if (diff > 0) { note = (key === 'kcal' ? fmtN(diff) + 'kcal' : diff + 'g') + ' 더 필요'; }
+    if (diff > 0) { note = ''; }
     else if (diff < 0) { note = (key === 'kcal' ? fmtN(-diff) + 'kcal' : (-diff) + 'g') + ' 초과'; cls = ' over'; }
     else { note = '목표 딱 맞음'; cls = ' done'; }
     var label = key === 'kcal' ? '칼로리' : MACRO_LABEL[key];
@@ -2860,6 +2905,13 @@
     return amountText(it.count, unitOf(it));
   }
 
+  /* 목록·토스트에서 쓰는 남은 양 한 마디 */
+  function amountOrPctText(it) {
+    if (!it) return '';
+    if (isCountable(it)) return countText(it);
+    return pctOf(it) + '%';
+  }
+
   /* ── 잔량 퍼센트(0~100) 모델 ──
      · 개수 없는 재료(버터·소스·통/팩/병)와 남은 게 1개 이하인 개수 재료는 슬라이더로
      · 2개 이상인 다개입 재료는 기존 개수 스테퍼로 */
@@ -2981,6 +3033,8 @@
   var segLoc = $('segLoc'), segUrg = $('segUrg');
   var ingSave = $('ingSave'), ingDelete = $('ingDelete');
   var quickAdd = $('quickAdd');
+  var ingRestoreLine = $('ingRestoreLine'), ingRestoreText = $('ingRestoreText'), ingRestore = $('ingRestore');
+  var ingMoreToggle = $('ingMoreToggle'), ingMore = $('ingMore');
 
   var eatSheet = $('eatSheet'), eatSub = $('eatSub'), eatList = $('eatList'), eatConfirm = $('eatConfirm');
   var menuSheet = $('menuSheet');
@@ -2989,7 +3043,7 @@
   var customSheet = $('customSheet'), customSub = $('customSub');
   var cName = $('cName'), cSearch = $('cSearch'), cList = $('cList'), cNote = $('cNote'), cCount = $('cCount');
   var cTags = $('cTags'), cRecs = $('cRecs');
-  var fEmo = $('fEmo');
+  var fEmo = null;
 
   var pickSheet = $('pickSheet'), pickSub = $('pickSub');
   var pSearch = $('pSearch'), pList = $('pList'), pTags = $('pTags'), pRecs = $('pRecs'), pCount = $('pCount');
@@ -3191,6 +3245,20 @@
       }
       if (o.pct === 0 && o.count !== null) o.done = true;
       if (o.pct === 0 && o.count === null) o.done = true;
+
+      /* 소진 직전 양(_prev) — 되돌리기할 때 그대로 살린다. 값이 망가졌으면 비린다 */
+      if (it._prev && typeof it._prev === 'object') {
+        var pv = it._prev;
+        var keep = {};
+        if (typeof pv.count === 'number' && isFinite(pv.count)) keep.count = Math.max(0, Math.round(pv.count * 2) / 2);
+        if (typeof pv.pct === 'number' && isFinite(pv.pct)) keep.pct = Math.max(0, Math.min(100, Math.round(pv.pct / 5) * 5));
+        if (typeof pv.used === 'number' && isFinite(pv.used)) keep.used = Math.max(0, Math.round(pv.used));
+        keep.partial = !!pv.partial;
+        ["plans", "mealUses", "customMeals"].forEach(function (k) {
+          if (pv[k] && typeof pv[k] === 'object') keep[k] = pv[k];
+        });
+        if (o.done && (typeof keep.count === 'number' || typeof keep.pct === 'number')) o._prev = keep;
+      }
       return o;
     });
 
@@ -3382,6 +3450,139 @@
     return out;
   }
 
+  /* =========================================================
+     소진 / 되돌리기 — 한 곳에서 처리한다
+     · 소진 직전의 남은 양(_prev)을 재료에 남겨 두므로
+       토스트가 사라진 뒤나 새로고침 후에도 그대로 되돌릴 수 있다
+     · 소진하면서 바뀐 식단(대체 레시피)도 함께 기억했다가 같이 되돌린다
+     ========================================================= */
+  function cp(v) { try { return JSON.parse(JSON.stringify(v || {})); } catch (e) { return {}; } }
+
+  function captureCore() {
+    return {
+      items: state.ingredients.map(function (it) {
+        return { id: it.id, done: !!it.done, count: (typeof it.count === 'number' ? it.count : null),
+          pct: (typeof it.pct === 'number' ? it.pct : null), partial: !!it.partial, used: it.used || 0,
+          _prev: it._prev ? cp(it._prev) : null };
+      }),
+      plans: cp(state.plans), mealUses: cp(state.mealUses), customMeals: cp(state.customMeals),
+      eaten: cp(state.eaten), skips: cp(state.skips), outside: cp(state.outside), snacks: cp(state.snacks)
+    };
+  }
+
+  function restoreCore(snap) {
+    if (!snap) return;
+    (snap.items || []).forEach(function (s) {
+      var it = byId(s.id);
+      if (!it) return;
+      it.done = !!s.done;
+      it.count = (typeof s.count === 'number' ? s.count : null);
+      it.pct = (typeof s.pct === 'number' ? s.pct : null);
+      it.partial = !!s.partial;
+      it.used = s.used || 0;
+      if (s._prev) it._prev = cp(s._prev); else delete it._prev;
+    });
+    if (snap.plans) state.plans = cp(snap.plans);
+    if (snap.mealUses) state.mealUses = cp(snap.mealUses);
+    if (snap.customMeals) state.customMeals = cp(snap.customMeals);
+    if (snap.eaten) state.eaten = cp(snap.eaten);
+    if (snap.skips) state.skips = cp(snap.skips);
+    if (snap.outside) state.outside = cp(snap.outside);
+    if (snap.snacks) state.snacks = cp(snap.snacks);
+    save();
+    renderAll();
+  }
+
+  /* 소진 전 남은 양을 재료에 남긴다 (_prev) */
+  function rememberAmount(it) {
+    if (!it || it.done) return;
+    it._prev = {
+      count: (typeof it.count === 'number' ? it.count : null),
+      pct: (typeof it.pct === 'number') ? it.pct : (isCountable(it) ? null : pctOf(it)),
+      partial: !!it.partial,
+      used: it.used || 0
+    };
+  }
+
+  function planSnapshot() {
+    return { plans: cp(state.plans), mealUses: cp(state.mealUses), customMeals: cp(state.customMeals) };
+  }
+
+  /* 재료 하나를 소진 처리 — 되돌릴 정보를 남기고 결과를 돌려준다 */
+  function depleteItem(id, opts) {
+    opts = opts || {};
+    var it = byId(id);
+    if (!it || it.done) return null;
+    var emo = emojiOf(it), nm = it.name;
+    rememberAmount(it);
+    var before = planSnapshot();
+    it.done = true;
+    it.pct = 0;
+    it.used = 0;
+    if (isCountable(it)) { it.count = 0; it.partial = false; }
+    var res = { swapped: 0, trimmed: 0 };
+    if (opts.swap !== false) {
+      res = swapOutIngredient(id);
+      if ((res.swapped || res.trimmed) && it._prev) {
+        it._prev.plans = before.plans;
+        it._prev.mealUses = before.mealUses;
+        it._prev.customMeals = before.customMeals;
+      }
+    }
+    save();
+    renderAll();
+    return { id: id, emo: emo, nm: nm, res: res };
+  }
+
+  /* 소진 취소 — 소진 직전 양(없으면 1개/100%)으로 되돌리고 바뀌었던 식단도 함께 되돌린다 */
+  function restoreItem(id) {
+    var it = byId(id);
+    if (!it) return null;
+    var prev = it._prev || null;
+    var pct = (prev && typeof prev.pct === 'number' && prev.pct > 0) ? prev.pct : 0;
+    if (isCountable(it)) {
+      if (prev && typeof prev.count === 'number' && prev.count > 0) {
+        it.count = prev.count;
+        it.pct = it.count <= 1 ? (pct || 50) : null;
+      } else if (pct > 0) {
+        it.count = 1;
+        it.pct = pct;
+      } else {
+        it.count = 1;
+        it.pct = 100;
+      }
+    } else {
+      it.pct = pct || 100;
+    }
+    it.done = false;
+    it.partial = isCountable(it) && Math.abs(it.count - Math.round(it.count)) > 0.001;
+    if (prev && typeof prev.used === 'number') it.used = prev.used;
+    if (prev && prev.plans) {
+      state.plans = cp(prev.plans);
+      if (prev.mealUses) state.mealUses = cp(prev.mealUses);
+      if (prev.customMeals) state.customMeals = cp(prev.customMeals);
+    }
+    delete it._prev;
+    save();
+    renderAll();
+    return it;
+  }
+
+  function toastDepleted(info) {
+    if (!info) return;
+    var msg;
+    if (info.res && info.res.swapped) msg = info.emo + ' ' + info.nm + ' 다 씀 · ' + info.res.swapped + '끼니를 다른 메뉴로 바꿨어요';
+    else if (info.res && info.res.trimmed) msg = info.emo + ' ' + info.nm + ' 다 씀 · 끼니에서 뻐어요';
+    else msg = info.emo + ' ' + info.nm + ' 다 씀으로 옮겼어요';
+    toast(msg, {
+      label: '되돌리기',
+      fn: function () {
+        var it = restoreItem(info.id);
+        if (it) toast(emojiOf(it) + ' ' + it.name + ' 다시 살렸어요');
+      }
+    });
+  }
+
   function setMealUses(day, meal, list) {
     if (!state.mealUses) state.mealUses = {};
     state.mealUses[slotKey(day, meal)] = (list || []).slice();
@@ -3445,7 +3646,7 @@
     }
     toastEl.classList.add('is-open');
     if (toastTimer) clearTimeout(toastTimer);
-    toastTimer = setTimeout(hideToast, act && act.label ? 3600 : 1900);
+    toastTimer = setTimeout(hideToast, act && act.label ? 5200 : 1900);
   }
 
   /* =========================================================
@@ -3693,14 +3894,15 @@
   function openDeplete(day, meal, id) {
     var it = byId(id);
     if (!it) return;
-    depTarget = { day: day, meal: meal, id: id };
+    var already = isDepleted(it);
+    depTarget = { day: day, meal: meal, id: id, mode: already ? 'trim' : 'deplete' };
     depEmo.textContent = emojiOf(it);
-    depTitle.textContent = it.name + ' 소진되었나요?';
-    depSub.textContent = isDepleted(it)
-      ? '이 재료는 이미 소진 처리되어 있어요. 이 끼니에서만 뺄까요?'
-      : '소진 처리하면 이 재료를 쓰는 다른 끼니도 소진된 재료 없이 만들 수 있는 메뉴로 자동 교체돼요.';
-    depYes.textContent = '네, 소진됐어요';
-    depNo.textContent = '아니요, 이 메뉴에서만 뺄게요';
+    depTitle.textContent = already ? it.name + ' 소진된 재료예요' : it.name + ' 다 썼어요?';
+    depSub.textContent = already
+      ? '이 끼니에서 이 재료만 빼면 바로 만들 수 있어요.'
+      : '이 재료를 쓰는 다른 끼니도 같이 바꿔 둘게요. 바로 되돌릴 수 있어요.';
+    depYes.textContent = already ? '이 끼니에서 빼기' : '네, 다 썼어요';
+    depNo.textContent = already ? '그대로 두기' : '이 메뉴에서만 뺄게요';
     depModal.classList.add('is-open');
   }
 
@@ -3714,26 +3916,19 @@
     var t = depTarget;
     var it = byId(t.id);
     if (!it) { closeDeplete(); return; }
-    var emo = emojiOf(it), nm = it.name;
-
-    it.done = true;
-    it.used = 0;
-    it.pct = 0;
-    if (isCountable(it)) { it.count = 0; it.partial = false; }
-
-    var res = swapOutIngredient(t.id);
-    save();
+    if (t.mode === 'trim') {
+      closeDeplete();
+      removeFromMealOnly(t.day, t.meal, t.id);
+      return;
+    }
+    var info = depleteItem(t.id);
     closeDeplete();
-    renderAll();
-
-    if (res.swapped) toast(emo + ' ' + nm + ' 소진 처리! ' + nm + ' 없이 만드는 메뉴로 바꿨어요');
-    else if (res.trimmed) toast(emo + ' ' + nm + ' 소진 처리! 이 끼니에서는 ' + nm + (res.trimmed > 1 ? ' 등' : '') + '만 뺐어요');
-    else toast(emo + ' ' + nm + ' 소진 완료로 옮겼어요');
+    if (info) toastDepleted(info);
   }
 
-  function removeFromMealOnly() {
-    if (!depTarget) return;
-    var t = depTarget;
+  function removeFromMealOnly(day, meal, id) {
+    var t = (day && meal && id) ? { day: day, meal: meal, id: id } : depTarget;
+    if (!t) return;
     var it = byId(t.id);
     var r = mealRecipe(t.day, t.meal);
     if (!it || !r) { closeDeplete(); return; }
@@ -3781,11 +3976,13 @@
      필터 & 재료 리스트
      ========================================================= */
   function renderFilters() {
-    var html = FILTERS.map(function (f) {
-      return '<button class="chip' + (ui.filter === f.id ? ' is-on' : '') + '" data-filter="' + f.id + '">' + f.label + '</button>';
-    }).join('');
-    html += '<button class="chip toggle' + (ui.hideDone ? ' is-on' : '') + '" data-hide="1">미처리만' +
-      '<span class="mini-switch"><i></i></span></button>';
+    /* 한 줄에서 밀어 보는 칩 — 두 줄로 쌓지 않는다 */
+    var chips = FILTERS.map(function (f) {
+      return '<button class="chip' + (ui.filter === f.id ? ' is-on' : '') + '" data-filter="' + f.id + '" aria-pressed="' + (ui.filter === f.id) + '">' + f.label + '</button>';
+    });
+    /* 미처리만 토글이 스크롤 밖으로 밀리지 않게 두 번째 자리에 둔다 */
+    chips.splice(2, 0, '<button class="chip toggle' + (ui.hideDone ? ' is-on' : '') + '" data-hide="1" aria-pressed="' + ui.hideDone + '">✓ 미처리만</button>');
+    var html = chips.join('');
     filtersEl.innerHTML = html;
   }
 
@@ -3804,36 +4001,45 @@
     }
     if (it.custom) meta.push('<span class="mine">내가 추가</span>');
 
+    /* 급한 것만 배지를 붙인다 — '보통'은 매 줄에 반복될 이유가 없다 */
+    var urgBadge = (it.urg === 'urgent' || it.urg === 'soon')
+      ? '<span class="badge ' + URG[it.urg].cls + '">' + URG[it.urg].short + ' ' + URG[it.urg].label + '</span>'
+      : '';
+
     var nameBtn = '<button class="item-main" data-act="edit" data-id="' + esc(it.id) + '">' +
-      '<span class="item-name"><span class="emo">' + emojiOf(it) + '</span>' + esc(it.name) +
-        '<span class="badge ' + URG[it.urg].cls + '">' + URG[it.urg].short + ' ' + URG[it.urg].label + '</span>' +
-      '</span>' +
+      '<span class="item-name"><span class="emo">' + emojiOf(it) + '</span>' + esc(it.name) + urgBadge + '</span>' +
       (meta.length ? '<span class="item-meta">' + meta.join('') + '</span>' : '') +
     '</button>';
 
-    var finish = isSharing(it)
-      ? '<button class="finish-btn" data-act="finish" data-id="' + esc(it.id) + '" aria-label="' +
-        esc(it.name) + ' 다 먹음 처리">다 먹음</button>'
-      : '';
+    /* 원탭 토글 — 처리 전에는 ✓(다 씀), 처리 후에는 ↩︎(되돌리기) */
+    var toggle = it.done
+      ? '<button class="kill-btn is-undo" data-act="restore" data-id="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 되돌리기">↩︎</button>'
+      : '<button class="kill-btn" data-act="kill" data-id="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 다 씀 처리">✓</button>';
+
+    if (it.done) {
+      return '<div class="item is-done" data-row="' + esc(it.id) + '">' +
+        nameBtn +
+        '<span class="done-tag">다 씀</span>' +
+        toggle +
+      '</div>';
+    }
 
     /* 잔량 퍼센트 슬라이더 — 드르륵 옮겨서 남은 양을 표현한다 */
     if (isPctItem(it)) {
-      var p = it.done ? 0 : pctOf(it);
-      return '<div class="item is-pct' + (it.done ? ' is-done' : '') + '" data-row="' + esc(it.id) + '">' +
-        '<div class="item-top">' + nameBtn + finish + '</div>' +
+      var p = pctOf(it);
+      return '<div class="item is-pct" data-row="' + esc(it.id) + '">' +
+        '<div class="item-top">' + nameBtn + toggle + '</div>' +
         '<div class="pctrow">' +
           '<input type="range" min="0" max="100" step="5" value="' + p + '" style="--p:' + p + '%"' +
-            ' data-pct="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 남은 양 ' + p + '%"' +
-            (it.done ? ' disabled' : '') + '>' +
+            ' data-pct="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 남은 양 ' + p + '%">' +
           '<span class="pctval' + (p === 0 ? ' dim' : '') + '" data-pctv="' + esc(it.id) + '">' + p + '%' +
             '<small>' + pctLabel(p) + '</small></span>' +
         '</div>' +
       '</div>';
     }
 
-    var control;
     var un = esc(unitOf(it));
-    var canTap = !it.done && it.count > 0 && it.count <= 2;
+    var canTap = it.count > 0 && it.count <= 2;
     var numAttr = canTap
       ? ' data-act="part" data-id="' + esc(it.id) + '" role="button" tabindex="0" aria-label="' + esc(it.name) +
         (part ? ' 소량 표시 끄기' : ' 반 ' + un + ' 더 표시') + '"'
@@ -3848,15 +4054,14 @@
     var incLabel = esc(it.name) + (part
       ? (it.count > 0.5 ? ' 반 ' + un + ' 더' : ' 1' + un + roParticle(unitOf(it)) + ' 되돌리기')
       : ' 하나 더');
-    control = '<div class="step' + (part ? ' is-partial' : '') + '">' +
-      '<button data-act="dec" data-id="' + esc(it.id) + '" aria-label="' + decLabel + '"' +
-        (it.done || it.count <= 0 ? ' disabled' : '') + '>−</button>' +
+    var control = '<div class="step' + (part ? ' is-partial' : '') + '">' +
+      '<button data-act="dec" data-id="' + esc(it.id) + '" aria-label="' + decLabel + '">−</button>' +
       '<span class="step-num' + (part ? ' is-partial' : '') + '"' + numAttr + '>' + numBody + '</span>' +
       '<button data-act="inc" data-id="' + esc(it.id) + '" aria-label="' + incLabel + '">+</button>' +
     '</div>';
 
-    return '<div class="item' + (it.done ? ' is-done' : '') + '" data-row="' + esc(it.id) + '">' +
-      nameBtn + finish + control +
+    return '<div class="item" data-row="' + esc(it.id) + '">' +
+      nameBtn + control + toggle +
     '</div>';
   }
 
@@ -3907,8 +4112,6 @@
     if (!html) {
       html = emptyBox('🧺', '이 조건에 맞는 재료가 없어요.');
     }
-
-    html += '<p class="pct-hint">드르륵 옮겨서 남은 양을 0~100%로 맞춰요. 2개 이상 남은 재료는 −/+로 새요.</p>';
 
     listEl.innerHTML = html;
   }
@@ -4073,7 +4276,12 @@
       (accordion ? '<button type="button" class="mc-collapse" data-act="expand" aria-label="접기">접기 ⌃</button>' : '') +
     '</div>';
 
-    var title = '<div class="mc-title"><h3 class="meal-name">' + esc(titleName) + '</h3></div>';
+    /* 제목을 누르면 레시피가 열린다 — 별도 버튼 한 줄을 없앤다 */
+    var title = '<div class="mc-title">' +
+      ((skipped || out)
+        ? '<h3 class="meal-name">' + esc(titleName) + '</h3>'
+        : '<button type="button" class="meal-name as-btn" data-act="recipe" aria-label="' + esc(titleName) + ' 레시피 보기">' + esc(titleName) + '</button>') +
+    '</div>';
 
     var metaBits = [];
     if (out) {
@@ -4145,10 +4353,7 @@
       '</div>';
     }
 
-    var recipeBtn = (skipped || out) ? '' :
-      '<button class="recipe-btn" data-act="recipe">' +
-        (mine ? '📖 내 메뉴 보기' : '📖 레시피 보기') +
-      '</button>';
+    var recipeBtn = '';
 
     var skipNote = (skipped && !out) ? '<div class="skip-note">🍗 이 끼니는 외식으로 비웠어요</div>' : '';
 
@@ -4703,7 +4908,7 @@
       var it = byId(id);
       if (!it) return;
       ingSheetTitle.textContent = '재료 수정';
-      ingSheetSub.textContent = '수량·메모·급한 정도를 고치거나 삭제할 수 있어요.';
+      ingSheetSub.textContent = it.done ? '지금은 다 쓴 상태예요.' : '바꿀 것만 고치고 저장하면 돼요.';
       fName.value = it.name;
       fQty.value = it.qty;
       fNote.value = it.note;
@@ -4711,38 +4916,43 @@
       editor.urg = it.urg;
       editor.emoji = it.emoji || null;
       editor.origQty = it.qty;
+      editor.wasDone = !!it.done;
       ingDelete.classList.remove('is-hidden');
       quickAdd.style.display = 'none';
+      ingRestoreLine.classList.toggle('is-hidden', !it.done);
+      ingRestoreText.textContent = '다 쓴 재료예요. 되돌리면 남은 양이 다시 살아나요.';
+      setMoreOpen(!!it.note);
     } else {
       ingSheetTitle.textContent = '재료 추가';
-      ingSheetSub.textContent = '장 본 재료를 바로 넣고 급한 정도를 정해두세요.';
+      ingSheetSub.textContent = '이름만 적어도 담겨요. 나머지는 기본값으로 들어가요.';
       fName.value = '';
       fQty.value = '';
       fNote.value = '';
       editor.loc = 'fridge';
       editor.urg = 'normal';
       editor.origQty = '';
+      editor.wasDone = false;
       ingDelete.classList.add('is-hidden');
+      ingRestoreLine.classList.add('is-hidden');
       quickAdd.style.display = '';
+      setMoreOpen(false);
     }
 
     segSet(segLoc, editor.loc);
     segSet(segUrg, editor.urg);
-    renderEmoPick();
     openSheet(ingSheet);
     setTimeout(function () { fName.focus(); }, 260);
   }
 
-  function renderEmoPick() {
-    var autoEmo = emojiFor(fName.value.trim());
-    var cur = editor.emoji || autoEmo;
-    var seen = {};
-    fEmo.innerHTML = [autoEmo].concat(EMOJI_PICKS).map(function (e) {
-      if (seen[e]) return '';
-      seen[e] = true;
-      return '<button type="button" data-emo="' + e + '" class="' + (cur === e ? 'is-on' : '') + '">' + e + '</button>';
-    }).join('');
+  /* 메모·유통기한은 기본 접힘 — 필요한 사람만 펼친다 */
+  function setMoreOpen(open) {
+    if (!ingMore || !ingMoreToggle) return;
+    ingMore.classList.toggle('is-folded', !open);
+    ingMoreToggle.classList.toggle('is-open', !!open);
+    ingMoreToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
+
+  function renderEmoPick() { /* 이모지는 이름에서 자동으로 정해요 (고르는 단계 없음) */ }
 
   function saveEditor() {
     var name = fName.value.trim();
@@ -4758,31 +4968,49 @@
     if (editor.mode === 'edit') {
       var it = byId(editor.id);
       if (!it) { closeSheets(); return; }
+      var qtyChanged = qty !== editor.origQty;
       it.name = name;
       it.qty = qty;
       it.note = note;
       it.loc = editor.loc;
       it.urg = editor.urg;
       it.emoji = emoji;
-      /* 수량을 새로 적었고 그 안에 숫자가 있으면 남은 개수도 거기에 맞춘다 */
-      if (qty !== editor.origQty) {
-        var parsedEdit = countFromQty(qty);
-        if (parsedEdit) {
-          it.count = parsedEdit.count;
-          it.unit = parsedEdit.unit;
-          it.done = it.count <= 0;
-          it.partial = false;
-          it.pct = it.count >= 2 ? null : (it.count > 0 ? 100 : 0);
-        } else if (it.count !== null && it.count !== undefined && !qty) {
+
+      /* 남은 양을 새로 적었으면 그 값이 그대로 상태가 된다 —
+         숫자(2개·1팩)면 개수로, 그 밖의 글(절반 남음 등)이면 남은 양으로 본다 */
+      var parsedEdit = qtyChanged ? countFromQty(qty) : null;
+      if (parsedEdit) {
+        it.count = parsedEdit.count;
+        it.unit = parsedEdit.unit;
+        it.done = it.count <= 0;
+        it.partial = false;
+        it.pct = it.count >= 2 ? null : (it.count > 0 ? 100 : 0);
+        if (it.done) delete it._prev;
+      } else if (qtyChanged) {
+        if (!qty) {
+          /* 남은 양을 지웠으면 개수 없이 100%로 되돌린다 */
           it.count = null;
           it.partial = false;
           it.pct = 100;
+          it.done = false;
+          delete it._prev;
+        } else if (it.done) {
+          /* '절반 남음'처럼 글자로 적었으면 다 쓴 상태를 풀고 그만큼 남긴다 */
+          if (isCountable(it)) it.count = 1;
+          it.done = false;
+          it.partial = false;
+          it.pct = /절반|반\s*남/.test(qty) ? 50 : (/소량|조금/.test(qty) ? 25 : 100);
+          delete it._prev;
         }
       }
+
       save();
       closeSheets();
       renderAll();
-      toast('재료를 수정했어요');
+      if (editor.wasDone && !it.done) toast(emojiOf(it) + ' ' + it.name + ' ' + amountOrPctText(it) + ' 남았어요 · 다시 살렸어요');
+      else if (it.done && !editor.wasDone) toast(emojiOf(it) + ' ' + it.name + ' 다 쓴 상태로 저장했어요 · ↩︎로 되돌릴 수 있어요');
+      else if (it.done) toast(emojiOf(it) + ' ' + it.name + ' 아직 다 쓴 상태예요 · 되돌리려면 위의 ↩︎ 되돌리기를 눌러 주세요');
+      else toast('재료를 수정했어요');
     } else {
       var id = 'c' + Date.now().toString(36) + Math.floor(Math.random() * 1000).toString(36);
       var parsedNew = countFromQty(qty);
@@ -6088,7 +6316,7 @@
       return URG[a.urg].order - URG[b.urg].order;
     });
 
-    eatSub.textContent = r.name + ' — 먹은 만큼 남은 양을 맞춰주세요. 그대로 두면 안 쓴 걸로 남아요.';
+    eatSub.textContent = r.name + ' — 쓴 만큼만 아래에서 덜어내면 끝이에요.';
 
     eatList.innerHTML = rows.map(function (it) {
       if (it.done) {
@@ -6102,9 +6330,6 @@
         var cur = pctOf(it);
         var def = cur >= 100 ? 50 : Math.max(0, Math.round(cur / 2 / 5) * 5);
         eatPct[it.id] = def;
-        var quick = [100, 75, 50, 25, 0].map(function (v) {
-          return '<button type="button" class="eq' + (v === def ? ' is-on' : '') + '" data-eatp="' + esc(it.id) + '" data-v="' + v + '">' + v + '%</button>';
-        }).join('');
         return '<div class="eat-row eat-pct" data-eatrow="' + esc(it.id) + '">' +
           '<div class="eat-top">' +
             '<span class="eat-name"><span class="emo">' + emojiOf(it) + '</span>' + esc(it.name) + '</span>' +
@@ -6115,7 +6340,6 @@
               ' data-eatpct="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 남은 양">' +
             '<span class="pctval" data-eatpctv="' + esc(it.id) + '">' + def + '%<small>' + pctLabel(def) + '</small></span>' +
           '</div>' +
-          '<div class="eat-quick">' + quick + '</div>' +
         '</div>';
       }
       eatQty[it.id] = 1;
@@ -6130,7 +6354,6 @@
             '<span class="step-num" data-eatnum="' + esc(it.id) + '">1<small>' + esc(unitOf(it)) + '</small></span>' +
             '<button data-eat="inc" data-id="' + esc(it.id) + '" aria-label="' + esc(it.name) + ' 한 개 더 쓰기">+</button>' +
           '</div>' +
-          '<button type="button" class="emode some" data-eat="some" data-id="' + esc(it.id) + '">반 개 <em>먹음</em></button>' +
           '<button type="button" class="emode all finish-all" data-eat="all" data-id="' + esc(it.id) + '">다 먹음</button>' +
         '</div>' +
       '</div>';
@@ -6164,6 +6387,7 @@
 
   function confirmEat() {
     if (!eatTarget) return;
+    var snap = captureCore();
     var parts = [];
     var usedIds = [];
     var finished = [];
@@ -6176,6 +6400,7 @@
       var cur = pctOf(it);
       var next = eatPct[id];
       if (next == null || next >= cur) return;
+      rememberAmount(it);
       setPct(it, next);
       it.used = (it.used || 0) + 1;
       usedIds.push(it.id);
@@ -6194,6 +6419,7 @@
       if (!item || item.done || !isCountable(item)) return;
       var n = Math.min(eatQty[id] || 0, item.count);
       if (!n || n <= 0) return;
+      rememberAmount(item);
       item.count = Math.round((item.count - n) * 2) / 2;
       usedIds.push(item.id);
       parts.push(emojiOf(item) + ' ' + item.name + ' ' + (n < 1 ? '소량' : amountText(n, unitOf(item))));
@@ -6216,6 +6442,11 @@
     var swapped = 0;
     finished.forEach(function (it) { swapped += swapOutIngredient(it.id).swapped; });
 
+    /* 방금 다 쓴 재료만 되돌릴 정보를 남긴다 */
+    state.ingredients.forEach(function (it) {
+      if (it._prev && !isDepleted(it)) delete it._prev;
+    });
+
     save();
     closeSheets();
     eatTarget = null;
@@ -6230,7 +6461,13 @@
       msg = names + ' 소진 완료' + (swapped ? ' · 안 먹은 끼니 ' + swapped + '개 자동 교체' : '');
       if (shareCount) msg += ' · 일부 남긴 재료 ' + shareCount + '개';
     }
-    toast(msg);
+    toast(msg, {
+      label: '되돌리기',
+      fn: function () {
+        restoreCore(snap);
+        toast('먹은 기록을 되돌렸어요');
+      }
+    });
   }
 
   /* =========================================================
@@ -6373,41 +6610,51 @@
     }
   });
 
-  /* 잔량 슬라이더 — 끄는 동안에는 그 행만 갱신하고, 놓으면 목록을 다시 그린다 */
+  /* 잔량 슬라이더 — 끄는 동안에는 그 행만 갱신하고, 놓았을 때 상태를 확정한다 */
+  var pctDragFrom = {};
   listEl.addEventListener('input', function (e) {
     var s = e.target.closest('[data-pct]');
     if (!s) return;
     var it = byId(s.getAttribute('data-pct'));
     if (!it) return;
+    if (!pctDragFrom[it.id] && !it.done) {
+      pctDragFrom[it.id] = { count: (typeof it.count === 'number' ? it.count : null), pct: pctOf(it), partial: !!it.partial, used: it.used || 0 };
+    }
     setPct(it, +s.value);
     save();
     var p = pctOf(it);
     var lab = listEl.querySelector('[data-pctv="' + it.id + '"]');
     if (lab) lab.innerHTML = p + '%<small>' + pctLabel(p) + '</small>';
     var row = s.closest('.item');
-    if (row) {
-      row.classList.toggle('is-done', it.done);
-      /* 일부만 남았을 때만 '다 먹음' 버튼을 붙인다 (행을 다시 그리지 않아 드래그가 끊기지 않게) */
-      var fin = row.querySelector('.finish-btn');
-      var need = !it.done && p > 0 && p < 100;
-      if (need && !fin) {
-        var btn = document.createElement('button');
-        btn.className = 'finish-btn';
-        btn.setAttribute('data-act', 'finish');
-        btn.setAttribute('data-id', it.id);
-        btn.setAttribute('aria-label', it.name + ' 다 먹음 처리');
-        btn.textContent = '다 먹음';
-        var top = row.querySelector('.item-top');
-        if (top) top.appendChild(btn);
-      } else if (!need && fin) {
-        fin.parentNode.removeChild(fin);
-      }
-    }
-    var lab2 = listEl.querySelector('[data-pctv="' + it.id + '"]');
-    if (lab2) lab2.classList.toggle('dim', p === 0);
+    if (row) row.classList.toggle('is-done', it.done);
     renderDash();
-    renderMeals();
     renderLeftover();
+  });
+
+  /* 손을 떼면: 0%까지 내려 소진됐으면 그 자리에서 되돌릴 수 있게 알려준다 */
+  listEl.addEventListener('change', function (e) {
+    var s = e.target.closest('[data-pct]');
+    if (!s) return;
+    var it = byId(s.getAttribute('data-pct'));
+    if (!it) return;
+    var from = pctDragFrom[it.id];
+    delete pctDragFrom[it.id];
+    if (it.done) {
+      it._prev = from && from.pct > 0 ? from : { count: null, pct: 50, partial: false, used: 0 };
+      var before = planSnapshot();
+      var res = swapOutIngredient(it.id);
+      if ((res.swapped || res.trimmed) && it._prev) {
+        it._prev.plans = before.plans;
+        it._prev.mealUses = before.mealUses;
+        it._prev.customMeals = before.customMeals;
+      }
+      save();
+      renderAll();
+      toastDepleted({ id: it.id, emo: emojiOf(it), nm: it.name, res: res });
+    } else {
+      renderList();
+      renderMeals();
+    }
   });
 
   listEl.addEventListener('click', function (e) {
@@ -6415,6 +6662,18 @@
     if (!btn) return;
     var id = btn.getAttribute('data-id');
     var act = btn.getAttribute('data-act');
+
+    /* 원탭 처리 / 되돌리기 */
+    if (act === 'kill') {
+      var info = depleteItem(id);
+      if (info) toastDepleted(info);
+      return;
+    }
+    if (act === 'restore') {
+      var rit = restoreItem(id);
+      if (rit) toast(emojiOf(rit) + ' ' + rit.name + ' ' + amountOrPctText(rit) + ' 남았어요 · 다시 살렸어요');
+      return;
+    }
 
     /* 개수 스테퍼: 2개 → 1개 → 소량 → 다 씀, 숫자를 누르면 반 개(소량) 표시를 켜고 끈다 */
     if (act === 'dec' || act === 'inc' || act === 'part') {
@@ -6440,34 +6699,34 @@
       } else if (act === 'dec') {
         if (cit.done || cit.count <= 0) return;
         if (chalf) {
+          var beforeCount = cit.count;
           cit.count = Math.round((cit.count - 0.5) * 2) / 2;
           if (cit.count <= 0) {
-            cit.count = 0;
-            cit.done = true;
-            toast(cem + ' ' + cnm + ' 다 씀 · 처리 완료');
-          } else {
-            toast(cem + ' ' + cnm + ' ' + amountText(cit.count, cun) + ' 남음');
+            cit.count = beforeCount; /* 되돌릴 양을 남겨 두고 소진 처리한다 */
+            var dinfo = depleteItem(cit.id);
+            if (dinfo) toastDepleted(dinfo);
+            return;
           }
+          toast(cem + ' ' + cnm + ' ' + amountText(cit.count, cun) + ' 남음');
         } else if (cit.count > 1) {
           cit.count -= 1;
           toast(cem + ' ' + cnm + ' 1' + cun + ' 차감 · ' + amountText(cit.count, cun) + ' 남음');
         } else {
           cit.count = 0.5;
+          cit.partial = true;
+          if (typeof cit.pct === 'number') cit.pct = 50;
           toast(cem + ' ' + cnm + ' 소량 남음 · 한 번 더 − 하면 다 씀');
         }
       } else {
         if (chalf) {
           cit.count = Math.round((cit.count + 0.5) * 2) / 2;
           toast(cem + ' ' + cnm + ' ' + amountText(cit.count, cun) + ' 남았어요');
-        } else if (cit.done || cit.count <= 0) {
-          cit.count = 1;
-          cit.done = false;
-          toast(cem + ' ' + cnm + ' 다시 ' + amountText(1, cun) + ' 남았어요');
         } else {
           cit.count += 1;
           toast(cem + ' ' + cnm + ' +1 · ' + amountText(cit.count, cun) + ' 남음');
         }
       }
+      cit.partial = Math.abs(cit.count - Math.round(cit.count)) > 0.001;
       save();
       renderDash();
       renderLeftover();
@@ -6476,34 +6735,6 @@
       return;
     }
 
-    if (act === 'finish') {
-      /* 소량 → 다 먹음(소진) */
-      var fit = byId(id);
-      if (!fit) return;
-      var fem = emojiOf(fit), fnm = fit.name;
-      fit.done = true;
-      fit.used = 0;
-      fit.pct = 0;
-      if (isCountable(fit)) { fit.count = 0; fit.partial = false; }
-      var fres = swapOutIngredient(fit.id);
-      save();
-      renderAll();
-      if (fres.swapped) toast(fem + ' ' + fnm + ' 소진 완료! 안 먹은 끼니 ' + fres.swapped + '개를 다른 메뉴로 바꿨어요');
-      else toast(fem + ' ' + fnm + ' 소진 완료로 옮겼어요');
-      return;
-    }
-
-    if (act === 'toggle') {
-      var it = byId(id);
-      if (!it) return;
-      it.done = !it.done;
-      save();
-      renderDash();
-      renderList();
-      renderMeals();
-      if (it.done) toast(emojiOf(it) + ' ' + it.name + ' 처리 완료');
-      return;
-    }
     if (act === 'edit') openEditor('edit', id);
   });
 
@@ -6598,13 +6829,8 @@
       renderAll();
       toast(emojiOf(it) + ' ' + it.name + ' · 먹음 횟수를 다시 셀게요');
     } else {
-      it.done = true;
-      it.used = 0;
-      it.pct = 0;
-      if (isCountable(it)) { it.count = 0; it.partial = false; }
-      save();
-      renderAll();
-      toast(emojiOf(it) + ' ' + it.name + ' 소진 완료로 옮겼어요');
+      var linfo = depleteItem(it.id);
+      if (linfo) toastDepleted(linfo);
     }
   }
   leftoverCard.addEventListener('click', onLeftoverClick);
@@ -6938,15 +7164,21 @@
   $('ingCancel').addEventListener('click', function () { closeSheets(); });
   ingDelete.addEventListener('click', deleteEditor);
   fName.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); saveEditor(); } });
-  fName.addEventListener('input', function () { if (!editor.emoji) renderEmoPick(); });
 
-  fEmo.addEventListener('click', function (e) {
-    var b = e.target.closest('button[data-emo]');
-    if (!b) return;
-    var emo = b.getAttribute('data-emo');
-    editor.emoji = emo === emojiFor(fName.value.trim()) ? null : emo;
-    renderEmoPick();
-  });
+  /* 시트 안에서 바로 소진 취소 */
+  if (ingRestore) {
+    ingRestore.addEventListener('click', function () {
+      var id = editor.id;
+      var it = restoreItem(id);
+      closeSheets();
+      if (it) toast(emojiOf(it) + ' ' + it.name + ' ' + amountOrPctText(it) + ' 남았어요 · 다시 살렸어요');
+    });
+  }
+  if (ingMoreToggle) {
+    ingMoreToggle.addEventListener('click', function () {
+      setMoreOpen(ingMore.classList.contains('is-folded'));
+    });
+  }
 
   eatConfirm.addEventListener('click', confirmEat);
   $('eatCancel').addEventListener('click', function () { closeSheets(); });
