@@ -1708,8 +1708,8 @@
   .port button.on{background:#191F28;color:#fff}
   .port button:active{transform:scale(.95);background:#E5E8EB}
   .port button.on:active{background:#191F28}
-  .port button.end{color:#8A3038;background:#FFF1F1}
-  .port button.end:active{background:#FFE3E3}
+  .port button.end{color:var(--ink2);background:#F2F4F6}
+  .port button.end:active{background:#E5E8EB;color:#8A3038}
   .port .undo{background:#fff;color:var(--blue-deep);border:1px solid #CBDFFA;min-height:32px;padding:5px 12px;border-radius:9px;font-size:12px;font-weight:700}
   .port .undo:active{background:var(--blue-soft)}
 
@@ -4746,7 +4746,7 @@
       chips = [
         { k: 'half', label: '− 반' + un },
         { k: 'one', label: '− 1' + un },
-        { k: 'end', label: '다 씀' }
+        { k: 'end', label: '✓ 다 씀' }
       ];
     } else {
       var p = pctOf(it);
@@ -4754,7 +4754,7 @@
         { k: 'full', label: '가득', on: p >= 100 },
         { k: 'half', label: '절반', on: p >= 50 && p < 100 },
         { k: 'little', label: '조금', on: p > 0 && p < 50 },
-        { k: 'end', label: '다 씀' }
+        { k: 'end', label: '✓ 다 씀' }
       ];
     }
     return '<div class="port" role="group" aria-label="' + esc(it.name) + ' 남은 양 조절">' +
