@@ -8713,6 +8713,17 @@
     if (e.target === depModal) closeDeplete();
   });
 
+  /* 이월 시트 — 넘길 끼니를 고르면 바로 복사 */
+  if (carryList) {
+    carryList.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-carryto]');
+      if (!b) return;
+      var v = b.getAttribute('data-carryto').split('|');
+      doCarry(v[0], v[1]);
+    });
+  }
+  if ($('carryCancel')) $('carryCancel').addEventListener('click', function () { carryTarget = null; closeSheets(); });
+
   $('menuBtn').addEventListener('click', function () {
     if ($('menuGoalNow')) $('menuGoalNow').textContent = fmtN(goals().kcal) + 'kcal';
     openSheet(menuSheet);
