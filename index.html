@@ -1564,12 +1564,6 @@
   .mix-fold i{margin-left:auto;font-style:normal;font-size:11px;color:var(--sub2);transition:transform .18s}
   .mix-pick-field:not(.is-folded) .mix-fold i{transform:rotate(180deg)}
   .mix-pick-field.is-folded .mix-fold{margin-bottom:0}
-  /* 결과가 먼저 보이고 재료 목록은 아래로 — 고를 땐 목록, 읽을 땐 조언 */
-  #mixSheet .mix-sel{order:1}
-  #mixSheet .mix-input{order:2}
-  #mixSheet #mixResult{order:3}
-  #mixSheet .mix-pick-field{order:4}
-  #mixSheet .sheet-actions{order:5}
   .mix-pick button{
     display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:8px 12px;
     border-radius:12px;background:#F5F7F9;border:1px solid transparent;
@@ -4950,7 +4944,7 @@
       : '냉장고에서 고르기 <em>2개 이상 고르면 조언이 떠요</em>';
 
     if (sel.length < 2) {
-      mixResult.innerHTML = '<p class="mx-empty">재료를 2개 이상 고르면<br>뭘 더 넣고 뭘 빼면 좋을지 바로 짚어 드려요.</p>';
+      mixResult.innerHTML = '';
       return;
     }
 
