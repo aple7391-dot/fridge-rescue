@@ -1555,15 +1555,15 @@
   .mix-chip.mine{background:#F2F4F6;color:var(--ink2)}
   .mix-chip.mine .x{background:#E5E8EB;color:var(--sub)}
   .mix-pick{display:flex;flex-wrap:wrap;gap:7px}
-  .mix-pick-field.is-folded .mix-pick{display:none}
+  .mix-pick-field.is-collapsed .mix-pick{display:none}
   .mix-fold{
     display:flex;align-items:center;gap:6px;width:100%;min-height:40px;margin-bottom:10px;
     font-size:12.5px;font-weight:700;color:var(--sub);letter-spacing:-.02em;text-align:left;
   }
   .mix-fold em{font-style:normal;font-weight:600;color:var(--sub2)}
   .mix-fold i{margin-left:auto;font-style:normal;font-size:11px;color:var(--sub2);transition:transform .18s}
-  .mix-pick-field:not(.is-folded) .mix-fold i{transform:rotate(180deg)}
-  .mix-pick-field.is-folded .mix-fold{margin-bottom:0}
+  .mix-pick-field:not(.is-collapsed) .mix-fold i{transform:rotate(180deg)}
+  .mix-pick-field.is-collapsed .mix-fold{margin-bottom:0}
   .mix-pick button{
     display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:8px 12px;
     border-radius:12px;background:#F5F7F9;border:1px solid transparent;
@@ -4935,7 +4935,7 @@
 
     /* 재료를 2개 넘게 고르면 목록은 접어서 조언이 바로 보이게 한다 */
     var folded = sel.length >= 2 && !mixFoldOpen;
-    mixPickField.classList.toggle('is-folded', folded);
+    mixPickField.classList.toggle('is-collapsed', folded);
     mixFold.setAttribute('aria-expanded', folded ? 'false' : 'true');
     mixFold.innerHTML = sel.length >= 2
       ? (folded
