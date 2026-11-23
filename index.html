@@ -3089,7 +3089,11 @@
       var carry = carryRec(day, m);
       if (carry) {
         var cMac = carryMacro(carry);
-        if (cMac && cMac.kcal > 0) { t.c += cMac.c; t.p += cMac.p; t.f += cMac.f; }
+        if (cMac && cMac.kcal > 0) {
+          t.c += cMac.c; t.p += cMac.p; t.f += cMac.f;
+          /* 카드에 적힌 kcal과 합계가 어긋나지 않게 차이만 보정한다 */
+          t.extraKcal += cMac.kcal - (cMac.c * 4 + cMac.p * 4 + cMac.f * 9);
+        }
         if (!state.eaten[k]) t.openMeals.push(m);
         return;
       }
