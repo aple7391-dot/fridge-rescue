@@ -3881,7 +3881,6 @@
     note: '저녁 외식 일정 · 남은 제육은 모레 이어서 드시면 됩니다',
     macro: { kcal: 0, c: 0, p: 0, f: 0 }
   };
-
   function seedJeyukLate(s) {
     if (!s || (typeof s.jeyukSeedVer === 'number' ? s.jeyukSeedVer : 0) >= 3) return false;
     /* 그 이틀이 지난 뒤 처음 열었다면 지금 냉장고·지난 식단을 건드리지 않는다 */
@@ -3936,7 +3935,21 @@
       delete s.skips['2026-11-23-dinner'];
     }
     put('2026-11-24-lunch', LATE_NEXT_LUNCH);
-    if (put('2026-11-24-dinner', LATE_NEXT_DINNER)) {
+    /* 내일 저녁은 외식 일정 — 집에서 먹지 않는 끼니(외식)로 비워 둔다.
+       외식 카드는 이름이 남색으로 또렷하게 보이고, 내일 ✏️ 수정에서 실제 외식량을 넣을 수 있다 */
+    if (!s.outside['2026-11-24-dinner']) {
+      delete s.customMeals['2026-11-24-dinner'];
+      delete s.mealUses['2026-11-24-dinner'];
+      s.outside['2026-11-24-dinner'] = {
+        name: LATE_NEXT_DINNER.name,
+        rawText: '',
+        items: [],
+        kcal: LATE_NEXT_DINNER.macro.kcal,
+        c: LATE_NEXT_DINNER.macro.c,
+        p: LATE_NEXT_DINNER.macro.p,
+        f: LATE_NEXT_DINNER.macro.f,
+        portion: 1
+      };
       s.skips['2026-11-24-dinner'] = true;
       delete s.eaten['2026-11-24-dinner'];
     }
