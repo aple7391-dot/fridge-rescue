@@ -2227,6 +2227,21 @@
     { id: 'jam',        name: '딸기잼',              qty: '',           loc: 'pantry',  urg: 'pantry', note: '', emoji: '🍓' }
   ];
 
+  /* ── 11/23 쿠팡 입고분 (11/22 주문 · 11/23 새벽 도착, 모짜렐라만 11/24 도착) ──
+     원래 있던 재료와 소비기한이 달라서 합치지 않고 이번에 산 것만 따로 담는다.
+     비식품(세탁조 클리너·신발 패드·물티슈)과 생수는 넣지 않는다. */
+  var COUPANG_ITEMS = [
+    { id: 'cp-daepa',    name: '흙대파',                qty: '1단 · 1kg', loc: 'fridge',  urg: 'urgent', note: '1kg 대용량 · 썰어서 냉동 소분 추천', emoji: '🌿' },
+    { id: 'cp-salad',    name: '데일리믹스 샐러드',      qty: '2봉',       loc: 'fridge',  urg: 'urgent', note: '11/19 포장 · 11/26까지 · 2봉 나눠 먹기', emoji: '🥬', count: 2, unit: '봉' },
+    { id: 'cp-pork-jeuk',name: '목전지 (제육볶음용)',    qty: '1kg',       loc: 'fridge',  urg: 'soon',   note: '11/27까지 · 4~5회분 · 소분 냉동 추천', emoji: '🥩' },
+    { id: 'cp-pork-bossam', name: '목살 (수육보쌈용)',   qty: '1kg',       loc: 'fridge',  urg: 'soon',   note: '11/27까지 · 1kg · 소분 냉동 추천', emoji: '🥩' },
+    { id: 'cp-mushroom', name: '미니 새송이버섯',        qty: '500g 1팩',  loc: 'fridge',  urg: 'soon',   note: '11/28까지 · 500g 1팩', emoji: '🍄' },
+    { id: 'cp-tofu',     name: '두부 (찌개용 380g)',     qty: '2모',       loc: 'fridge',  urg: 'normal', note: '12/9까지', emoji: '🧊', count: 2, unit: '모' },
+    { id: 'cp-mozz',     name: '못난이 모짜렐라 치즈',   qty: '1kg',       loc: 'freezer', urg: 'normal', note: '11/24(화) 도착 · 1kg 소분 냉동 추천', emoji: '🧀', arrivesAt: '2026-11-24' },
+    { id: 'cp-gochujang',name: '고추장 돼지불고기 양념', qty: '500g',      loc: 'pantry',  urg: 'pantry', note: '500g · 목전지 제육용', emoji: '🌶️' },
+    { id: 'cp-ketchup',  name: '자가비 케첩맛',          qty: '4봉',       loc: 'pantry',  urg: 'pantry', note: '45g × 4봉', emoji: '🥫', count: 4, unit: '봉' }
+  ];
+
   var RECIPES = [
     { id: 'bun-sandwich', name: '모닝빵 바질·크림치즈 샌드 & 우유', slots: ['lunch'], key: 'bread', time: '10분', tag: '노쿡', method: '노쿡', level: '쉬움',
       uses: ['morningbun', 'pesto', 'creamcheese', 'salad', 'milk', 'shake'],
@@ -2478,7 +2493,31 @@
         '두부와 버섯 위에 간장 소스를 끼얹어 밥과 함께 내요.'
       ],
       tip: '버섯은 소량이라 이 끼니에 다 쓰면 소진이에요. 두부 한 모를 다 쓰면 자동으로 소진 처리돼요.',
-      extra: ['소금', '후추'] }
+      extra: ['소금', '후추'] },
+
+    { id: 'pork-jeuk-bokkeum', name: '목전지 제육볶음 + 밥', slots: ['dinner'], key: 'pork', time: '20분', tag: '매콤', method: '팬', level: '쉬움',
+      uses: ['cp-pork-jeuk', 'cp-gochujang', 'onion', 'cp-daepa', 'rice'],
+      steps: '목전지를 한입 크기로 썰어 센 불에 굽고, 양파·대파 넣고 고추장 양념에 볶아 밥과 함께.',
+      detail: [
+        '목전지를 한입 크기로 썰어 후추만 살짝 뿌려 둬요. 고추장 양념은 물 2큰술을 풀어 준비해요.',
+        '센 불로 팬을 달리고 목전지를 펼쳐 키친타월 없이 3분 굽다가 한 번 뒤집어요.',
+        '양파와 대파를 넣고 2분 볶아 숨을 죽인 뒤 고추장 양념을 넣고 3분 비비듯 볶아요.',
+        '국물이 살짝 졸면 불을 끄고 밥과 함께 내요.'
+      ],
+      tip: '제육용 목전지는 기름이 많아 팬에 기름을 따로 두르지 않아도 돼요. 남은 1kg은 한 끼 분량(200g)씩 나둬서 냉동하면 네 번 더 써요.',
+      extra: ['후추'] },
+
+    { id: 'daepa-tofu-jorim', name: '대파 듬뿍 두부조림 + 밥', slots: ['dinner'], key: 'tofu', time: '20분', tag: '담백', method: '팬', level: '쉬움',
+      uses: ['cp-tofu', 'cp-daepa', 'soy', 'garlic', 'onion', 'rice'],
+      steps: '두부 도톰하게 썰어 노릇하게 굽고, 대파 송송 썰어 간장·마늘 양념에 촉촉하게 조려요.',
+      detail: [
+        '두부 한 모를 도톰하게 썰어 물기를 빼요.',
+        '팬에 기름을 두르고 두부 양면을 노릇하게 구워요.',
+        '간장 2큰술, 다진마늘 1작은술, 물 3큰술을 섞어 부어 2분 조려요.',
+        '대파를 송송 썰어 듬뿍 올리고 뚜껑을 덮어 1분 더 익혀요.'
+      ],
+      tip: '대파는 마지막에 올려야 향이 살아요. 쓸 만큼만 뜨고 나머지 1kg은 썰어서 바로 냉동하면 두고두고 국·볶음에 쓰기 좋아요.',
+      extra: ['식용유'] }
   ];
 
   /* 기본 레시피에서 함께 쓰인 빈도 (추천 칩 1순위 재료) */
@@ -2528,7 +2567,17 @@
     soy:         { c: 2,   p: 1,   f: 0 },
     tunasauce:   { c: 1,   p: 1,   f: 0 },
     peanut:      { c: 3,   p: 3.5, f: 8 },
-    jam:         { c: 12,  p: 0,   f: 0 }
+    jam:         { c: 12,  p: 0,   f: 0 },
+    /* 11/23 쿠팡 입고분 */
+    'cp-daepa':      { c: 3,   p: 1,   f: 0.2 },
+    'cp-salad':      { c: 5,   p: 1,   f: 0.5 },
+    'cp-pork-jeuk':  { c: 0,   p: 25,  f: 19 },
+    'cp-pork-bossam':{ c: 0,   p: 25,  f: 19 },
+    'cp-mushroom':   { c: 3,   p: 2,   f: 0.3 },
+    'cp-tofu':       { c: 2,   p: 8,   f: 5 },
+    'cp-mozz':       { c: 1,   p: 10,  f: 5 },
+    'cp-gochujang':  { c: 6,   p: 1,   f: 1 },
+    'cp-ketchup':    { c: 3,   p: 0.3, f: 0.5 }
   };
 
   /* 재료별 소화·속 자극 태그 */
@@ -2569,7 +2618,17 @@
     soy:         ['highSodium'],
     tunasauce:   ['highSodium'],
     peanut:      ['highFat'],
-    jam:         []
+    jam:         [],
+    /* 11/23 쿠팡 입고분 */
+    'cp-daepa':      [],
+    'cp-salad':      ['rawCold'],
+    'cp-pork-jeuk':  ['spicy', 'highFat'],
+    'cp-pork-bossam':['highFat'],
+    'cp-mushroom':   [],
+    'cp-tofu':       [],
+    'cp-mozz':       ['dairy', 'highSodium'],
+    'cp-gochujang':  ['spicy', 'highSodium'],
+    'cp-ketchup':    []
   };
 
   var TAG_LABEL = {
@@ -3364,7 +3423,11 @@
     kimchi: 'banchan',
     rice: 'staple', pasta: 'staple'
   };
-  var AMT_FULL = { milk: '한 팩 그대로', rice: '그대로 있음' };
+  /* 11/23 쿠팡 입고분 — 분량을 사람 말로(가득·한 덩이 그대로) */
+  AMT_ITEM['cp-gochujang'] = 'sauce';
+  var AMT_FULL = { milk: '한 팩 그대로', rice: '그대로 있음',
+    'cp-daepa': '한 단 그대로', 'cp-pork-jeuk': '한 덩이 그대로', 'cp-pork-bossam': '한 덩이 그대로',
+    'cp-mushroom': '한 봉지 그대로', 'cp-mozz': '한 봉지 그대로' };
 
   /* 남은 양 한 마디 — '절반 남음 · 약 2잔' / '반 모 남음' / '다 씀' */
   function amtWord(it, p) {
@@ -3649,10 +3712,12 @@
       v: 3,
       dayAnchor: t,
       startedAt: t,
-      ingredients: DEFAULT_ITEMS.map(function (it) {
+      coupangSeedVer: 1,
+      ingredients: DEFAULT_ITEMS.concat(COUPANG_ITEMS).map(function (it) {
         return {
           id: it.id, name: it.name, qty: it.qty, loc: it.loc, urg: it.urg, note: it.note,
           done: false, custom: false,
+          arrivesAt: it.arrivesAt || '',
           emoji: it.emoji || emojiFor(it.name),
           count: typeof it.count === 'number' ? it.count : null,
           unit: it.unit || '개',
@@ -3735,11 +3800,32 @@
     return o;
   }
 
+  /* ── 11/23 쿠팡 입고분을 저장값에 1회 병합 ──
+     기존에 쓰던 기기의 재료 목록 위에 이번에 산 재료만 앞쪽에 얹는다.
+     같은 id가 이미 있으면 건너뛰고, coupangSeedVer로 다시 들어가지 않게 막는다. */
+  function seedCoupang(s) {
+    if (!s || s.coupangSeedVer >= 1) return false;
+    if (!Array.isArray(s.ingredients)) s.ingredients = [];
+    var have = {};
+    s.ingredients.forEach(function (it) { if (it && it.id) have[String(it.id)] = true; });
+    var add = COUPANG_ITEMS.filter(function (d) { return !have[d.id]; }).map(function (d) {
+      var o = {};
+      Object.keys(d).forEach(function (k) { o[k] = d[k]; });
+      return o;
+    });
+    if (add.length) s.ingredients = add.concat(s.ingredients);
+    s.coupangSeedVer = 1;
+    return add.length > 0;
+  }
+
   function normalize(s) {
     var byId0 = {};
-    DEFAULT_ITEMS.forEach(function (d) { byId0[d.id] = d; });
+    DEFAULT_ITEMS.concat(COUPANG_ITEMS).forEach(function (d) { byId0[d.id] = d; });
     /* 저장 형식 2 = 반 개(0.5) 단위. 예전 형식만 '소량' 플래그를 0.5로 옮긴다 */
     var legacy = !s.v;
+
+    /* 11/23 쿠팡 입고분 — 이미 쓰던 기기 저장값에도 한 번만 얹는다 */
+    seedCoupang(s);
 
     s.ingredients = s.ingredients.map(function (it) {
       var def = byId0[String(it.id)] || null;
