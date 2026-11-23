@@ -3084,6 +3084,15 @@
         return;
       }
       if (state.skips[k]) return;
+      /* 이월한 끼니는 넘길 때 정해 둔 영양을 그대로 더한다 —
+         재료를 다시 빼지 않으므로 재료 목록만으로는 계산되지 않는다 */
+      var carry = carryRec(day, m);
+      if (carry) {
+        var cMac = carryMacro(carry);
+        if (cMac && cMac.kcal > 0) { t.c += cMac.c; t.p += cMac.p; t.f += cMac.f; }
+        if (!state.eaten[k]) t.openMeals.push(m);
+        return;
+      }
       var r = mealRecipe(day, m);
       if (!r || !(r.uses || []).length) return;
       var s = sumMacros(r.uses);
@@ -3847,6 +3856,95 @@
     return true;
   }
 
+  /* ── 11/23 저녁 실제로 먹은 것 · 흙대파 잔량 정정 ──
+     보미 님: "제육 남은거에서 3분의1(…파는 다 먹음. 즉 어제오늘 통틀어서 한 줄 먹음.
+     아까 한 단이라 말한 건 잘못 말함)" / "밥 반공기 + 생계란노른자에 참기름 살짝" /
+     "제육 2인분 남음 어쩌면 2.5인분" / "내일 점심도 오늘 저녁처럼, 내일 저녁은 외식"
+     · 흙대파는 1단(1kg) 중 한 줄만 썼으니 다시 냉장고 목록으로 되돌린다
+     · 저녁에 생계란 노른자를 한 알 더 먹었으니 계란을 한 알 뺀다
+     · 오늘 저녁은 실제 먹은 내용으로 바꾸고, 내일 점심은 남은 제육 이어서·저녁은 외식으로 둔다
+     · jeyukSeedVer 1·2가 적용된 기기에서도 딱 한 번만 (3으로 올려 두 번 실행되지 않게) */
+  var LATE_DINNER = {
+    name: '제육볶음 + 밥 반공기 + 계란노른자',
+    note: '남은 제육 1/3 (양파·대파·버섯·감자·두부 포함) + 밥 반공기 + 생계란노른자·참기름 살짝 (제육 약 2~2.5인분 남음)',
+    from: 'lunch',
+    macro: { kcal: 550, c: 48, p: 28, f: 26 }
+  };
+  var LATE_NEXT_LUNCH = {
+    name: '제육볶음 + 밥 (반공기/한공기 고민)',
+    note: '남은 제육(약 2~2.5인분) 이어서 · 밥 양은 내일 결정 (이월이라 재료 재차감 없음)',
+    from: 'dinner',
+    macro: { kcal: 426, c: 34, p: 27, f: 19 }
+  };
+  var LATE_NEXT_DINNER = {
+    name: '저녁 외식 예정 (집밥 패스)',
+    note: '저녁 외식 일정 · 남은 제육은 모레 이어서 드시면 됩니다',
+    macro: { kcal: 0, c: 0, p: 0, f: 0 }
+  };
+
+  function seedJeyukLate(s) {
+    if (!s || (typeof s.jeyukSeedVer === 'number' ? s.jeyukSeedVer : 0) >= 3) return false;
+    /* 그 이틀이 지난 뒤 처음 열었다면 지금 냉장고·지난 식단을 건드리지 않는다 */
+    if (todayKey() > '2026-11-24') { s.jeyukSeedVer = 3; return false; }
+    if (!Array.isArray(s.ingredients) || !s.ingredients.length) return false;
+
+    var map = {};
+    s.ingredients.forEach(function (it) { if (it && it.id) map[String(it.id)] = it; });
+
+    /* ① 흙대파 — 한 단 1kg 중 한 줄만 썼다. 네 단계 표현상 '가득'으로 되돌린다 */
+    var daepa = map['cp-daepa'];
+    if (daepa) {
+      daepa.done = false;
+      daepa.pct = 100;
+      daepa.used = 0;
+      daepa.note = '1kg 대용량 · 11/23 제육에 1줄 사용 · 나머지 냉동 소분 추천';
+    }
+
+    /* ② 계란 — 저녁 생계란 노른자 한 알 */
+    var egg = map['egg'];
+    if (egg && !egg.done && typeof egg.count === 'number' && egg.count >= 1) {
+      egg.count = Math.max(0, Math.round((egg.count - 1) * 2) / 2);
+      egg.pct = null;
+      egg.partial = false;
+      if (egg.count <= 0) { egg.done = true; egg.count = 0; }
+      egg.note = '상온분 우선 소진 · 11/23 노른자 2개 씀';
+    }
+
+    /* ③ 식단 — 직접 남긴 외식 기록이 있는 끼니는 그대로 둔다 */
+    s.customMeals = (s.customMeals && typeof s.customMeals === 'object') ? s.customMeals : {};
+    s.mealUses = (s.mealUses && typeof s.mealUses === 'object') ? s.mealUses : {};
+    s.eaten = (s.eaten && typeof s.eaten === 'object') ? s.eaten : {};
+    s.skips = (s.skips && typeof s.skips === 'object') ? s.skips : {};
+    s.outside = (s.outside && typeof s.outside === 'object') ? s.outside : {};
+
+    var put = function (key, def) {
+      if (s.outside[key]) return false;
+      s.customMeals[key] = {
+        name: def.name,
+        uses: [],
+        note: def.note,
+        carried: !!def.from,
+        from: def.from || '',
+        macro: { kcal: def.macro.kcal, c: def.macro.c, p: def.macro.p, f: def.macro.f }
+      };
+      delete s.mealUses[key];
+      return true;
+    };
+
+    if (put('2026-11-23-dinner', LATE_DINNER)) {
+      s.eaten['2026-11-23-dinner'] = true;
+      delete s.skips['2026-11-23-dinner'];
+    }
+    put('2026-11-24-lunch', LATE_NEXT_LUNCH);
+    if (put('2026-11-24-dinner', LATE_NEXT_DINNER)) {
+      s.skips['2026-11-24-dinner'] = true;
+      delete s.eaten['2026-11-24-dinner'];
+    }
+
+    s.jeyukSeedVer = 3;
+    return true;
+  }
+
   /* ── 11/21(토) 저녁 고기 외식 기록 ──
      그날 저녁에 직접 남긴 기록(외식·직접 등록·먹음·건너뜀)이 없을 때만 한 번 채운다.
      양은 외식 카드의 ✏️ 수정에서 그대로 조절할 수 있도록 저장 형식(items)에 맞춰 넣는다. */
@@ -3935,6 +4033,7 @@
     seedDayMeals(s);
     seedJeyukDay(s);
     seedJeyukMore(s);
+    seedJeyukLate(s);
     seedPastDinner(s);
     return s;
   }
@@ -4221,6 +4320,7 @@
     seedDayMeals(s);
     seedJeyukDay(s);
     seedJeyukMore(s);
+    seedJeyukLate(s);
     s.v = 3;
     return s;
   }
